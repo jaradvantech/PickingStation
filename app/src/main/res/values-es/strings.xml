@@ -1,0 +1,149 @@
+<resources>
+
+    <string name="app_name">Display4</string>
+    <string name="preference_file_key" translatable="false">Preference</string>
+
+    <string name="Stored_PC_IP_Address" translatable="false">Stored_PC_IP_Address</string>
+    <string name="Stored_PC_IP_Port" translatable="false">Stored_PC_IP_Port</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- Loading Screen -->
+    <string name="Connectingtoserver">Conectando al servidor...</string>
+
+    <!-- Line state -->
+    <string name="At">En:</string>
+    <string name="To">A:</string>
+
+    <!-- Settings Screen-->
+    <string name="Language">Idioma</string>
+    <string name="Port">Puerto</string>
+    <string name="IPaddres">IP de la máquina</string>
+    <string name="Warning">Atención</string>
+    <string name="saveconfig">Guardar configuración</string>
+
+    <!-- Navigation Menu -->
+    <string name="Loading">Cargando...</string>
+    <string name="LineState">Estado de la línea</string>
+    <string name="AlgorithmConfiguration">Configuración del algoritmo</string>
+    <string name="PalletEditor">Editor de palets</string>
+    <string name="ProductionLogs">Registro de producción</string>
+    <string name="Alarms">Alarmas</string>
+    <string name="ManualControl">Control Manual</string>
+    <string name="Debug">Pantalla de pruebas</string>
+    <string name="Settings">Configuración</string>
+
+    <!-- Manual Control-->
+    <string name="Manualmode">Modo Manual</string>
+    <string name="LineStopped">Línea parada</string>
+
+    <!-- Alarms -->
+    <string name="RecentAlarms">Últimas alarmas:</string>
+    <string name="Details">Detalles:</string>
+    <string name="Doyoureallywanttodeletethisalarm">Está seguro de querer borrar esta alarma?</string>
+    <string name="Cancel">Cancelar</string>
+    <string name="Alarmoftype">Alarma de tipo: </string>
+    <string name="Source">Fuente: </string>
+    <string name="Raisedat">Disparada: </string>
+    <string name="Reason">Razón: Desconocida\n\n</string>
+    <string name="Longpresstodismiss">[Mantener pulsado para eliminar] \n</string>
+    <string name="Equipment">Equipamiento</string>
+    <string name="Type_">Tipo </string>
+    <string name="_alarm"> alarma</string>
+    <string name="Source_">Fuente: </string>
+    <string name="Manipulator">Manipulador </string>
+    <!-- Logs -->
+
+    <!-- Pallet Editor -->
+    <string name="Color">Color</string>
+    <string name="Grade">Grado</string>
+    <string name="Location">Ubicación</string>
+    <string name="AddAtTheTop">Añadir arriba</string>
+    <string name="AddOver">Añadir sobre...</string>
+    <string name="AddUnder">Añadir debajo...</string>
+    <string name="Position">Posición</string>
+    <string name="Add">Añadir</string>
+    <string name="Edit">Editar</string>
+    <string name="Delete">Borrar</string>
+    <string name="Format">Format</string>
+    <string name="NoPalletSelected">Ningún palet seleccionado</string>
+
+    <string name="Red">Rojo</string>
+    <string name="Orange">Naranja</string>
+    <string name="Yellow">Amarillo</string>
+    <string name="PaleGreen">Verde Claro</string>
+    <string name="Green">Verde</string>
+    <string name="BlueGreen">Verdiazul</string>
+    <string name="LightBlue">Azul claro</string>
+    <string name="Blue">Azul</string>
+    <string name="Purple">Morado</string>
+    <string name="Pink">Rosa</string>
+    <string name="HardPink">Fucsia</string>
+    <string name="Brown">Marrón</string>
+    <string name="White">Blanco</string>
+    <string name="LightGrey">Gris Claro</string>
+    <string name="DarkGrey">Gris Oscuro</string>
+
+    <string name="brick_grade_1">Grado A</string>
+    <string name="brick_grade_2">Grado B</string>
+    <string name="brick_grade_3">Grado C</string>
+    <string name="brick_grade_4">Grado D</string>
+    <string name="brick_grade_5">Grado E</string>
+    <string name="brick_grade_6">Grado F</string>
+    <string name="brick_grade_7">Grado G</string>
+
+    <!-- Algorithm Configuration-->
+    <string name="TypeToPackage">Tipo a empaquetar:</string>
+    <string name="MatchTopCoef">Ponderación de encajar el top</string>
+    <string name="SimilarityCoef">Ponderación de número de iguales</string>
+    <string name="PositionCoef">Ponderación de posición</string>
+    <string name="Save">Guardar</string>
+    <string name="Saveconfigurationtomachine">¿Guardar esta configuración en la maquina 14?</string>
+    <string name="Arm">Brazo</string>
+    <string name="INPUT">:\nEntrada</string>
+    <string name="INOUT">:\nEntrada/Salida</string>
+    <string name="OUTPUT">:\nSalida</string>
+    <string name="DISABLED">:\nNo usar</string>
+
+    <!-- Here we go! -->
+
+    <string name="button_sendCommand_text">Enviar</string>
+
+    <string name="editText_sendCommand_text">Comando a enviar</string>
+
+    <string name="logs_received">Recibido: </string>
+    <string name="logs_sent">Enviado: </string>
+
+
+    <string-array name="Colours">
+        <item>Rojo</item>
+        <item>Naranja</item>
+        <item>Amarillo</item>
+        <item>Verde claro</item>
+        <item>Verde</item>
+        <item>Verdiazul</item>
+        <item>Azul claro</item>
+        <item>Azul</item>
+        <item>Morado</item>
+        <item>Rosa</item>
+        <item>Fucsia</item>
+        <item>Marron</item>
+        <item>Blanco</item>
+        <item>Gris claro</item>
+        <item>Gris oscuro</item>
+    </string-array>
+
+
+    <string-array name="Grades">
+        <item>Grado A</item>
+        <item>Grado B</item>
+        <item>Grado C</item>
+        <item>Grado D</item>
+        <item>Grado E</item>
+        <item>Grado F</item>
+        <item>Grado G</item>
+    </string-array>
+</resources>

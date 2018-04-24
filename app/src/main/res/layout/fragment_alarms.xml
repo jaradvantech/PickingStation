@@ -1,0 +1,53 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.Display4.Algorithm">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/Details"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/alarms_ListView"
+            android:layout_width="415dp"
+            android:layout_height="415dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="56dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/alarms_textView_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Details"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toTopOf="@+id/alarms_textView_output"
+            app:layout_constraintStart_toStartOf="@+id/alarms_textView_output" />
+
+        <TextView
+            android:id="@+id/alarms_textView_recent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick='"onClick"'
+            android:text="@string/RecentAlarms"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toTopOf="@+id/alarms_ListView"
+            app:layout_constraintStart_toStartOf="@+id/alarms_ListView" />
+
+        <TextView
+            android:id="@+id/alarms_textView_output"
+            android:layout_width="417dp"
+            android:layout_height="415dp"
+            android:layout_marginStart="68dp"
+            android:textSize="20dp"
+            app:layout_constraintStart_toEndOf="@+id/alarms_ListView"
+            app:layout_constraintTop_toTopOf="@+id/alarms_ListView" />
+    </android.support.constraint.ConstraintLayout>
+</FrameLayout>

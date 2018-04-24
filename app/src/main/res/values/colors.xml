@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffaa00</color>
+    <color name="colorSecondary">#190b91</color>
+    <color name="colorPrimaryDark">#e28c00</color>
+    <color name="colorPrimaryPale">#ffe2a8</color>
+    <color name="colorAccent">#e28c00</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#ffffff</color>
+
+    <color name="brick_color_1">#ff0d00</color>
+    <color name="brick_color_2">#ffb700</color>
+    <color name="brick_color_3">#ffe600</color>
+    <color name="brick_color_4">#bbff00</color>
+    <color name="brick_color_5">#04ff00</color>
+    <color name="brick_color_6">#00ffc4</color>
+    <color name="brick_color_7">#00c4ff</color>
+    <color name="brick_color_8">#0051ff</color>
+    <color name="brick_color_9">#ae00ff</color>
+    <color name="brick_color_10">#a8feadff</color>
+    <color name="brick_color_11">#ff00bb</color>
+    <color name="brick_color_12">#895b00</color>
+    <color name="brick_color_13">#ffffff</color>
+    <color name="brick_color_14">#d4d4d4</color>
+    <color name="brick_color_15">#8b8b8b</color>
+    <color name="colorSecondaryPale">#276af1</color>
+    <color name="colorYellow">#eeff21</color>
+</resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_lines"
+            android:checked="false"
+            android:icon="@mipmap/conveyor"
+            android:title="@string/LineState" />
+        <item
+            android:id="@+id/nav_algorithm"
+            android:icon="@mipmap/color_wheel"
+            android:title="@string/AlgorithmConfiguration" />
+        <item
+            android:id="@+id/nav_editor"
+            android:icon="@mipmap/layers"
+            android:title="@string/PalletEditor" />
+        <item
+            android:id="@+id/nav_logs"
+            android:icon="@mipmap/log_file_format"
+            android:title="@string/ProductionLogs" />
+
+        <item
+            android:id="@+id/nav_alarms"
+            android:icon="@mipmap/alarm"
+            android:title="@string/Alarms" />
+        <item
+            android:id="@+id/nav_manual"
+            android:icon="@mipmap/one_finger"
+            android:title="@string/ManualControl" />
+        <item
+            android:id="@+id/nav_debug"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/Debug" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@mipmap/settings"
+            android:title="@string/Settings" />
+    </group>
+    <!--
+    <item android:title="Other stuff">
+        <menu>
+            <item
+                android:id="@+id/nav_export"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Export data" />
+            <item
+                android:id="@+id/nav_wifi"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Connect Wi-Fi" />
+        </menu>
+    </item>
+    !-->
+
+</menu>

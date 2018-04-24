@@ -1,0 +1,365 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.Display4.Editor">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/editor_textView_Indicator2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="360dp"
+            android:text="@string/NoPalletSelected"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/editor_flipview_bircks_stack"
+            app:layout_constraintStart_toStartOf="@+id/editor_flipview_bircks_stack"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/editor_textView_Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/NoPalletSelected"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/editor_flipview_bircks_stack"
+            app:layout_constraintStart_toStartOf="@+id/editor_flipview_bircks_stack"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/editor_SwipeRefreshLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/editor_NestedScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <HorizontalScrollView
+                        android:id="@+id/horizontalScrollView"
+                        android:layout_width="650dp"
+                        android:layout_height="200dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <android.support.constraint.ConstraintLayout
+                            android:id="@+id/editor_layout_pallets"
+                            android:layout_width="650dp"
+                            android:layout_height="match_parent">
+
+                            <ToggleButton
+                                android:id="@+id/editor_button_pallet_1"
+                                style="@android:style/Widget.Material.Button.Toggle"
+                                android:layout_width="@dimen/pallets_size"
+                                android:layout_height="@dimen/pallets_size"
+                                android:layout_marginTop="@dimen/space_between_pallets_middle"
+                                android:textOff="1"
+                                android:textOn="1"
+                                app:layout_constraintStart_toStartOf="@+id/editor_button_pallet_2"
+                                app:layout_constraintTop_toBottomOf="@+id/editor_button_pallet_2" />
+
+                            <ToggleButton
+                                android:id="@+id/editor_button_pallet_2"
+                                style="@android:style/Widget.Material.Button.Toggle"
+                                android:layout_width="@dimen/pallets_size"
+                                android:layout_height="@dimen/pallets_size"
+                                android:layout_marginStart="@dimen/space_between_pallets_horizontal"
+                                android:layout_marginTop="16dp"
+                                android:textOff="2"
+                                android:textOn="2"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ToggleButton
+                                android:id="@+id/editor_button_pallet_3"
+                                style="@android:style/Widget.Material.Button.Toggle"
+                                android:layout_width="@dimen/pallets_size"
+                                android:layout_height="@dimen/pallets_size"
+                                android:layout_marginStart="@dimen/space_between_pallets_horizontal"
+                                android:layout_marginTop="@dimen/space_between_pallets_middle"
+                                android:textOff="3"
+                                android:textOn="3"
+                                app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_1"
+                                app:layout_constraintTop_toBottomOf="@+id/editor_button_pallet_4" />
+
+                            <ToggleButton
+                                android:id="@+id/editor_button_pallet_4"
+                                style="@android:style/Widget.Material.Button.Toggle"
+                                android:layout_width="@dimen/pallets_size"
+                                android:layout_height="@dimen/pallets_size"
+                                android:layout_marginStart="@dimen/space_between_pallets_horizontal"
+                                android:textOff="4"
+                                android:textOn="4"
+                                app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_2"
+                                app:layout_constraintTop_toTopOf="@+id/editor_button_pallet_2" />
+
+                            <ToggleButton
+                                android:id="@+id/editor_button_pallet_5"
+                                style="@android:style/Widget.Material.Button.Toggle"
+                                android:layout_width="@dimen/pallets_size"
+                                android:layout_height="@dimen/pallets_size"
+                                android:layout_marginStart="@dimen/space_between_pallets_horizontal"
+                                android:layout_marginTop="@dimen/space_between_pallets_middle"
+                                android:textOff="5"
+                                android:textOn="5"
+                                app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_3"
+                                app:layout_constraintTop_toBottomOf="@+id/editor_button_pallet_6" />
+
+                            <ToggleButton
+                                android:id="@+id/editor_button_pallet_6"
+                                style="@android:style/Widget.Material.Button.Toggle"
+                                android:layout_width="@dimen/pallets_size"
+                                android:layout_height="@dimen/pallets_size"
+                                android:layout_marginStart="@dimen/space_between_pallets_horizontal"
+                                android:textOff="6"
+                                android:textOn="6"
+                                app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_4"
+                                app:layout_constraintTop_toTopOf="@+id/editor_button_pallet_4" />
+
+                            <ToggleButton
+                                android:id="@+id/editor_button_pallet_7"
+                                style="@android:style/Widget.Material.Button.Toggle"
+                                android:layout_width="@dimen/pallets_size"
+                                android:layout_height="@dimen/pallets_size"
+                                android:layout_marginStart="@dimen/space_between_pallets_horizontal"
+                                android:layout_marginTop="@dimen/space_between_pallets_middle"
+                                android:textOff="7"
+                                android:textOn="7"
+                                app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_5"
+                                app:layout_constraintTop_toBottomOf="@+id/editor_button_pallet_8" />
+
+                            <ToggleButton
+                                android:id="@+id/editor_button_pallet_8"
+                                style="@android:style/Widget.Material.Button.Toggle"
+                                android:layout_width="@dimen/pallets_size"
+                                android:layout_height="@dimen/pallets_size"
+                                android:layout_marginStart="@dimen/space_between_pallets_horizontal"
+                                android:textOff="8"
+                                android:textOn="8"
+                                app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_6"
+                                app:layout_constraintTop_toTopOf="@+id/editor_button_pallet_6" />
+
+                            <ToggleButton
+                                android:id="@+id/editor_button_pallet_9"
+                                style="@android:style/Widget.Material.Button.Toggle"
+                                android:layout_width="@dimen/pallets_size"
+                                android:layout_height="@dimen/pallets_size"
+                                android:layout_marginStart="@dimen/space_between_pallets_horizontal"
+                                android:layout_marginTop="@dimen/space_between_pallets_middle"
+                                android:textOff="9"
+                                android:textOn="9"
+                                app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_7"
+                                app:layout_constraintTop_toBottomOf="@+id/editor_button_pallet_10" />
+
+                            <ToggleButton
+                                android:id="@+id/editor_button_pallet_10"
+                                style="@android:style/Widget.Material.Button.Toggle"
+                                android:layout_width="@dimen/pallets_size"
+                                android:layout_height="@dimen/pallets_size"
+                                android:layout_marginStart="@dimen/space_between_pallets_horizontal"
+                                android:textOff="10"
+                                android:textOn="10"
+                                app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_8"
+                                app:layout_constraintTop_toTopOf="@+id/editor_button_pallet_8" />
+
+                        </android.support.constraint.ConstraintLayout>
+
+                    </HorizontalScrollView>
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="142dp"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/Grade"
+                        app:layout_constraintStart_toEndOf="@+id/textView13"
+                        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+
+                    <TextView
+                        android:id="@+id/textView13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:text="@string/Color"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+                    <Button
+                        android:id="@+id/editor_button_delete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/Delete"
+                        app:layout_constraintStart_toStartOf="@+id/editor_button_edit"
+                        app:layout_constraintTop_toBottomOf="@+id/editor_button_edit" />
+
+                    <Button
+                        android:id="@+id/editor_button_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/Edit"
+                        app:layout_constraintStart_toStartOf="@+id/editor_button_add"
+                        app:layout_constraintTop_toBottomOf="@+id/editor_button_add" />
+
+                    <Button
+                        android:id="@+id/editor_button_add"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/Add"
+                        app:layout_constraintEnd_toEndOf="@+id/horizontalScrollView"
+                        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+
+                    <Button
+                        android:id="@+id/editor_button_format"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="14dp"
+                        android:text="@string/Format"
+                        app:layout_constraintStart_toStartOf="@+id/editor_button_delete"
+                        app:layout_constraintTop_toBottomOf="@+id/editor_button_delete" />
+
+                    <RadioGroup
+                        android:id="@+id/dfszf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="48dp"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintEnd_toStartOf="@+id/editor_button_add"
+                        app:layout_constraintTop_toTopOf="@+id/editor_button_add">
+
+                        <RadioButton
+                            android:id="@+id/radioButton4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:text="@string/AddAtTheTop" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/AddOver" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/AddUnder" />
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/textView14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="30dp"
+                        android:text="@string/Position"
+                        app:layout_constraintStart_toStartOf="@+id/dfszf"
+                        app:layout_constraintTop_toBottomOf="@+id/dfszf" />
+
+                    <Spinner
+                        android:id="@+id/spinner3"
+                        android:layout_width="109dp"
+                        android:layout_height="26dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintStart_toStartOf="@+id/dfszf"
+                        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/Location"
+                        app:layout_constraintStart_toStartOf="@+id/dfszf"
+                        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <ListView
+            android:id="@+id/editor_listView_grades"
+            android:layout_width="140dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="40dp"
+            android:choiceMode="singleChoice"
+            android:entries="@array/Grades"
+            android:listSelector="@color/colorPrimaryPale"
+            app:layout_constraintStart_toEndOf="@+id/editor_listView_colours"
+            app:layout_constraintTop_toTopOf="@+id/editor_listView_colours" />
+
+        <ListView
+            android:id="@+id/editor_listView_colours"
+            android:layout_width="140dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="244dp"
+            android:alwaysDrawnWithCache="false"
+            android:entries="@array/Colours"
+            android:choiceMode="singleChoice"
+            android:listSelector="@color/colorPrimaryPale"
+            android:clickable="false"
+            android:maxHeight="10dp"
+            android:minHeight="10dp"
+            android:scrollingCache="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <com.bartoszlipinski.flippablestackview.FlippableStackView
+            android:id="@+id/editor_flipview_bircks_stack"
+            android:layout_width="300dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="650dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Button" />
+        </com.bartoszlipinski.flippablestackview.FlippableStackView>
+
+    </android.support.constraint.ConstraintLayout>
+</FrameLayout>

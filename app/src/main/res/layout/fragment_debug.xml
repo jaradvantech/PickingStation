@@ -1,0 +1,385 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.Display4.Debug">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/debug_commonDataOutput"
+            android:layout_width="250dp"
+            android:layout_height="362dp"
+            android:layout_marginStart="20dp"
+            android:text="Common Data:"
+            app:layout_constraintStart_toEndOf="@+id/debug_armDataOutput"
+            app:layout_constraintTop_toTopOf="@+id/debug_armDataOutput" />
+
+        <Button
+            android:id="@+id/debug_read"
+            android:layout_width="76dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Read"
+            app:layout_constraintStart_toEndOf="@+id/debug_clear"
+            app:layout_constraintTop_toBottomOf="@+id/debug_armDataOutput" />
+
+        <Button
+            android:id="@+id/debug_clear"
+            android:layout_width="76dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="CLEAR"
+            app:layout_constraintStart_toEndOf="@+id/debug_checkBox_autoupdate"
+            app:layout_constraintTop_toBottomOf="@+id/debug_armDataOutput" />
+
+        <TextView
+            android:id="@+id/debug_armDataOutput"
+            android:layout_width="250dp"
+            android:layout_height="362dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:text="Arm Data:"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/debug_write"
+            android:layout_width="76dp"
+            android:layout_height="47dp"
+            android:layout_marginStart="16dp"
+            android:text="Write"
+            app:layout_constraintStart_toEndOf="@+id/debug_read"
+            app:layout_constraintTop_toTopOf="@+id/debug_read" />
+
+        <EditText
+            android:id="@+id/debug_editText_ZASV"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Z_AxisStandbyValue"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_editText_ADD"
+            app:layout_constraintTop_toBottomOf="@+id/debug_editText_ADD" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_SBD"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:text="StorageBinDirection"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/debug_commonDataOutput"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_TP"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:text="TestPattern"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_CE"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_CE" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_CE"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:text="CommunicationExchange"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/debug_checkBox_SBD"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_SBFA"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:text="StorageBinFullA"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_MR"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_MR" />
+
+        <EditText
+            android:id="@+id/debug_editText_PCS"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="PCState"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_TMD"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_TMD" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_MR"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:text="ManipulatorReset"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_SBD"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_SBD" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_SBFB"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:text="StorageBinFullB"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_SBFA"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_SBFA" />
+
+        <EditText
+            android:id="@+id/debug_editText_TPOX_AGB"
+            android:layout_width="210dp"
+            android:layout_height="38dp"
+            android:ems="10"
+            android:hint="ThePulseOfX_AxisGoBack..."
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_editText_ZASV"
+            app:layout_constraintTop_toBottomOf="@+id/debug_editText_ZASV" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_BCRSA"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:text="BarCodeReadStateA"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_SBFB"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_SBFB" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_BCRSB"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:text="BarCodeReadStateB"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_BCRSA"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_BCRSA" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_MM"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:text="ManipulatorMode"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_BCRSB"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_BCRSB" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_VV"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:text="VacuumValve"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_MM"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_MM" />
+
+        <EditText
+            android:id="@+id/debug_editText_TPOX_AAD"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="ThePulseOfZ_AxisAdvanceDown..."
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_editText_TPOX_AGB"
+            app:layout_constraintTop_toBottomOf="@+id/debug_editText_TPOX_AGB" />
+
+        <EditText
+            android:id="@+id/debug_editText_MFB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="ManualForwardBackward"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_VV"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_VV" />
+
+        <EditText
+            android:id="@+id/debug_editText_MLR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="ManualLeftRight"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_editText_MFB"
+            app:layout_constraintTop_toBottomOf="@+id/debug_editText_MFB" />
+
+        <EditText
+            android:id="@+id/debug_editText_MUD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="ManualUpDown"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_editText_MLR"
+            app:layout_constraintTop_toBottomOf="@+id/debug_editText_MLR" />
+
+        <EditText
+            android:id="@+id/debug_editText_ADD"
+            android:layout_width="210dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Z_AxisDeceletationDistance"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_editText_PCS"
+            app:layout_constraintTop_toBottomOf="@+id/debug_editText_PCS" />
+
+        <EditText
+            android:id="@+id/debug_editText_COD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="CatchOrDrop"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_editText_WTDWT"
+            app:layout_constraintTop_toBottomOf="@+id/debug_editText_WTDWT" />
+
+        <EditText
+            android:id="@+id/debug_editText_WTDWT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="WhatToDoWithTheBrick"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_editText_MUD"
+            app:layout_constraintTop_toBottomOf="@+id/debug_editText_MUD" />
+
+        <EditText
+            android:id="@+id/debug_editText_VOCD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="ValueOfCatchDrop"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_editText_PZA"
+            app:layout_constraintTop_toBottomOf="@+id/debug_editText_PZA" />
+
+        <EditText
+            android:id="@+id/debug_editText_PZA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="PulseZAxis"
+            android:inputType="number"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_editText_COD"
+            app:layout_constraintTop_toBottomOf="@+id/debug_editText_COD" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_ITT"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:text="InquiryTheTile"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_TP"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_TP" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_TMD"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:text="TransmissionManualDebugging"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/debug_checkBox_ITT"
+            app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_ITT" />
+
+
+        <ImageView
+            android:id="@+id/debug_imageView_previous"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@mipmap/arrowhead_left"
+            android:backgroundTint="@color/colorSecondary"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toEndOf="@+id/debug_write"
+            app:layout_constraintTop_toTopOf="@+id/debug_write" />
+
+        <ImageView
+            android:id="@+id/debug_imageView_next"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:background="@mipmap/arrowhead_right"
+            android:backgroundTint="@color/colorSecondary"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toEndOf="@+id/debug_currentArm"
+            app:layout_constraintTop_toTopOf="@+id/debug_write" />
+
+        <TextView
+            android:id="@+id/debug_currentArm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="392dp"
+            android:text="1"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/debug_imageView_previous"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <CheckBox
+            android:id="@+id/debug_checkBox_autoupdate"
+            android:layout_width="108dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Auto-upd8"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/debug_armDataOutput" />
+
+        <Button
+            android:id="@+id/debug_button_advanced"
+            android:layout_width="209dp"
+            android:layout_height="wrap_content"
+            android:text="ARM POSITION"
+            app:layout_constraintStart_toStartOf="@+id/debug_button_presets"
+            app:layout_constraintTop_toBottomOf="@+id/debug_button_presets" />
+
+        <Button
+            android:id="@+id/debug_button_presets"
+            android:layout_width="209dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="ADVANCED OPTIONS"
+            app:layout_constraintStart_toStartOf="@+id/debug_editText_TPOX_AAD"
+            app:layout_constraintTop_toBottomOf="@+id/debug_editText_TPOX_AAD" />
+
+        <Button
+            android:id="@+id/debug_encoder3000"
+            android:layout_width="209dp"
+            android:layout_height="wrap_content"
+            android:text="Encoder + 3000"
+            app:layout_constraintStart_toStartOf="@+id/debug_button_advanced"
+            app:layout_constraintTop_toBottomOf="@+id/debug_button_advanced" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</FrameLayout>

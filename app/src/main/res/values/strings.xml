@@ -1,0 +1,149 @@
+<resources>
+
+    <string name="app_name">Display4</string>
+    <string name="preference_file_key" translatable="false">Preference</string>
+
+    <string name="Stored_PC_IP_Address" translatable="false">Stored_PC_IP_Address</string>
+    <string name="Stored_PC_IP_Port" translatable="false">Stored_PC_IP_Port</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- Loading Screen -->
+    <string name="Connectingtoserver">Connecting to server...</string>
+
+    <!-- Line state -->
+    <string name="At">At:</string>
+    <string name="To">To:</string>
+
+    <!-- Settings Screen-->
+    <string name="Language">Language</string>
+    <string name="Port">Port</string>
+    <string name="IPaddres">Machine IP Address</string>
+    <string name="Warning">Warning</string>
+    <string name="saveconfig">Save Configuration</string>
+
+    <!-- Navigation Menu -->
+    <string name="Loading">Loading</string>
+    <string name="LineState">Line Status</string>
+    <string name="AlgorithmConfiguration">Algorithm configuration</string>
+    <string name="PalletEditor">Pallet editor</string>
+    <string name="ProductionLogs">Production logs</string>
+    <string name="Alarms">Alarms</string>
+    <string name="ManualControl">Manual control</string>
+    <string name="Debug">DEBUG SCREEN</string>
+    <string name="Settings">Settings</string>
+
+    <!-- Manual Control-->
+    <string name="Manualmode">Manual Mode</string>
+    <string name="LineStopped">Line Stopped</string>
+
+    <!-- Alarms -->
+    <string name="RecentAlarms">Recent Alarms:</string>
+    <string name="Details">Details:</string>
+    <string name="Doyoureallywanttodeletethisalarm">Do you really want to delete this alarm?</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Alarmoftype">Alarm of type: </string>
+    <string name="Source">Source: </string>
+    <string name="Raisedat">Raised at: </string>
+    <string name="Reason">Reason: Unknown\n\n</string>
+    <string name="Longpresstodismiss">[Long press to dismiss] \n</string>
+    <string name="Equipment">Equipment </string>
+    <string name="Type_">Type</string>
+    <string name="_alarm"> alarm</string>
+    <string name="Source_">Source:</string>
+    <string name="Manipulator">Manipulator </string>
+    <!-- Logs -->
+
+    <!-- Pallet Editor -->
+    <string name="Color">Colour</string>
+    <string name="Grade">Grade</string>
+    <string name="Location">Location</string>
+    <string name="AddAtTheTop">Add at the top</string>
+    <string name="AddOver">Add over...</string>
+    <string name="AddUnder">Add under...</string>
+    <string name="Position">Position</string>
+    <string name="Add">Add</string>
+    <string name="Edit">Edit</string>
+    <string name="Delete">Delete</string>
+    <string name="Format">Format</string>
+    <string name="NoPalletSelected">No pallet selected</string>
+
+    <string name="Red">Red</string>
+    <string name="Orange">Orange</string>
+    <string name="Yellow">Yellow</string>
+    <string name="PaleGreen">PaleGreen</string>
+    <string name="Green">Green</string>
+    <string name="BlueGreen">BlueGreen</string>
+    <string name="LightBlue">LightBlue</string>
+    <string name="Blue">Blue</string>
+    <string name="Purple">Purple</string>
+    <string name="Pink">Pink</string>
+    <string name="HardPink">HardPink</string>
+    <string name="Brown">Brown</string>
+    <string name="White">White</string>
+    <string name="LightGrey">LightGrey</string>
+    <string name="DarkGrey">DarkGrey</string>
+
+    <string name="brick_grade_1">Grade A</string>
+    <string name="brick_grade_2">Grade B</string>
+    <string name="brick_grade_3">Grade C</string>
+    <string name="brick_grade_4">Grade D</string>
+    <string name="brick_grade_5">Grade E</string>
+    <string name="brick_grade_6">Grade F</string>
+    <string name="brick_grade_7">Grade G</string>
+
+    <!-- Algorithm Configuration-->
+    <string name="TypeToPackage">Type to package:</string>
+    <string name="MatchTopCoef">Match-top coefficient</string>
+    <string name="SimilarityCoef">Similarity coefficient</string>
+    <string name="PositionCoef">Position coefficient</string>
+    <string name="Save">Save</string>
+    <string name="Saveconfigurationtomachine">Save configuration to machine 14?</string>
+    <string name="Arm">ARM</string>
+    <string name="INPUT">:\nINPUT</string>
+    <string name="INOUT">:\nIN/OUT</string>
+    <string name="OUTPUT">:\nOUTPUT</string>
+    <string name="DISABLED">:\nDISABLED</string>
+
+    <!-- Here we go! -->
+
+    <string name="button_sendCommand_text">Send</string>
+
+    <string name="editText_sendCommand_text">Command to send</string>
+
+    <string name="logs_received">Received: </string>
+    <string name="logs_sent">Sent: </string>
+
+
+    <string-array name="Colours">
+        <item>Red</item>
+        <item>Orange</item>
+        <item>Yellow</item>
+        <item>Pale Green</item>
+        <item>Green</item>
+        <item>Blue-Green</item>
+        <item>Light Blue</item>
+        <item>Blue</item>
+        <item>Purple</item>
+        <item>Pink</item>
+        <item>Hard Pink</item>
+        <item>Brown</item>
+        <item>White</item>
+        <item>Light Grey</item>
+        <item>Dark Grey</item>
+    </string-array>
+
+
+    <string-array name="Grades">
+        <item>Grade A</item>
+        <item>Grade B</item>
+        <item>Grade C</item>
+        <item>Grade D</item>
+        <item>Grade E</item>
+        <item>Grade F</item>
+        <item>Grade G</item>
+    </string-array>
+</resources>

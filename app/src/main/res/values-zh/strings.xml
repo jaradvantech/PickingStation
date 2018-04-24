@@ -1,0 +1,144 @@
+<resources>
+
+    <string name="app_name">Display4</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">设置</string>
+
+    <!-- Loading Screen -->
+    <string name="Connectingtoserver">连接到服务器</string>
+
+    <!-- Line state -->
+    <string name="At">在:</string>
+    <string name="To">至:</string>
+
+    <!-- Settings Screen-->
+    <string name="Language">语言</string>
+    <string name="Port">港口</string>
+    <string name="IPaddres">机器IP地址</string>
+    <string name="Warning">警告</string>
+    <string name="saveconfig">保存配置</string>
+
+    <!-- Navigation Menu -->
+    <string name="LineState">工位信息</string>
+    <string name="AlgorithmConfiguration">参数配置</string>
+    <string name="PalletEditor">托盘编辑</string>
+    <string name="ProductionLogs">生产日志</string>
+    <string name="Alarms">报警信息</string>
+    <string name="ManualControl">手动</string>
+    <string name="Debug">测试界面</string>
+    <string name="Settings">设置</string>
+
+    <!-- Manual Control-->
+    <string name="Manualmode">手动</string>
+    <string name="LineStopped">线路已停止</string>
+
+    <!-- Alarms -->
+    <string name="RecentAlarms">最近的警报：</string>
+    <string name="Details">细节:</string>
+    <string name="Doyoureallywanttodeletethisalarm">你真的想删除这个闹钟吗？</string>
+    <string name="Cancel">取消</string>
+    <string name="Alarmoftype">类型报警</string>
+    <string name="Source">资源</string>
+    <string name="Raisedat">提高:</string>
+    <string name="Reason">原因：未知\n\n</string>
+    <string name="Longpresstodismiss">[长按解散] \n</string>
+    <string name="Equipment">设备</string>
+    <string name="Type_">类型</string>
+    <string name="_alarm"> 报警</string>
+    <string name="Source_">资源:</string>
+    <string name="Manipulator">机械手</string>
+    <!-- Logs -->
+
+    <!-- Pallet Editor -->
+    <string name="Color">颜色</string>
+    <string name="Grade">年级</string>
+    <string name="Location">位置</string>
+    <string name="AddAtTheTop">在顶部添加</string>
+    <string name="AddOver">加过来...</string>
+    <string name="AddUnder">添加下...</string>
+    <string name="Position">位置</string>
+    <string name="Add">加</string>
+    <string name="Edit">编辑</string>
+    <string name="Delete">删除</string>
+    <string name="Format">格式</string>
+    <string name="NoPalletSelected">没有选择托盘</string>
+
+    <string name="Red">红</string>
+    <string name="Orange">橙子</string>
+    <string name="Yellow">黄色</string>
+    <string name="PaleGreen">浅绿色</string>
+    <string name="Green">绿色</string>
+    <string name="BlueGreen">蓝绿</string>
+    <string name="LightBlue">浅蓝</string>
+    <string name="Blue">蓝色</string>
+    <string name="Purple">紫色</string>
+    <string name="Pink">粉</string>
+    <string name="HardPink">紫红色</string>
+    <string name="Brown">棕色</string>
+    <string name="White">白色</string>
+    <string name="LightGrey">浅灰色</string>
+    <string name="DarkGrey">深灰色</string>
+
+    <string name="brick_grade_1">年级 A</string>
+    <string name="brick_grade_2">年级 B</string>
+    <string name="brick_grade_3">年级 C</string>
+    <string name="brick_grade_4">年级 D</string>
+    <string name="brick_grade_5">年级 E</string>
+    <string name="brick_grade_6">年级 F</string>
+    <string name="brick_grade_7">年级 G</string>
+
+    <!-- Algorithm Configuration-->
+    <string name="TypeToPackage">键入打包:</string>
+    <string name="MatchTopCoef">匹配系数</string>
+    <string name="SimilarityCoef">相似系数</string>
+    <string name="PositionCoef">位置系数</string>
+    <string name="Save">保存</string>
+    <string name="Saveconfigurationtomachine">保存配置到机器14？</string>
+    <string name="Arm">臂</string>
+    <string name="INPUT">:\n输入</string>
+    <string name="INOUT">:\n输入和输出</string>
+    <string name="OUTPUT">:\n输出</string>
+    <string name="DISABLED">:\nDISABLED</string> //TODO
+
+    <!-- Here we go! -->
+
+    <string name="button_sendCommand_text">发送</string>
+
+    <string name="editText_sendCommand_text">要发送的命令</string>
+
+    <string name="logs_received">收到:</string>
+    <string name="logs_sent">发送:</string>
+
+
+    <string-array name="Colours">
+        <item>红</item>
+        <item>橙子</item>
+        <item>黄色</item>
+        <item>浅绿色</item>
+        <item>绿色</item>
+        <item>蓝绿</item>
+        <item>浅蓝</item>
+        <item>蓝色</item>
+        <item>紫色</item>
+        <item>粉</item>
+        <item>紫红色</item>
+        <item>棕色</item>
+        <item>白色</item>
+        <item>浅灰色</item>
+        <item>深灰色</item>
+    </string-array>
+
+    <string-array name="Grades">
+        <item>年级 A</item>
+        <item>年级 B</item>
+        <item>年级 C</item>
+        <item>年级 D</item>
+        <item>年级 E</item>
+        <item>年级 F</item>
+        <item>年级 G</item>
+    </string-array>
+
+</resources>
