@@ -17,7 +17,7 @@
     android:paddingRight="0dp"
     android:paddingStart="0dp"
     android:paddingTop="0dp"
-    tools:context="com.example.administrator.Display4.Manual">
+    tools:context="com.example.administrator.PickingStation.Manual">
 
     <!-- TODO: Update blank fragment layout -->
 

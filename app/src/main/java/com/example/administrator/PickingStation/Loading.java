@@ -1,16 +1,11 @@
-package com.example.administrator.Display4;
+package com.example.administrator.PickingStation;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Loading extends Fragment {
 

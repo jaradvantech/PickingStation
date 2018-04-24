@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.administrator.Display4">
+    package="com.example.administrator.PickingStation">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -16,7 +16,7 @@
 
         <!-- RBS add splash screen -->
         <activity
-            android:name="com.example.administrator.Display4.SplashActivity"
+            android:name="com.example.administrator.PickingStation.SplashActivity"
             android:label="Display4"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -26,13 +26,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.administrator.Display4.MainActivity"
+            android:name="com.example.administrator.PickingStation.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
 
-        <activity android:name="com.example.administrator.Display4.AdvancedSettings"></activity>
+        <activity android:name="com.example.administrator.PickingStation.AdvancedSettings"></activity>
 
-        <activity android:name="com.example.administrator.Display4.Debug_presets"></activity>
+        <activity android:name="com.example.administrator.PickingStation.Debug_presets"></activity>
     </application>
 
 </manifest>

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.administrator.Display4;
+package com.example.administrator.PickingStation;
 
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
