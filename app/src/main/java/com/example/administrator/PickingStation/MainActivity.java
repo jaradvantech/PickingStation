@@ -524,6 +524,5 @@ public class MainActivity extends AppCompatActivity
             this.getResources().updateConfiguration(config, displayMetrics);
         }
     }
-
 }
 
