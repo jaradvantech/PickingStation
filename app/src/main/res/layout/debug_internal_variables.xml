@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.PickingStation.AdvancedSettings">
+
+    <TextView
+        android:id="@+id/internal_height"
+        android:layout_width="170dp"
+        android:layout_height="212dp"
+        android:layout_marginTop="16dp"
+        android:text="Height"
+        app:layout_constraintStart_toStartOf="@+id/internal_DNIlist"
+        app:layout_constraintTop_toBottomOf="@+id/internal_DNIlist" />
+
+    <TextView
+        android:id="@+id/internal_DNIlist"
+        android:layout_width="170dp"
+        android:layout_height="96dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="32dp"
+        android:text="Available DNIs"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/internal_BricksBefore"
+        android:layout_width="170dp"
+        android:layout_height="98dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="32dp"
+        android:text="Bricks Before Line"
+        app:layout_constraintStart_toEndOf="@+id/internal_DNIlist"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/internal_BricksOn"
+        android:layout_width="170dp"
+        android:layout_height="98dp"
+        android:layout_marginTop="16dp"
+        android:text="Bricks on the line"
+        app:layout_constraintStart_toStartOf="@+id/internal_BricksBefore"
+        app:layout_constraintTop_toBottomOf="@+id/internal_BricksBefore" />
+
+    <TextView
+        android:id="@+id/internal_BricksReady"
+        android:layout_width="170dp"
+        android:layout_height="98dp"
+        android:layout_marginTop="16dp"
+        android:text="Bricks Ready for output"
+        app:layout_constraintStart_toStartOf="@+id/internal_BricksOn"
+        app:layout_constraintTop_toBottomOf="@+id/internal_BricksOn" />
+
+    <TextView
+        android:id="@+id/internal_ManipulatorInfo"
+        android:layout_width="435dp"
+        android:layout_height="325dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="32dp"
+        android:text="Manipulator Info"
+        app:layout_constraintStart_toEndOf="@+id/internal_BricksBefore"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

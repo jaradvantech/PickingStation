@@ -40,23 +40,19 @@ public class MainActivity extends AppCompatActivity
         Alarms.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
-    int previous_id = R.id.holder_loading;
-    TcpClient mTcpClient;
-    Boolean FirstTimeRPRV =true;
-    Line line = new Line();
-    Algorithm algorithm = new Algorithm();
-    Editor editor = new Editor();
-    Logs logs = new Logs();
-    Manual manual = new Manual();
-    Debug debug = new Debug();
-    Settings settings = new Settings();
-    Loading loading = new Loading();
-    Alarms alarms = new Alarms();
-
-
-    /*****************************************************
-     *                                  --Globals--
-     *****************************************************/
+    private TcpClient mTcpClient;
+    private Boolean FirstTimeRPRV = true;
+    private Line line;
+    private Algorithm algorithm;
+    private Editor editor;
+    private Logs logs;
+    private Manual manual;
+    private Debug debug;
+    private Debug_InternalState debug_advanced;
+    private Settings settings;
+    private Loading loading;
+    private Alarms alarms;
+    private int previous_id = R.id.holder_loading;
     private final int TRANSITION_TIME = 400;
     private final int ALARM_CHECK_PERIOD = 2000;
     private final int RPRV_PERIOD = 300;
@@ -99,6 +95,16 @@ public class MainActivity extends AppCompatActivity
         manipulatorAlarmIcon[3] = (ImageView) findViewById(R.id.appbar_imageView_arm4);
         manipulatorAlarmIcon[4] = (ImageView) findViewById(R.id.appbar_imageView_arm5);
         equipmentAlarmIcon = (ImageView) findViewById(R.id.appbar_imageview_equipment);
+        line = new Line();
+        algorithm = new Algorithm();
+        editor = new Editor();
+        logs = new Logs();
+        manual = new Manual();
+        debug = new Debug();
+        debug_advanced = new Debug_InternalState();
+        settings = new Settings();
+        loading = new Loading();
+        alarms = new Alarms();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -385,6 +391,9 @@ public class MainActivity extends AppCompatActivity
                 alarms.updateAlarms(mAlarmManager.parseAlarmCMD(values[1]));
                 updateAppbarAlarms(mAlarmManager.getCurrentArmState());
 
+            }else if(values[1].contains("GDIS") && values[0].contains("cmdreceived")){
+                TcpClient.timeOuts=0;
+
             }else if(values[1].contains("PING") && values[0].contains("cmdreceived")){
                 TcpClient.timeOuts=0;
 
@@ -510,7 +519,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     /*
-     * We haven't redesigned this app yet, so we are running it with the
+     * We haven't redesigned this app yet, we are running it with the
      * wrong DPI so it looks the same in the simulator
      */
     public void correctDisplayMetrics() {
