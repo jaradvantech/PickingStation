@@ -6,6 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/advanced_takenBricks"
+        android:layout_width="110dp"
+        android:layout_height="463dp"
+        android:layout_marginStart="20dp"
+        android:text="Taken Bricks:"
+        android:textColor="@color/brick_color_1"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/advanced_BricksOn"
+        app:layout_constraintTop_toTopOf="@+id/advanced_BricksOn" />
+
     <Button
         android:id="@+id/presets_button_placeorder"
         android:layout_width="126dp"
@@ -66,13 +78,15 @@
 
     <Switch
         android:id="@+id/advanced_switch_enable16"
-        android:layout_width="326dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="140dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
         android:enabled="true"
         android:text="WheterOrNotPutTheTileTo16 enable"
         android:textAlignment="textEnd"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -105,4 +119,43 @@
         android:inputType="number"
         app:layout_constraintStart_toEndOf="@+id/presets_editText_what"
         app:layout_constraintTop_toTopOf="@+id/presets_editText_what" />
+
+    <TextView
+        android:id="@+id/advanced_height"
+        android:layout_width="121dp"
+        android:layout_height="253dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="224dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/advanced_BricksOn"
+        android:layout_width="110dp"
+        android:layout_height="463dp"
+        android:layout_marginStart="696dp"
+        android:layout_marginTop="16dp"
+        android:text="Bricks on the line:"
+        android:textColor="@color/brick_color_8"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/advanced_BricksReady"
+        android:layout_width="142dp"
+        android:layout_height="253dp"
+        android:layout_marginStart="12dp"
+        app:layout_constraintStart_toEndOf="@+id/advanced_height"
+        app:layout_constraintTop_toTopOf="@+id/advanced_height" />
+
+    <TextView
+        android:id="@+id/advanced_ManipulatorInfo"
+        android:layout_width="317dp"
+        android:layout_height="253dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="224dp"
+        app:layout_constraintStart_toEndOf="@+id/advanced_BricksReady"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

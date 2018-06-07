@@ -32,7 +32,6 @@
 
         <activity android:name="com.example.administrator.PickingStation.AdvancedSettings"></activity>
 
-        <activity android:name="com.example.administrator.PickingStation.Debug_presets"></activity>
     </application>
 
 </manifest>

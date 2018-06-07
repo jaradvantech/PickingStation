@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <!-- RBS: I need an identifier for this item.
+    SDK will give unique values during compile time.-->
+    <item name="opt_debug_advanced" type="id"/>
+
+</resources>

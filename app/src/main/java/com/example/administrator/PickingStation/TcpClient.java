@@ -38,7 +38,7 @@ public class TcpClient {
     }
 
     public void sendMessage(String message) {
-        //Log.e("TCP Client", "C: Sending...");
+        Log.e("TCP Client", "C: Sending...");
         if (mBufferOut != null && !mBufferOut.checkError()) {
             mBufferOut.println(message);
             mBufferOut.flush();
@@ -170,9 +170,9 @@ public class TcpClient {
     //Declare the interface. The method messageReceived(String message) will must be implemented in the MyActivity
     //class at on asynckTask doInBackground
     public interface OnMessageReceived {
-        public void messageReceived(String message);
-        public void connectionEstablished();
-        public void connectionLost();
+        void messageReceived(String message);
+        void connectionEstablished();
+        void connectionLost();
     }
 
 }

@@ -26,7 +26,7 @@ public class Debug extends Fragment {
     private Button buttonRead;
     private Button buttonWrite;
     private Button buttonClear;
-    private Button debug_encoder3000, advancedSettings, presets;
+    private Button debug_encoder3000, armPosition, advanced;
     private TextView armDataOutput;
     private TextView commonDataOutput;
     private CheckBox checkBox_SBD, checkBox_MR, checkBox_SBFA;
@@ -63,8 +63,8 @@ public class Debug extends Fragment {
         buttonWrite = (Button) view.findViewById(R.id.debug_write);
         buttonClear = (Button) view.findViewById(R.id.debug_clear);
         debug_encoder3000 = (Button) view.findViewById(R.id.debug_encoder3000);
-        advancedSettings = (Button) view.findViewById(R.id.debug_button_advanced);
-        presets = (Button) view.findViewById(R.id.debug_button_presets);
+        armPosition = (Button) view.findViewById(R.id.debug_button_armPosition);
+        advanced = (Button) view.findViewById(R.id.debug_button_advanced);
         commonDataOutput = (TextView) view.findViewById(R.id.debug_commonDataOutput);
         armDataOutput = (TextView) view.findViewById(R.id.debug_armDataOutput);
         final TextView currentArmText = (TextView) view.findViewById(R.id.debug_currentArm);
@@ -124,19 +124,16 @@ public class Debug extends Fragment {
         });
 
         //Launch advanced settings window (manipulator position etc.)
-        advancedSettings.setOnClickListener(new View.OnClickListener() {
+        armPosition.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AdvancedSettings.class);
-                startActivityForResult(intent, 1);
-
+            //TODO redo this part
             }
         });
 
         //Launch advanced settings window (manipulator position etc.)
-        presets.setOnClickListener(new View.OnClickListener() {
+        advanced.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), Debug_presets.class);
-                startActivityForResult(intent, 1);
+                ((MainActivity)getActivity()).switchToLayout(R.id.opt_debug_advanced);
             }
         });
 
@@ -304,6 +301,8 @@ public class Debug extends Fragment {
         //Format int into string
         return String.format(format, inputNumber);
     }
+
+    //TODO this wont be needed
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

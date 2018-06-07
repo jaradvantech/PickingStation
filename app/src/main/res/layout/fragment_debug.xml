@@ -356,15 +356,16 @@
             app:layout_constraintTop_toBottomOf="@+id/debug_armDataOutput" />
 
         <Button
-            android:id="@+id/debug_button_advanced"
+            android:id="@+id/debug_button_armPosition"
             android:layout_width="209dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="ARM POSITION"
-            app:layout_constraintStart_toStartOf="@+id/debug_button_presets"
-            app:layout_constraintTop_toBottomOf="@+id/debug_button_presets" />
+            app:layout_constraintStart_toStartOf="@+id/debug_button_advanced"
+            app:layout_constraintTop_toBottomOf="@+id/debug_button_advanced" />
 
         <Button
-            android:id="@+id/debug_button_presets"
+            android:id="@+id/debug_button_advanced"
             android:layout_width="209dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -376,9 +377,10 @@
             android:id="@+id/debug_encoder3000"
             android:layout_width="209dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="Encoder + 3000"
-            app:layout_constraintStart_toStartOf="@+id/debug_button_advanced"
-            app:layout_constraintTop_toBottomOf="@+id/debug_button_advanced" />
+            app:layout_constraintStart_toStartOf="@+id/debug_button_armPosition"
+            app:layout_constraintTop_toBottomOf="@+id/debug_button_armPosition" />
 
     </android.support.constraint.ConstraintLayout>
 

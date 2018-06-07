@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
         Editor.OnFragmentInteractionListener,
         Manual.OnFragmentInteractionListener,
         Debug.OnFragmentInteractionListener,
+        DebugAdvancedOptions.OnFragmentInteractionListener,
         Alarms.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity
     private Logs logs;
     private Manual manual;
     private Debug debug;
-    private Debug_InternalState debug_advanced;
+    private DebugAdvancedOptions debug_advanced;
     private Settings settings;
     private Loading loading;
     private Alarms alarms;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity
         logs = new Logs();
         manual = new Manual();
         debug = new Debug();
-        debug_advanced = new Debug_InternalState();
+        debug_advanced = new DebugAdvancedOptions();
         settings = new Settings();
         loading = new Loading();
         alarms = new Alarms();
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity
         manager.beginTransaction().replace(R.id.holder_logs, logs, logs.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_manual, manual, manual.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_debug, debug, debug.getTag()).commit();
+        manager.beginTransaction().replace(R.id.holder_debug_advanced, debug_advanced, debug_advanced.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_settings, settings, settings.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_loading, loading, loading.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_alarms, alarms, alarms.getTag()).commit();
@@ -141,6 +143,9 @@ public class MainActivity extends AppCompatActivity
                 switchToLayout(R.id.nav_alarms);
             }
         });
+
+        //Start TCP connection
+        new ConnectTask().execute("");
 
         startCheckingForAlarms();
     }
@@ -166,8 +171,13 @@ public class MainActivity extends AppCompatActivity
 
          //Otherwise, go to Line Status
         } else {
-            startRPRV();
-            switchToLayout(R.id.nav_lines);
+            //If in sub-screen, return to main screen
+            if(previous_id == R.id.opt_debug_advanced) switchToLayout(R.id.nav_debug);
+
+            else {
+                startRPRV();
+                switchToLayout(R.id.nav_lines);
+            }
         }
     }
 
@@ -230,6 +240,12 @@ public class MainActivity extends AppCompatActivity
         if(new_id == R.id.nav_lines) startRPRV();
 
         /*
+         * Enable/disable autoupdate of debug fragment
+         */
+        if(previous_id == R.id.opt_debug_advanced) debug_advanced.stopAutoUpdate();
+        if(new_id == R.id.opt_debug_advanced) debug_advanced.startAutoUpdate();
+
+        /*
          * Save&Load settings when leaving the Settings screen
          */
         if(previous_id == R.id.nav_settings) settings.saveSettings();
@@ -272,6 +288,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_debug:
                 retLayout = (ConstraintLayout) this.findViewById(R.id.holder_debug);
+                break;
+            case R.id.opt_debug_advanced:
+                retLayout = (ConstraintLayout) this.findViewById(R.id.holder_debug_advanced);
                 break;
             case R.id.nav_settings:
                 retLayout = (ConstraintLayout) this.findViewById(R.id.holder_settings);
@@ -320,6 +339,10 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_debug:
                 getSupportActionBar().setTitle(getResources().getString(R.string.Debug));
+                break;
+            case R.id.opt_debug_advanced:
+                //getSupportActionBar().setTitle(getResources().getString(R.string.DebugAdvanced));
+                getSupportActionBar().setTitle("Advanced Debug"); //TODO update strings
                 break;
             case R.id.nav_settings:
                 getSupportActionBar().setTitle(getResources().getString(R.string.Settings));
@@ -392,7 +415,7 @@ public class MainActivity extends AppCompatActivity
                 updateAppbarAlarms(mAlarmManager.getCurrentArmState());
 
             }else if(values[1].contains("GDIS") && values[0].contains("cmdreceived")){
-                TcpClient.timeOuts=0;
+                debug_advanced.parseInternalStateDebugData(values[1]);
 
             }else if(values[1].contains("PING") && values[0].contains("cmdreceived")){
                 TcpClient.timeOuts=0;
