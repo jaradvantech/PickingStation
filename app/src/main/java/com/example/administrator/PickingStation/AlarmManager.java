@@ -13,7 +13,7 @@ public class AlarmManager {
     private ArrayList<AlarmObject> newAlarms;
     private Context context;
     private int lastChecked_CommonAlarms;
-    private int lastChecked_Manipulatoralarms[] = new int[5+1];
+    private int lastChecked_Manipulatoralarms[] = new int[5+1]; //todo MAGIC NUMBER_5
 
     /*
      * Conyext is needed.
@@ -30,8 +30,8 @@ public class AlarmManager {
      */
     public ArrayList<AlarmObject> parseAlarmCMD(String CMD) {
         newAlarms = new ArrayList<>();
-        int current_manipulatoralarms[] = new int[5+1];
-        int new_manipulatoralarms[] = new int[5+1];
+        int current_manipulatoralarms[] = new int[5+1]; //todo MAGIC NUMBER_5
+        int new_manipulatoralarms[] = new int[5+1]; //todo MAGIC NUMBER_5
         int new_commonAlarms = 0;
 
         //Ex. CMD=  CHAL_14_00000_00000_00000_00000_00002_00000
@@ -51,7 +51,7 @@ public class AlarmManager {
             new_commonAlarms = (lastChecked_CommonAlarms^current_commonAlarms)&current_commonAlarms;
         }
 
-        for(int i=1; i<=5; i++) {
+        for(int i=1; i<=5; i++) { //todo MAGIC NUMBER_5
             if(current_manipulatoralarms[i] != lastChecked_Manipulatoralarms[i]){
                 new_manipulatoralarms[i] = (lastChecked_Manipulatoralarms[i]^current_manipulatoralarms[i])&current_manipulatoralarms[i];
             }
@@ -76,7 +76,7 @@ public class AlarmManager {
             }
         }
         //Arm Alarms
-        for(int j=1; j<=5; j++) {
+        for(int j=1; j<=5; j++) { //todo MAGIC NUMBER_5
             //check bit at i
             for(int i=0; i<16; i++) {
                 //check bit at i

@@ -30,7 +30,7 @@
         android:text="JARADVANTECH"
         android:textAlignment="center"
         android:textColor="@color/colorBlack"
-        android:textSize="24sp" />
+        android:textSize="@dimen/text_big" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -38,6 +38,7 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="Alpha v0.9.5-prerelease"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_small" />
 
 </LinearLayout>

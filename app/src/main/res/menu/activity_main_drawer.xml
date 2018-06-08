@@ -39,19 +39,6 @@
             android:icon="@mipmap/settings"
             android:title="@string/Settings" />
     </group>
-    <!--
-    <item android:title="Other stuff">
-        <menu>
-            <item
-                android:id="@+id/nav_export"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Export data" />
-            <item
-                android:id="@+id/nav_wifi"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Connect Wi-Fi" />
-        </menu>
-    </item>
-    !-->
+
 
 </menu>

@@ -98,8 +98,8 @@ public class TcpClient {
                 //get IP and Port from preferences
                 try {
                     SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                    SERVER_IP = InetAddress.getByName(sharedPref.getString(mContext.getResources().getString(R.string.Stored_PC_IP_Address),null));
-                    SERVER_PORT = Integer.parseInt(sharedPref.getString(mContext.getResources().getString(R.string.Stored_PC_IP_Port),null));
+                    SERVER_IP = InetAddress.getByName(sharedPref.getString(mContext.getResources().getString(R.string.Stored_PC_IP_Address),"192.168.0.0"));
+                    SERVER_PORT = Integer.parseInt(sharedPref.getString(mContext.getResources().getString(R.string.Stored_PC_IP_Port),"24601"));
                 } catch (Exception e) {
                     Log.e("String to IP exc.", e.toString());
                 }

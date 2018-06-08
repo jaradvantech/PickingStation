@@ -27,7 +27,3 @@
         app:menu="@menu/activity_main_drawer" />
 
 </android.support.v4.widget.DrawerLayout>
-
-    <!--app:itemIconTint="@color/colorSecondary"!-->
-    <!--app:itemTextColor="@color/colorSecondary"!-->
-    <!--app:itemBackground="@android:color/transparent"!-->

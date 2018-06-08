@@ -14,6 +14,16 @@
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
+   <!-- RBS Custom sizes for drawer (rescaled screen makes default look too small)-->
+    <style name="NavigationDrawerStyle">
+        <item name="android:textSize">20dp</item><!-- text size in menu-->
+        <item name="android:listPreferredItemHeightSmall">65dp</item><!-- item size in menu-->
+    </style>
+
+    <style name="list_item_appearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

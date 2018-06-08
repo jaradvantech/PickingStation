@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.Locale;
 
@@ -58,12 +59,13 @@ public class MainActivity extends AppCompatActivity
     private final int ALARM_CHECK_PERIOD = 2000;
     private final int RPRV_PERIOD = 300;
     private final Handler alarmLoopHandler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private final AlarmManager mAlarmManager = new AlarmManager(this);
-    private ImageView appbar_connection;
     private Button appbarTransparentButton;
+    private TextView title;
+    private ImageView appbar_connection;
     private ImageView manipulatorAlarmIcon[] = new ImageView[5];
     private ImageView equipmentAlarmIcon;
-    private final Handler handler = new Handler(Looper.getMainLooper());
     private volatile boolean DoLoops = false;
     private String CurrentLanguage = "en"; //default
     private NavigationView navigationView;
@@ -107,19 +109,21 @@ public class MainActivity extends AppCompatActivity
         loading = new Loading();
         alarms = new Alarms();
 
+        //Replace built-in title with custom title
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        title = (TextView) findViewById(R.id.appBar_TextView_Title);
+        title.setText(getResources().getString(R.string.Loading));
 
+        /*Configure Navigation Drawer*/
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setItemIconTintList(null);
-
-        getSupportActionBar().setTitle(getResources().getString(R.string.Loading));
 
         // FRAGMENT MANAGEMENT  https://www.youtube.com/watch?v=iksjcQuxtt4
         FragmentManager manager = getSupportFragmentManager();
@@ -179,26 +183,6 @@ public class MainActivity extends AppCompatActivity
                 switchToLayout(R.id.nav_lines);
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu( Menu menu ) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected( MenuItem item ) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     /*
@@ -320,32 +304,32 @@ public class MainActivity extends AppCompatActivity
     private void setCurrentTitle(int id) {
         switch (id) {
             case R.id.nav_lines:
-                getSupportActionBar().setTitle(getResources().getString(R.string.LineState));
+                title.setText(getResources().getString(R.string.LineState));
                 break;
             case R.id.nav_algorithm:
-                getSupportActionBar().setTitle(getResources().getString(R.string.AlgorithmConfiguration));
+                title.setText(getResources().getString(R.string.AlgorithmConfiguration));
                 break;
             case R.id.nav_editor:
-                getSupportActionBar().setTitle(getResources().getString(R.string.PalletEditor));
+                title.setText(getResources().getString(R.string.PalletEditor));
                 break;
             case R.id.nav_logs:
-                getSupportActionBar().setTitle(getResources().getString(R.string.ProductionLogs));
+                title.setText(getResources().getString(R.string.ProductionLogs));
                 break;
             case R.id.nav_alarms:
-                getSupportActionBar().setTitle(getResources().getString(R.string.Alarms));
+                title.setText(getResources().getString(R.string.Alarms));
                 break;
             case R.id.nav_manual:
-                getSupportActionBar().setTitle(getResources().getString(R.string.ManualControl));
+                title.setText(getResources().getString(R.string.ManualControl));
                 break;
             case R.id.nav_debug:
-                getSupportActionBar().setTitle(getResources().getString(R.string.Debug));
+                title.setText(getResources().getString(R.string.Debug));
                 break;
             case R.id.opt_debug_advanced:
-                //getSupportActionBar().setTitle(getResources().getString(R.string.DebugAdvanced));
-                getSupportActionBar().setTitle("Advanced Debug"); //TODO update strings
+                //title.setText(getResources().getString(R.string.DebugAdvanced));
+                title.setText("Advanced Debug"); //TODO update strings
                 break;
             case R.id.nav_settings:
-                getSupportActionBar().setTitle(getResources().getString(R.string.Settings));
+                title.setText(getResources().getString(R.string.Settings));
                 break;
         }
     }
@@ -541,18 +525,23 @@ public class MainActivity extends AppCompatActivity
         mainMenu.findItem(R.id.nav_manual).setTitle(getString(R.string.ManualControl));
     }
 
-    /*
-     * We haven't redesigned this app yet, we are running it with the
-     * wrong DPI so it looks the same in the simulator
+    /* RBS April 19th, 2018
+     *
+     * One more workaround (duh)
+     * This crappy Android tablet has the wrong density value programmed
+     * It should be aprox dens = 1 and DPI=160 since it is a 143dpi screen.
+     * However someone decided to change this to 1.33125 at some point,
+     * fucking everything up. In order to get this layout to match the one in the
+     * AndroidStudio editor, this has to be reverted.
      */
     public void correctDisplayMetrics() {
 
         DisplayMetrics displayMetrics =  this.getResources().getDisplayMetrics();
         Configuration config = this.getResources().getConfiguration();
 
-        if(displayMetrics.density < 1.3f) {
-            displayMetrics.density = 1.33125f;
-            config.densityDpi = DisplayMetrics.DENSITY_MEDIUM;
+        if(displayMetrics.density != 1) {
+            displayMetrics.density = 1;
+            config.densityDpi = 160;
             this.getResources().updateConfiguration(config, displayMetrics);
         }
     }

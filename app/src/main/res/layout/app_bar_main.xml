@@ -18,7 +18,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="51dp"
+                android:layout_height="@dimen/action_bar_default_height"
                 android:layout_marginEnd="8dp"
                 android:background="?attr/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -28,21 +28,34 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+            <TextView
+                android:id="@+id/appBar_TextView_Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="78dp"
+                android:text="AppTitle"
+                android:textAppearance="@android:style/TextAppearance.WindowTitle"
+                android:textSize="@dimen/action_bar_title_text_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.45999998" />
+
             <Button
                 android:id="@+id/appbar_button_transparentButton"
-                android:layout_width="249dp"
+                android:layout_width="286dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="104dp"
+                android:layout_marginEnd="112dp"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/appbar_imageView_connection"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/appbar_imageView_connection"
-                app:layout_constraintVertical_bias="0.333" />
+                app:layout_constraintVertical_bias="0.416" />
 
             <ImageView
                 android:id="@+id/appbar_imageView_connection"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_marginBottom="8dp"
                 android:layout_marginRight="68dp"
                 android:layout_marginTop="8dp"
@@ -56,8 +69,8 @@
 
             <ImageView
                 android:id="@+id/appbar_imageView_arm5"
-                android:layout_width="31dp"
-                android:layout_height="31dp"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
@@ -70,8 +83,8 @@
 
             <ImageView
                 android:id="@+id/appbar_imageView_arm4"
-                android:layout_width="31dp"
-                android:layout_height="31dp"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
@@ -84,8 +97,8 @@
 
             <ImageView
                 android:id="@+id/appbar_imageView_arm2"
-                android:layout_width="31dp"
-                android:layout_height="31dp"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
@@ -98,8 +111,8 @@
 
             <ImageView
                 android:id="@+id/appbar_imageView_arm3"
-                android:layout_width="31dp"
-                android:layout_height="31dp"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
@@ -112,8 +125,8 @@
 
             <ImageView
                 android:id="@+id/appbar_imageView_arm1"
-                android:layout_width="31dp"
-                android:layout_height="31dp"
+                android:layout_width="@dimen/action_bar_icon_size"
+                android:layout_height="@dimen/action_bar_icon_size"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
@@ -126,8 +139,8 @@
 
             <ImageView
                 android:id="@+id/appbar_imageview_equipment"
-                android:layout_width="29dp"
-                android:layout_height="29dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginTop="8dp"
