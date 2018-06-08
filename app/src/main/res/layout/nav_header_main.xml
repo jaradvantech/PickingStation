@@ -8,8 +8,8 @@
     android:gravity="top|left|start"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_bottom_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
     android:paddingTop="@dimen/activity_top_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 

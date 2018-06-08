@@ -27,8 +27,8 @@
 
         <ImageView
             android:id="@+id/manual_imageView_stop"
-            android:layout_width="79dp"
-            android:layout_height="45dp"
+            android:layout_width="103dp"
+            android:layout_height="56dp"
             android:layout_marginBottom="124dp"
             android:layout_marginEnd="144dp"
             android:background="@mipmap/box2"
@@ -42,10 +42,9 @@
 
         <ImageView
             android:id="@+id/manual_imageView_forward"
-            android:layout_width="47dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="32dp"
-            android:layout_marginStart="4dp"
+            android:layout_width="61dp"
+            android:layout_height="46dp"
+            android:layout_marginBottom="36dp"
             android:background="@mipmap/forward"
             android:backgroundTint="@color/colorSecondaryPale"
             android:backgroundTintMode="multiply"
@@ -56,8 +55,8 @@
 
         <ImageView
             android:id="@+id/manual_imageView_backward"
-            android:layout_width="47dp"
-            android:layout_height="35dp"
+            android:layout_width="61dp"
+            android:layout_height="46dp"
             android:layout_marginEnd="4dp"
             android:layout_marginTop="34dp"
             android:background="@mipmap/backward"
@@ -70,10 +69,10 @@
 
         <ImageView
             android:id="@+id/manual_imageView_left"
-            android:layout_width="44dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="32dp"
-            android:layout_marginEnd="72dp"
+            android:layout_width="57dp"
+            android:layout_height="46dp"
+            android:layout_marginBottom="36dp"
+            android:layout_marginEnd="104dp"
             android:background="@mipmap/left"
             android:backgroundTint="@color/colorSecondaryPale"
             android:backgroundTintMode="multiply"
@@ -84,9 +83,9 @@
 
         <ImageView
             android:id="@+id/manual_imageView_right"
-            android:layout_width="44dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="68dp"
+            android:layout_width="57dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="104dp"
             android:layout_marginTop="32dp"
             android:background="@mipmap/right"
             android:backgroundTint="@color/colorSecondaryPale"
@@ -98,11 +97,11 @@
 
         <ImageView
             android:id="@+id/manual_imageView_up"
-            android:layout_width="37dp"
-            android:layout_height="54dp"
-            android:layout_marginBottom="14dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="48dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="11dp"
+            android:layout_marginStart="11dp"
             android:background="@mipmap/up"
             android:backgroundTint="@color/colorSecondaryPale"
             android:backgroundTintMode="multiply"
@@ -110,15 +109,16 @@
             android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/manual_imageView_stop"
             app:layout_constraintEnd_toEndOf="@+id/manual_imageView_stop"
+            app:layout_constraintHorizontal_bias="0.515"
             app:layout_constraintStart_toStartOf="@+id/manual_imageView_stop" />
 
         <ImageView
             android:id="@+id/manual_imageView_down"
-            android:layout_width="37dp"
-            android:layout_height="54dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="14dp"
+            android:layout_width="48dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="11dp"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="18dp"
             android:background="@mipmap/down"
             android:backgroundTint="@color/colorSecondaryPale"
             android:backgroundTintMode="multiply"
@@ -132,7 +132,7 @@
             android:id="@+id/manual_imageView_sucker"
             android:layout_width="169dp"
             android:layout_height="260dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="5dp"
             android:clickable="true"
             android:scaleType="fitXY"
             android:src="@mipmap/sucker_cut"
@@ -144,8 +144,8 @@
             android:id="@+id/manual_GifimageView_sucker_animation"
             android:layout_width="182dp"
             android:layout_height="266dp"
-            android:layout_marginStart="144dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="187dp"
+            android:layout_marginTop="5dp"
             android:background="@mipmap/ventosa_cut_airflow"
             android:backgroundTint="@color/colorPrimaryDark"
             android:scaleType="fitXY"
