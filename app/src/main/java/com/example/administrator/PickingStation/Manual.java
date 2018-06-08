@@ -75,15 +75,11 @@ public class Manual extends Fragment {
         manual_imageView_question_top = (ImageView) view.findViewById(R.id.manual_imageView_question_top);
 
         final GifImageView manual_GifimageView_sucker_glow = (GifImageView) view.findViewById(R.id.manual_GifimageView_sucker_glow);
-        final GifImageView manual_GifimageView_motor_glow = (GifImageView) view.findViewById(R.id.manual_GifimageView_motor_glow);
-        final GifImageView manual_GifimageView_arrows_glow = (GifImageView) view.findViewById(R.id.manual_GifimageView_arrows_glow);
 
         final GifImageView manual_GifimageView_sucker_animation = (GifImageView) view.findViewById(R.id.manual_GifimageView_sucker_animation);
         final GifImageView manual_GifimageView_line_wheel = (GifImageView) view.findViewById(R.id.manual_GifimageView_line_wheel);
 
         final GifDrawable manual_GifimageView_sucker_glow_Drawable = (GifDrawable)manual_GifimageView_sucker_glow.getBackground();
-        final GifDrawable manual_GifimageView_motor_glow_Drawable = (GifDrawable)manual_GifimageView_motor_glow.getBackground();
-        final GifDrawable manual_GifimageView_arrows_glow_Drawable = (GifDrawable)manual_GifimageView_arrows_glow.getBackground();
 
         final GifDrawable manual_GifimageView_sucker_animation_Drawable = (GifDrawable)manual_GifimageView_sucker_animation.getBackground();
         final GifDrawable manual_GifimageView_line_wheel_Drawable = (GifDrawable)manual_GifimageView_line_wheel.getBackground();
@@ -94,10 +90,6 @@ public class Manual extends Fragment {
 
         manual_GifimageView_sucker_glow_Drawable.stop();
         manual_GifimageView_sucker_glow_Drawable.seekToFrame(0);
-        manual_GifimageView_motor_glow_Drawable.stop();
-        manual_GifimageView_motor_glow_Drawable.seekToFrame(0);
-        manual_GifimageView_arrows_glow_Drawable.stop();
-        manual_GifimageView_arrows_glow_Drawable.seekToFrame(0);
 
         manual_GifimageView_sucker_animation_Drawable.stop();
         manual_GifimageView_sucker_animation_Drawable.seekToFrame(0);
@@ -290,24 +282,13 @@ public class Manual extends Fragment {
             @Override
             public void onClick( View view ) {
                 manual_GifimageView_sucker_glow.setVisibility(View.VISIBLE);
-                manual_GifimageView_motor_glow.setVisibility(View.VISIBLE);
-                manual_GifimageView_arrows_glow.setVisibility(View.VISIBLE);
 
                 if(manual_GifimageView_sucker_glow_Drawable.isPlaying()){
                     manual_GifimageView_sucker_glow_Drawable.stop();
                     manual_GifimageView_sucker_glow_Drawable.seekToFrame(0);
-
-                    manual_GifimageView_motor_glow_Drawable.stop();
-                    manual_GifimageView_motor_glow_Drawable.seekToFrame(0);
-
-                    manual_GifimageView_arrows_glow_Drawable.stop();
-                    manual_GifimageView_arrows_glow_Drawable.seekToFrame(0);
-                    manual_GifimageView_arrows_glow.setVisibility(View.INVISIBLE);
                 }
                 else{
                     manual_GifimageView_sucker_glow_Drawable.reset();
-                    manual_GifimageView_motor_glow_Drawable.reset();
-                    manual_GifimageView_arrows_glow_Drawable.reset();
                 }
 
             }

@@ -69,7 +69,7 @@ public class Editor extends Fragment {
         View view = inflater.inflate(R.layout.fragment_editor, container, false);
         //RBS change name
         finalview = view;
-
+/*
         mSwipeRefreshLayout=(SwipeRefreshLayout) view.findViewById(R.id.editor_SwipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -83,7 +83,7 @@ public class Editor extends Fragment {
                 }
                 mListener.onSendCommand("RGMV_"+ String.format("%02d",index-1));
             }
-        });
+        });*/
 
         ////////////////////////////////////////
         // PALLET OVERVIEW
@@ -92,7 +92,7 @@ public class Editor extends Fragment {
         createViewPagerFragments();
 
         mPageAdapter = new ColorFragmentAdapter(getFragmentManager(), mViewPagerFragments);
-        mFlippableStack = (FlippableStackView) view.findViewById(R.id.editor_flipview_bircks_stack);
+        mFlippableStack = (FlippableStackView) view.findViewById(R.id.editor_flipview_bricks_stack);
         mFlippableStack.initStack(8, StackPageTransformer.Orientation.VERTICAL, (float)1,(float)0.5,(float)0,StackPageTransformer.Gravity.BOTTOM);
         mFlippableStack.setAdapter(mPageAdapter);
         final TextView editor_textView_Indicator=(TextView) view.findViewById(R.id.editor_textView_Indicator);

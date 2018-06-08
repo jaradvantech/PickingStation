@@ -25,363 +25,307 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/constraintLayout"
-            android:layout_width="964dp"
-            android:layout_height="488dp"
+        <ImageView
+            android:id="@+id/manual_imageView_line"
+            android:layout_width="1280"
+            android:layout_height="581"
+            android:clickable="false"
+            android:scaleType="fitXY"
+            android:src="@mipmap/cinta112"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/debug_imageView_previous"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@mipmap/arrowhead_left"
+            android:backgroundTint="@color/colorSecondary"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/debug_currentArm"
+            app:layout_constraintEnd_toStartOf="@+id/debug_currentArm"
+            app:layout_constraintTop_toTopOf="@+id/debug_currentArm" />
+
+        <ImageView
+            android:id="@+id/manual_imageView_arm"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginStart="8dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/manual_manipulator"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.92"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/manual_imageView_line"
-                android:layout_width="950dp"
-                android:layout_height="430dp"
-                android:layout_marginEnd="4dp"
-                android:clickable="false"
-                android:scaleType="fitXY"
-                android:src="@mipmap/cinta112"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+        <ImageView
+            android:id="@+id/manual_imageView_forward"
+            android:layout_width="47dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginStart="4dp"
+            android:background="@mipmap/forward"
+            android:backgroundTint="@color/colorSecondaryPale"
+            android:backgroundTintMode="multiply"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/manual_imageView_stop"
+            app:layout_constraintStart_toEndOf="@+id/manual_imageView_stop" />
 
-            <pl.droidsonroids.gif.GifImageView
-                android:id="@+id/manual_GifimageView_sucker_glow"
-                android:layout_width="140dp"
-                android:layout_height="205dp"
-                android:layout_marginStart="104dp"
-                android:layout_marginTop="6dp"
-                android:background="@mipmap/ainmation_sucker"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:scaleType="fitXY"
-                android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@+id/manual_imageView_zoomer"
-                app:layout_constraintTop_toTopOf="@+id/manual_imageView_zoomer" /><![CDATA[
-                />
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/manual_GifimageView_sucker_animation"
+            android:layout_width="140dp"
+            android:layout_height="205dp"
+            android:layout_marginStart="104dp"
+            android:layout_marginTop="16dp"
+            android:background="@mipmap/ventosa_cut_airflow"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:scaleType="fitXY"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/manual_imageView_zoomer"
+            app:layout_constraintTop_toTopOf="@+id/manual_imageView_zoomer" />
 
-            ]]>
+        <ImageView
+            android:id="@+id/manual_imageView_zoomer"
+            android:layout_width="608dp"
+            android:layout_height="240dp"
+            android:layout_marginStart="304dp"
+            android:layout_marginTop="32dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/bocadillo"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <pl.droidsonroids.gif.GifImageView
-                android:id="@+id/manual_GifimageView_sucker_animation"
-                android:layout_width="140dp"
-                android:layout_height="205dp"
-                android:layout_marginStart="104dp"
-                android:layout_marginTop="16dp"
-                android:background="@mipmap/ventosa_cut_airflow"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:scaleType="fitXY"
-                android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@+id/manual_imageView_zoomer"
-                app:layout_constraintTop_toTopOf="@+id/manual_imageView_zoomer" />
+        <ImageView
+            android:id="@+id/manual_imageView_backward"
+            android:layout_width="47dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="34dp"
+            android:background="@mipmap/backward"
+            android:backgroundTint="@color/colorSecondaryPale"
+            android:backgroundTintMode="multiply"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toStartOf="@+id/manual_imageView_stop"
+            app:layout_constraintTop_toTopOf="@+id/manual_imageView_stop" />
 
-            <pl.droidsonroids.gif.GifImageView
-                android:id="@+id/manual_GifimageView_line_wheel"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="340dp"
-                android:background="@mipmap/animated_wheel"
-                android:scaleType="fitXY"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/manual_imageView_down"
+            android:layout_width="37dp"
+            android:layout_height="54dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="14dp"
+            android:background="@mipmap/down"
+            android:backgroundTint="@color/colorSecondaryPale"
+            android:backgroundTintMode="multiply"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="@+id/manual_imageView_stop"
+            app:layout_constraintStart_toStartOf="@+id/manual_imageView_stop"
+            app:layout_constraintTop_toBottomOf="@+id/manual_imageView_stop" />
 
-            <ImageView
-                android:id="@+id/manual_imageView_sucker"
-                android:layout_width="130dp"
-                android:layout_height="200dp"
-                android:layout_marginEnd="1dp"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                android:src="@mipmap/sucker_cut"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="@+id/manual_GifimageView_sucker_glow"
-                app:layout_constraintStart_toStartOf="@+id/manual_GifimageView_sucker_glow"
-                app:layout_constraintTop_toTopOf="@+id/manual_GifimageView_sucker_glow" />
+        <ImageButton
+            android:id="@+id/manual_imageView_question_top"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@mipmap/question"
+            android:backgroundTint="@color/colorPrimaryPale"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/manual_imageView_arm"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
-                android:layout_marginEnd="140dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/manual_manipulator"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="@+id/manual_imageView_line"
-                app:layout_constraintTop_toTopOf="parent" />
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/manual_GifimageView_line_wheel"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="416dp"
+            android:background="@mipmap/animated_wheel"
+            android:scaleType="fitXY"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/manual_imageView_zoomer"
-                android:layout_width="620dp"
-                android:layout_height="240dp"
-                android:layout_marginStart="35dp"
-                android:layout_marginTop="22dp"
-                android:scaleType="fitXY"
-                android:src="@mipmap/bocadillo"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/manual_GifimageView_sucker_glow"
+            android:layout_width="140dp"
+            android:layout_height="205dp"
+            android:layout_marginStart="104dp"
+            android:layout_marginTop="6dp"
+            android:background="@mipmap/ainmation_sucker"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:scaleType="fitXY"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/manual_imageView_zoomer"
+            app:layout_constraintTop_toTopOf="@+id/manual_imageView_zoomer" />
 
-            <pl.droidsonroids.gif.GifImageView
-                android:id="@+id/manual_GifimageView_motor_glow"
-                android:layout_width="101dp"
-                android:layout_height="72dp"
-                android:layout_marginStart="112dp"
-                android:background="@mipmap/motor11_glow"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:scaleType="fitXY"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+        <ImageView
+            android:id="@+id/manual_imageView_question"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:src="@color/colorSecondary"
+            app:layout_constraintBottom_toBottomOf="@+id/manual_imageView_question_top"
+            app:layout_constraintEnd_toEndOf="@+id/manual_imageView_question_top"
+            app:layout_constraintStart_toStartOf="@+id/manual_imageView_question_top"
+            app:layout_constraintTop_toTopOf="@+id/manual_imageView_question_top" />
 
-            <ImageView
-                android:id="@+id/manual_imageView_motor"
-                android:layout_width="81dp"
-                android:layout_height="52dp"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                android:src="@mipmap/motor111"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/manual_GifimageView_motor_glow"
-                app:layout_constraintEnd_toEndOf="@+id/manual_GifimageView_motor_glow"
-                app:layout_constraintStart_toStartOf="@+id/manual_GifimageView_motor_glow"
-                app:layout_constraintTop_toTopOf="@+id/manual_GifimageView_motor_glow" />
+        <ImageView
+            android:id="@+id/manual_imageView_sucker"
+            android:layout_width="130dp"
+            android:layout_height="200dp"
+            android:layout_marginEnd="1dp"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/sucker_cut"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="@+id/manual_GifimageView_sucker_glow"
+            app:layout_constraintStart_toStartOf="@+id/manual_GifimageView_sucker_glow"
+            app:layout_constraintTop_toTopOf="@+id/manual_GifimageView_sucker_glow" />
 
-            <TextView
-                android:id="@+id/debug_currentArm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="148dp"
-                android:layout_marginTop="30dp"
-                android:text="1"
-                android:textColor="@color/colorPrimary"
-                android:textSize="48sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/manual_imageView_zoomer"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/debug_currentArm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="75dp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="98dp" />
 
-            <ImageView
-                android:id="@+id/debug_imageView_previous"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
-                android:background="@mipmap/arrowhead_left"
-                android:backgroundTint="@color/colorSecondary"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="@+id/debug_currentArm"
-                app:layout_constraintEnd_toStartOf="@+id/debug_currentArm"
-                app:layout_constraintTop_toTopOf="@+id/debug_currentArm" />
+        <ImageView
+            android:id="@+id/manual_imageView_stop"
+            android:layout_width="79dp"
+            android:layout_height="45dp"
+            android:background="@mipmap/box2"
+            android:backgroundTint="@color/colorYellow"
+            android:backgroundTintMode="multiply"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="1115dp"
+            tools:layout_editor_absoluteY="515dp" />
 
-            <ImageView
-                android:id="@+id/manual_imageView_next"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:background="@mipmap/arrowhead_right"
-                android:backgroundTint="@color/colorSecondary"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="@+id/debug_currentArm"
-                app:layout_constraintStart_toEndOf="@+id/debug_currentArm"
-                app:layout_constraintTop_toTopOf="@+id/debug_currentArm" />
+        <ImageView
+            android:id="@+id/manual_imageView_up"
+            android:layout_width="37dp"
+            android:layout_height="54dp"
+            android:layout_marginBottom="14dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@mipmap/up"
+            android:backgroundTint="@color/colorSecondaryPale"
+            android:backgroundTintMode="multiply"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/manual_imageView_stop"
+            app:layout_constraintEnd_toEndOf="@+id/manual_imageView_stop"
+            app:layout_constraintStart_toStartOf="@+id/manual_imageView_stop" />
 
-            <ImageView
-                android:id="@+id/manual_imageView_question"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                android:src="@color/colorSecondary"
-                app:layout_constraintBottom_toBottomOf="@+id/manual_imageView_question_top"
-                app:layout_constraintEnd_toEndOf="@+id/manual_imageView_question_top"
-                app:layout_constraintStart_toStartOf="@+id/manual_imageView_question_top"
-                app:layout_constraintTop_toTopOf="@+id/manual_imageView_question_top" />
+        <Button
+            android:id="@+id/manual_reset"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="R"
+            app:layout_constraintEnd_toStartOf="@+id/manual_imageView_question_top"
+            app:layout_constraintTop_toTopOf="@+id/manual_imageView_question_top" />
 
-            <ImageButton
-                android:id="@+id/manual_imageView_question_top"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
-                android:background="@mipmap/question"
-                android:backgroundTint="@color/colorPrimaryPale"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/manual_textView_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:cursorVisible="false"
+            android:text="Line Stopped"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/manual_GifimageView_line_wheel"
+            app:layout_constraintStart_toEndOf="@+id/manual_GifimageView_line_wheel"
+            app:layout_constraintTop_toTopOf="@+id/manual_GifimageView_line_wheel" />
 
-            <ImageView
-                android:id="@+id/manual_imageView_template"
-                android:layout_width="220dp"
-                android:layout_height="201dp"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                android:src="@mipmap/fletxes"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+        <ImageView
+            android:id="@+id/manual_imageView_motor"
+            android:layout_width="81dp"
+            android:layout_height="52dp"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/motor111"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="241dp"
+            tools:layout_editor_absoluteY="515dp" />
 
-            <pl.droidsonroids.gif.GifImageView
-                android:id="@+id/manual_GifimageView_arrows_glow"
-                android:layout_width="220dp"
-                android:layout_height="220dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@mipmap/arrows_animation"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:scaleType="fitXY"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/manual_imageView_template" />
+        <ImageView
+            android:id="@+id/manual_imageView_left"
+            android:layout_width="44dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="72dp"
+            android:background="@mipmap/left"
+            android:backgroundTint="@color/colorSecondaryPale"
+            android:backgroundTintMode="multiply"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/manual_imageView_stop"
+            app:layout_constraintEnd_toEndOf="@+id/manual_imageView_stop" />
 
-            <ImageView
-                android:id="@+id/manual_imageView_stop"
-                android:layout_width="79dp"
-                android:layout_height="45dp"
-                android:background="@mipmap/box2"
-                android:backgroundTint="@color/colorYellow"
-                android:backgroundTintMode="multiply"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/manual_GifimageView_arrows_glow"
-                app:layout_constraintEnd_toEndOf="@+id/manual_GifimageView_arrows_glow"
-                app:layout_constraintStart_toStartOf="@+id/manual_GifimageView_arrows_glow"
-                app:layout_constraintTop_toTopOf="@+id/manual_GifimageView_arrows_glow" />
+        <ImageView
+            android:id="@+id/manual_imageView_next"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@mipmap/arrowhead_right"
+            android:backgroundTint="@color/colorSecondary"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/debug_currentArm"
+            app:layout_constraintStart_toEndOf="@+id/debug_currentArm"
+            app:layout_constraintTop_toTopOf="@+id/debug_currentArm" />
 
-            <ImageView
-                android:id="@+id/manual_imageView_up"
-                android:layout_width="37dp"
-                android:layout_height="54dp"
-                android:layout_marginBottom="14dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@mipmap/up"
-                android:backgroundTint="@color/colorSecondaryPale"
-                android:backgroundTintMode="multiply"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toTopOf="@+id/manual_imageView_stop"
-                app:layout_constraintEnd_toEndOf="@+id/manual_imageView_stop"
-                app:layout_constraintStart_toStartOf="@+id/manual_imageView_stop" />
-
-            <ImageView
-                android:id="@+id/manual_imageView_down"
-                android:layout_width="37dp"
-                android:layout_height="54dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="14dp"
-                android:background="@mipmap/down"
-                android:backgroundTint="@color/colorSecondaryPale"
-                android:backgroundTintMode="multiply"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                app:layout_constraintEnd_toEndOf="@+id/manual_imageView_stop"
-                app:layout_constraintStart_toStartOf="@+id/manual_imageView_stop"
-                app:layout_constraintTop_toBottomOf="@+id/manual_imageView_stop" />
-
-            <ImageView
-                android:id="@+id/manual_imageView_left"
-                android:layout_width="44dp"
-                android:layout_height="35dp"
-                android:layout_marginBottom="32dp"
-                android:layout_marginEnd="72dp"
-                android:background="@mipmap/left"
-                android:backgroundTint="@color/colorSecondaryPale"
-                android:backgroundTintMode="multiply"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="@+id/manual_imageView_stop"
-                app:layout_constraintEnd_toEndOf="@+id/manual_imageView_stop" />
-
-            <ImageView
-                android:id="@+id/manual_imageView_right"
-                android:layout_width="44dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="68dp"
-                android:layout_marginTop="32dp"
-                android:background="@mipmap/right"
-                android:backgroundTint="@color/colorSecondaryPale"
-                android:backgroundTintMode="multiply"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                app:layout_constraintStart_toStartOf="@+id/manual_imageView_stop"
-                app:layout_constraintTop_toTopOf="@+id/manual_imageView_stop" />
-
-            <ImageView
-                android:id="@+id/manual_imageView_forward"
-                android:layout_width="47dp"
-                android:layout_height="35dp"
-                android:layout_marginBottom="32dp"
-                android:layout_marginStart="4dp"
-                android:background="@mipmap/forward"
-                android:backgroundTint="@color/colorSecondaryPale"
-                android:backgroundTintMode="multiply"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="@+id/manual_imageView_stop"
-                app:layout_constraintStart_toEndOf="@+id/manual_imageView_stop" />
-
-            <ImageView
-                android:id="@+id/manual_imageView_backward"
-                android:layout_width="47dp"
-                android:layout_height="35dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginTop="34dp"
-                android:background="@mipmap/backward"
-                android:backgroundTint="@color/colorSecondaryPale"
-                android:backgroundTintMode="multiply"
-                android:clickable="true"
-                android:scaleType="fitXY"
-                app:layout_constraintEnd_toStartOf="@+id/manual_imageView_stop"
-                app:layout_constraintTop_toTopOf="@+id/manual_imageView_stop" />
-
-            <TextView
-                android:id="@+id/manual_textView_line"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:cursorVisible="false"
-                android:text="Line Stopped"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/manual_GifimageView_line_wheel"
-                app:layout_constraintStart_toEndOf="@+id/manual_GifimageView_line_wheel"
-                app:layout_constraintTop_toTopOf="@+id/manual_GifimageView_line_wheel" />
-
-            <Button
-                android:id="@+id/manual_reset"
-                android:layout_width="52dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:text="R"
-                app:layout_constraintEnd_toStartOf="@+id/manual_imageView_question_top"
-                app:layout_constraintTop_toTopOf="@+id/manual_imageView_question_top" />
-
-        </android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/manual_imageView_right"
+            android:layout_width="44dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="32dp"
+            android:background="@mipmap/right"
+            android:backgroundTint="@color/colorSecondaryPale"
+            android:backgroundTintMode="multiply"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="@+id/manual_imageView_stop"
+            app:layout_constraintTop_toTopOf="@+id/manual_imageView_stop" />
 
         <Switch
             android:id="@+id/manual_switch_mode"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:layout_marginStart="588dp"
-            android:layout_marginTop="416dp"
             android:text="@string/Manualmode"
-            app:layout_constraintStart_toStartOf="@+id/constraintLayout"
-            app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
+            tools:layout_editor_absoluteX="50dp"
+            tools:layout_editor_absoluteY="149dp" />
+
     </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>
