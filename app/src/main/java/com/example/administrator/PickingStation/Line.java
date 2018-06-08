@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,8 @@ public class Line extends Fragment {
     private final TextView PhysicalBricksOnTheLine_Brick_Viewer[] = new TextView[12 + 1];
     private final Button PhysicalPallet_TopBrick[] = new Button[10 + 1];
 
+    private int armNumber;
+    private View view;
     private int NumberOfPallets;
     private int NumberOfBricksOnLine;
     private ArrayList DNIinUse = new ArrayList<>();
@@ -62,11 +65,21 @@ public class Line extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_line, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //Set layout
+        view = inflater.inflate(R.layout.fragment_line_intento1, container, false);
 
+
+
+        this.setNumberOfManipulators(5);
+
+
+
+
+
+
+
+        ///////////////////////////////////////////////////////////////
         //Init bricks on the line
         for (int i = 1; i < PhysicalBricksOnTheLine_Brick_Viewer.length; i++) {
             String PhysicalBricksOnTheLine_Brick_ViewerID = "line_textView_brickOnTheLine_" + (i);
@@ -325,5 +338,21 @@ public class Line extends Fragment {
                 animSetline.start();
             }
         }
+    }
+
+
+    private void setNumberOfManipulators(int n) {
+        this.armNumber = n;
+
+        LinearLayout mainLayout = (LinearLayout) view.findViewById(R.id.line_linearLayout_canvas);
+
+        /*Structure is as follows*/
+        //Line Start --> always
+        //first_pallet --> always (n>1)
+        //middle_pallet --> As required (n-1) times
+        // ....
+        //Line end
+
+
     }
 }
