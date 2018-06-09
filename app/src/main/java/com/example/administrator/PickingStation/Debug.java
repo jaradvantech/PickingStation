@@ -54,7 +54,7 @@ public class Debug extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_debug, container, false);
+        final View view = inflater.inflate(R.layout.fragment_debug, container, false);
 
         //UI elements
         ImageView debug_next = (ImageView) view.findViewById(R.id.debug_imageView_next);
@@ -126,7 +126,8 @@ public class Debug extends Fragment {
         //Launch advanced settings window (manipulator position etc.)
         armPosition.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            //TODO redo this part
+                Intent i = new Intent(getContext(), AdvancedSettings.class);
+                startActivityForResult(i, 1);
             }
         });
 

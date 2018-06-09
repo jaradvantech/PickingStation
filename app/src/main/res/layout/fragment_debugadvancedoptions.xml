@@ -152,10 +152,18 @@
 
     <TextView
         android:id="@+id/advanced_ManipulatorInfo"
-        android:layout_width="317dp"
+        android:layout_width="357dp"
         android:layout_height="253dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="224dp"
         app:layout_constraintStart_toEndOf="@+id/advanced_BricksReady"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/advanced_misc"
+        android:layout_width="121dp"
+        android:layout_height="156dp"
+        android:layout_marginTop="52dp"
+        app:layout_constraintStart_toStartOf="@+id/advanced_height"
         app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>

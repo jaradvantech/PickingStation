@@ -45,9 +45,11 @@ public class DebugAdvancedOptions extends Fragment {
     private TextView BricksReady;
     private TextView ManipulatorInfo;
     private TextView takenBricks;
+    private TextView miscInformation;
     private JSONArray heightList;
     private JSONArray availableDNIList;
     private JSONArray bricksBeforeLineList;
+    private JSONArray manipulatorState;
     private JSONArray bricksOnLineList;
     private JSONArray BricksReadyForOutputList;
     private JSONArray manipulatorOrderList;
@@ -86,6 +88,7 @@ public class DebugAdvancedOptions extends Fragment {
         BricksReady = (TextView) view.findViewById(R.id.advanced_BricksReady);
         ManipulatorInfo = (TextView) view.findViewById(R.id.advanced_ManipulatorInfo);
         takenBricks = (TextView) view.findViewById(R.id.advanced_takenBricks);
+        miscInformation = (TextView) view.findViewById(R.id.advanced_misc);
 
         //Enable scroll on textviews
         height.setMovementMethod(new ScrollingMovementMethod());
@@ -130,8 +133,8 @@ public class DebugAdvancedOptions extends Fragment {
         });
 
         //debug
-        //String newString =  "{\"command_ID\":\"GDIS\",\"Available_DNI_List\":[2,3,4,5,6,7,8,9,10],\"Manipulator_Order_List\":[{},{},{},{\"What\":false,\"When\":1058,\"Where\":false},{}],\"Bricks_Before_The_Line\":[],\"Bricks_On_The_Line\":[{\"DNI\":1,\"AssignedPallet\":8,\"Position\":7842,\"Type\":17},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":5642,\"Type\":0}],\"Bricks_Ready_For_Output\":[0,0,0,0,0,0,0,0,0,0],\"Manipulator_Fixed_Position\":[2900,5000,7000,8900,10800],\"Manipulator_Modes\":[1,1,1,1,1],\"Pallet_LowSpeedPulse_Height_List\":[5000,5000,5000,5000,5000,5000,5000,5000,5000,5000],\"Manipulator_TakenBrick\":[{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1}]} ";
-        //this.parseInternalStateDebugData(newString);
+        //String testString = "{\"command_ID\":\"GDIS\",\"Available_DNI_List\":[2,3,4,5,6,7,8,9,10],\"Manipulator_Order_List\":[{},{},{},{\"What\":false,\"When\":1058,\"Where\":false},{}],\"Bricks_Before_The_Line\":[],\"Bricks_On_The_Line\":[{\"DNI\":1,\"AssignedPallet\":8,\"Position\":7842,\"Type\":17},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":5642,\"Type\":0}],\"Bricks_Ready_For_Output\":[0,0,0,0,0,0,0,0,0,0],\"Manipulator_Fixed_Position\":[2900,5000,7000,8900,10800],\"Manipulator_Modes\":[1,1,1,1,1],\"Pallet_LowSpeedPulse_Height_List\":[5000,5000,5000,5000,5000,5000,5000,5000,5000,5000],\"Manipulator_TakenBrick\":[{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1}],\"Manipulator_State\":[{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0}]}";
+       // this.parseInternalStateDebugData(testString);
 
         autoUpdater = new Runnable() {
             @Override
@@ -178,6 +181,7 @@ public class DebugAdvancedOptions extends Fragment {
             manipulatorModeList = JSONparser.getJSONArray("Manipulator_Modes");
             manipulatorPositionList = JSONparser.getJSONArray("Manipulator_Fixed_Position");
             manipulatorTakenBricks = JSONparser.getJSONArray("Manipulator_TakenBrick");
+            manipulatorState = JSONparser.getJSONArray("Manipulator_State");
 
             //Delete old data
             takenBricks.setText("");
@@ -203,24 +207,22 @@ public class DebugAdvancedOptions extends Fragment {
                         manipulatorOrderList.getJSONObject(i).has("When") &&
                         manipulatorOrderList.getJSONObject(i).has("Where")) {
 
-                    ManipulatorInfo.append("Arm #" + (i+1) + "--> ");
+                    ManipulatorInfo.append("Arm #" + (i+1) + "-->  ");
                     ManipulatorInfo.append("What: " + Boolean.valueOf(manipulatorOrderList.getJSONObject(i).getBoolean("What")).toString() + ", ");
                     ManipulatorInfo.append("When: " + Integer.valueOf(manipulatorOrderList.getJSONObject(i).getInt("When")).toString() + ", ");
                     ManipulatorInfo.append("Where: " + Boolean.valueOf(manipulatorOrderList.getJSONObject(i).getBoolean("Where")).toString() + "\n");
                 }
             }
 
-            //Fill modes
-            ManipulatorInfo.append("Modes:\n");
-            for(int i=0; i<manipulatorModeList.length(); i++) {
-                ManipulatorInfo.append(manipulatorModeList.get(i).toString() + "  ");
+            //Fill Manipulator state
+            ManipulatorInfo.append("\nState:\n");
+            for(int i=0; i<manipulatorState.length(); i++) {
+                ManipulatorInfo.append("Arm #" + i + ":  ");
+                ManipulatorInfo.append("WhatToDo: " + Integer.valueOf(manipulatorState.getJSONObject(i).getInt("WhatToDoWithTheBrick")).toString() + "   ");
+                ManipulatorInfo.append("Catch/Drop: " + Integer.valueOf(manipulatorState.getJSONObject(i).getInt("CatchOrDrop")).toString() + "   ");
+                ManipulatorInfo.append("Value c/d: " + Integer.valueOf(manipulatorState.getJSONObject(i).getInt("ValueOfCatchDrop")).toString() + "\n");
             }
 
-            //Fill Positions
-            ManipulatorInfo.append("\n\nFixed Positions:\n");
-            for(int i=0; i<manipulatorPositionList.length(); i++) {
-                ManipulatorInfo.append(manipulatorPositionList.get(i).toString() + "  ");
-            }
 
             //Fill Bricks On the line
             BricksOn.append("Bricks on the line:\n");
@@ -251,6 +253,19 @@ public class DebugAdvancedOptions extends Fragment {
                 height.append(heightList.get(i).toString());
                 height.append("\n");
             }
+
+            //Other information
+            //Fill modes
+            miscInformation.append("Modes:\n");
+            for(int i=0; i<manipulatorModeList.length(); i++) {
+                miscInformation.append(manipulatorModeList.get(i).toString() + "  ");
+            }
+            //Fill Positions
+            miscInformation.append("\n\nFixed Positions:\n");
+            for(int i=0; i<manipulatorPositionList.length(); i++) {
+                miscInformation.append(manipulatorPositionList.get(i).toString() + "\n");
+            }
+
 
         } catch(JSONException exc) {
             Log.d("JSON exception", "Can't parse Internal State Debug Data string. " + exc.getMessage().toString());
