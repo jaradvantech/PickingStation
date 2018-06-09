@@ -71,6 +71,7 @@
             android:hint="Z_AxisStandbyValue"
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_TPOX_AGB"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_ADD"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_ADD" />
 
@@ -79,10 +80,12 @@
             android:layout_width="220dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
+            android:layout_marginTop="16dp"
             android:text="StorageBinDirection"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_checkBox_MR"
             app:layout_constraintEnd_toStartOf="@+id/debug_checkBox_CE"
-            app:layout_constraintTop_toTopOf="@+id/debug_checkBox_CE" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <CheckBox
             android:id="@+id/debug_checkBox_TP"
@@ -90,6 +93,7 @@
             android:layout_height="wrap_content"
             android:text="TestPattern"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_checkBox_ITT"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_CE"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_CE" />
 
@@ -101,6 +105,7 @@
             android:layout_marginTop="@dimen/activity_top_margin"
             android:text="CommunicationExchange"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_checkBox_TP"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -110,6 +115,7 @@
             android:layout_height="wrap_content"
             android:text="StorageBinFullA"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_checkBox_SBFB"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_MR"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_MR" />
 
@@ -121,6 +127,7 @@
             android:hint="PCState"
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_ADD"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_TMD"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_TMD" />
 
@@ -130,6 +137,7 @@
             android:layout_height="wrap_content"
             android:text="ManipulatorReset"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_checkBox_SBFA"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_SBD"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_SBD" />
 
@@ -139,6 +147,7 @@
             android:layout_height="wrap_content"
             android:text="StorageBinFullB"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_checkBox_BCRSA"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_SBFA"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_SBFA" />
 
@@ -150,6 +159,7 @@
             android:hint="ThePulseOfX_AxisGoBack..."
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_TPOX_AAD"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_ZASV"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_ZASV" />
 
@@ -159,6 +169,7 @@
             android:layout_height="wrap_content"
             android:text="BarCodeReadStateA"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_checkBox_BCRSB"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_SBFB"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_SBFB" />
 
@@ -168,6 +179,7 @@
             android:layout_height="wrap_content"
             android:text="BarCodeReadStateB"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_checkBox_MM"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_BCRSA"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_BCRSA" />
 
@@ -177,6 +189,7 @@
             android:layout_height="wrap_content"
             android:text="ManipulatorMode"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_checkBox_VV"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_BCRSB"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_BCRSB" />
 
@@ -186,6 +199,7 @@
             android:layout_height="wrap_content"
             android:text="VacuumValve"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_MFB"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_MM"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_MM" />
 
@@ -198,6 +212,7 @@
             android:hint="ThePulseOfZ_AxisAdvanceDown..."
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_button_advanced"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_TPOX_AGB"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_TPOX_AGB" />
 
@@ -209,6 +224,7 @@
             android:hint="ManualForwardBackward"
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_MLR"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_VV"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_VV" />
 
@@ -220,6 +236,7 @@
             android:hint="ManualLeftRight"
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_MUD"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_MFB"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_MFB" />
 
@@ -231,6 +248,7 @@
             android:hint="ManualUpDown"
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_WTDWT"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_MLR"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_MLR" />
 
@@ -243,17 +261,19 @@
             android:hint="Z_AxisDeceletationDistance"
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_ZASV"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_PCS"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_PCS" />
 
         <EditText
             android:id="@+id/debug_editText_COD"
             android:layout_width="220dp"
-            android:layout_height="wrap_content"
+            android:layout_height="46dp"
             android:ems="10"
             android:hint="CatchOrDrop"
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_PZA"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_WTDWT"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_WTDWT" />
 
@@ -265,6 +285,7 @@
             android:hint="WhatToDoWithTheBrick"
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_COD"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_MUD"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_MUD" />
 
@@ -276,6 +297,7 @@
             android:hint="ValueOfCatchDrop"
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_PZA"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_PZA" />
 
@@ -287,6 +309,7 @@
             android:hint="PulseZAxis"
             android:inputType="number"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_VOCD"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_COD"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_COD" />
 
@@ -296,6 +319,7 @@
             android:layout_height="wrap_content"
             android:text="InquiryTheTile"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_checkBox_TMD"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_TP"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_TP" />
 
@@ -305,6 +329,7 @@
             android:layout_height="wrap_content"
             android:text="TransmissionManualDebugging"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_editText_PCS"
             app:layout_constraintStart_toStartOf="@+id/debug_checkBox_ITT"
             app:layout_constraintTop_toBottomOf="@+id/debug_checkBox_ITT" />
 
@@ -365,6 +390,7 @@
             android:layout_marginTop="8dp"
             android:text="ARM POSITION"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_encoder3000"
             app:layout_constraintStart_toStartOf="@+id/debug_button_advanced"
             app:layout_constraintTop_toBottomOf="@+id/debug_button_advanced" />
 
@@ -375,6 +401,7 @@
             android:layout_marginTop="10dp"
             android:text="ADVANCED OPTIONS"
             android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/debug_button_armPosition"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_TPOX_AAD"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_TPOX_AAD" />
 
@@ -382,9 +409,11 @@
             android:id="@+id/debug_encoder3000"
             android:layout_width="290dp"
             android:layout_height="60dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:text="Encoder + 3000"
             android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/debug_button_armPosition"
             app:layout_constraintTop_toBottomOf="@+id/debug_button_armPosition" />
 

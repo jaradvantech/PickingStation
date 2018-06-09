@@ -67,19 +67,8 @@ public class Line extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Set layout
-        view = inflater.inflate(R.layout.fragment_line_intento1, container, false);
+        view = inflater.inflate(R.layout.fragment_line, container, false);
 
-
-
-        this.setNumberOfManipulators(5);
-
-
-
-
-
-
-
-        ///////////////////////////////////////////////////////////////
         //Init bricks on the line
         for (int i = 1; i < PhysicalBricksOnTheLine_Brick_Viewer.length; i++) {
             String PhysicalBricksOnTheLine_Brick_ViewerID = "line_textView_brickOnTheLine_" + (i);

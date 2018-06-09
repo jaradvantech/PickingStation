@@ -19,7 +19,7 @@
     <!--Margins-->
     <dimen name="activity_right_margin">44dp</dimen>
     <dimen name="activity_left_margin">44dp</dimen>
-    <dimen name="activity_top_margin">16sp</dimen>
+    <dimen name="activity_top_margin">16dp</dimen>
     <dimen name="activity_bottom_margin">8dp</dimen>
 
     <!--Misc-->
@@ -28,6 +28,7 @@
     <!-- App-specific config-->
     <dimen name="space_between_pallets_horizontal">45dp</dimen>
     <dimen name="space_between_pallets_middle">24dp</dimen>
-    <dimen name="pallet_size">75dp</dimen>
+    <dimen name="pallet_size">133dp</dimen>
+    <dimen name="brick_size">94dp</dimen>
 
 </resources>

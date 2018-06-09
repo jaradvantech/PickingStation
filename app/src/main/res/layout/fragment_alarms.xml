@@ -14,19 +14,20 @@
 
         <ListView
             android:id="@+id/alarms_ListView"
-            android:layout_width="415dp"
-            android:layout_height="415dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="56dp"
+            android:layout_width="540dp"
+            android:layout_height="500dp"
+            android:layout_marginStart="@dimen/activity_left_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.496" />
 
         <TextView
             android:id="@+id/alarms_textView_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Details"
-            android:textSize="30dp"
+            android:textSize="@dimen/text_big"
             app:layout_constraintBottom_toTopOf="@+id/alarms_textView_output"
             app:layout_constraintStart_toStartOf="@+id/alarms_textView_output" />
 
@@ -37,17 +38,19 @@
             android:clickable="true"
             android:onClick='"onClick"'
             android:text="@string/RecentAlarms"
-            android:textSize="30dp"
+            android:textSize="@dimen/text_big"
             app:layout_constraintBottom_toTopOf="@+id/alarms_ListView"
             app:layout_constraintStart_toStartOf="@+id/alarms_ListView" />
 
         <TextView
             android:id="@+id/alarms_textView_output"
-            android:layout_width="417dp"
-            android:layout_height="415dp"
-            android:layout_marginStart="68dp"
+            android:layout_width="540dp"
+            android:layout_height="500dp"
+            android:layout_marginEnd="@dimen/activity_right_margin"
             android:textSize="20dp"
-            app:layout_constraintStart_toEndOf="@+id/alarms_ListView"
-            app:layout_constraintTop_toTopOf="@+id/alarms_ListView" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/border"/>
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

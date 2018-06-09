@@ -19,13 +19,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="wrap_content"
+                android:layout_height="546dp">
 
                 <ImageView
                     android:id="@+id/line_image_start"
-                    android:layout_width="80dp"
-                    android:layout_height="420dp"
+                    android:layout_width="104dp"
+                    android:layout_height="546dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="false"
                     android:scaleType="fitXY"
@@ -35,23 +35,27 @@
 
                 <ImageView
                     android:id="@+id/line_image_pallet_1"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="@dimen/pallet_size"
+                    android:layout_height="@dimen/pallet_size"
+                    android:layout_marginBottom="44dp"
+                    android:layout_marginStart="15dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/pallet"
                     android:visibility="visible"
-                    tools:layout_editor_absoluteX="93dp"
-                    tools:layout_editor_absoluteY="288dp" />
+                    app:layout_constraintBottom_toBottomOf="@+id/line_image_middle_1"
+                    app:layout_constraintStart_toStartOf="@+id/line_image_middle_1" />
 
                 <ImageView
                     android:id="@+id/line_image_pallet_2"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="@dimen/pallet_size"
+                    android:layout_height="@dimen/pallet_size"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="44dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/pallet"
                     android:visibility="visible"
-                    tools:layout_editor_absoluteX="93dp"
-                    tools:layout_editor_absoluteY="32dp" />
+                    app:layout_constraintStart_toStartOf="@+id/line_image_middle_1"
+                    app:layout_constraintTop_toTopOf="@+id/line_image_middle_1" />
 
                 <TextView
                     android:id="@+id/line_textView_UID_1"
@@ -71,7 +75,7 @@
 
                 <TextView
                     android:id="@+id/line_textView_UID_2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="@color/colorBlack"
                     android:gravity="center"
@@ -85,10 +89,21 @@
                     app:layout_constraintTop_toTopOf="@+id/line_image_pallet_2"
                     tools:layout_width="0dp" />
 
+                <ImageView
+                    android:id="@+id/line_image_middle_1"
+                    android:layout_width="195dp"
+                    android:layout_height="546dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="false"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/lines_first_big"
+                    app:layout_constraintStart_toEndOf="@+id/line_image_start"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <Button
                     android:id="@+id/line_button_pallet_1"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="18dp"
@@ -99,29 +114,43 @@
                     app:layout_constraintStart_toStartOf="@+id/line_image_pallet_1"
                     app:layout_constraintTop_toTopOf="@+id/line_image_pallet_1" />
 
+                <Button
+                    android:id="@+id/line_button_pallet_2"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="98dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="18dp"
+                    android:background="@android:color/transparent"
+                    android:textAlignment="center"
+                    android:textSize="11sp"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="@+id/line_image_pallet_2"
+                    app:layout_constraintHorizontal_bias="0.6"
+                    app:layout_constraintStart_toStartOf="@+id/line_image_pallet_2"
+                    app:layout_constraintTop_toTopOf="@+id/line_image_pallet_2" />
+
                 <ImageView
                     android:id="@+id/line_image_pallet_3"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginBottom="32dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_width="@dimen/pallet_size"
+                    android:layout_height="@dimen/pallet_size"
+                    android:layout_marginBottom="44dp"
+                    android:layout_marginStart="15dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/pallet"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/line_image_middle_2"
-                    app:layout_constraintEnd_toEndOf="@+id/line_image_middle_2"
                     app:layout_constraintStart_toStartOf="@+id/line_image_middle_2" />
 
                 <ImageView
                     android:id="@+id/line_image_pallet_4"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_width="@dimen/pallet_size"
+                    android:layout_height="@dimen/pallet_size"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="44dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/pallet"
                     android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="@+id/line_image_middle_2"
                     app:layout_constraintStart_toStartOf="@+id/line_image_middle_2"
                     app:layout_constraintTop_toTopOf="@+id/line_image_middle_2" />
 
@@ -159,19 +188,19 @@
 
                 <ImageView
                     android:id="@+id/line_image_middle_2"
-                    android:layout_width="150dp"
-                    android:layout_height="420dp"
+                    android:layout_width="195dp"
+                    android:layout_height="546dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="false"
                     android:scaleType="fitXY"
                     android:src="@mipmap/lines_middle_big"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="230dp" />
+                    app:layout_constraintStart_toEndOf="@+id/line_image_middle_1"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/line_button_pallet_3"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="18dp"
@@ -184,8 +213,8 @@
 
                 <Button
                     android:id="@+id/line_button_pallet_4"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="18dp"
@@ -198,27 +227,25 @@
 
                 <ImageView
                     android:id="@+id/line_image_pallet_5"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginBottom="32dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_width="@dimen/pallet_size"
+                    android:layout_height="@dimen/pallet_size"
+                    android:layout_marginBottom="44dp"
+                    android:layout_marginStart="15dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/pallet"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/line_image_middle_3"
-                    app:layout_constraintEnd_toEndOf="@+id/line_image_middle_3"
                     app:layout_constraintStart_toStartOf="@+id/line_image_middle_3" />
 
                 <ImageView
                     android:id="@+id/line_image_pallet_6"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_width="@dimen/pallet_size"
+                    android:layout_height="@dimen/pallet_size"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="44dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/pallet"
                     android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="@+id/line_image_middle_3"
                     app:layout_constraintStart_toStartOf="@+id/line_image_middle_3"
                     app:layout_constraintTop_toTopOf="@+id/line_image_middle_3" />
 
@@ -256,8 +283,8 @@
 
                 <ImageView
                     android:id="@+id/line_image_middle_3"
-                    android:layout_width="150dp"
-                    android:layout_height="420dp"
+                    android:layout_width="195dp"
+                    android:layout_height="546dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="false"
                     android:scaleType="fitXY"
@@ -267,8 +294,8 @@
 
                 <Button
                     android:id="@+id/line_button_pallet_5"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="18dp"
@@ -281,8 +308,8 @@
 
                 <Button
                     android:id="@+id/line_button_pallet_6"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="18dp"
@@ -295,27 +322,25 @@
 
                 <ImageView
                     android:id="@+id/line_image_pallet_7"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginBottom="32dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_width="@dimen/pallet_size"
+                    android:layout_height="@dimen/pallet_size"
+                    android:layout_marginBottom="44dp"
+                    android:layout_marginStart="15dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/pallet"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/line_image_middle_4"
-                    app:layout_constraintEnd_toEndOf="@+id/line_image_middle_4"
                     app:layout_constraintStart_toStartOf="@+id/line_image_middle_4" />
 
                 <ImageView
                     android:id="@+id/line_image_pallet_8"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_width="@dimen/pallet_size"
+                    android:layout_height="@dimen/pallet_size"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="44dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/pallet"
                     android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="@+id/line_image_middle_4"
                     app:layout_constraintStart_toStartOf="@+id/line_image_middle_4"
                     app:layout_constraintTop_toTopOf="@+id/line_image_middle_4" />
 
@@ -353,8 +378,8 @@
 
                 <ImageView
                     android:id="@+id/line_image_middle_4"
-                    android:layout_width="150dp"
-                    android:layout_height="420dp"
+                    android:layout_width="195dp"
+                    android:layout_height="546dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="false"
                     android:scaleType="fitXY"
@@ -364,8 +389,8 @@
 
                 <Button
                     android:id="@+id/line_button_pallet_7"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="18dp"
@@ -378,8 +403,8 @@
 
                 <Button
                     android:id="@+id/line_button_pallet_8"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="18dp"
@@ -392,27 +417,25 @@
 
                 <ImageView
                     android:id="@+id/line_image_pallet_9"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginBottom="32dp"
-                    android:layout_marginEnd="25dp"
+                    android:layout_width="@dimen/pallet_size"
+                    android:layout_height="@dimen/pallet_size"
+                    android:layout_marginBottom="44dp"
+                    android:layout_marginStart="15dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/pallet"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="@+id/line_image_middle_5"
-                    app:layout_constraintEnd_toEndOf="@+id/line_image_middle_5"
                     app:layout_constraintStart_toStartOf="@+id/line_image_middle_5" />
 
                 <ImageView
                     android:id="@+id/line_image_pallet_10"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginEnd="25dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_width="@dimen/pallet_size"
+                    android:layout_height="@dimen/pallet_size"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="44dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/pallet"
                     android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="@+id/line_image_middle_5"
                     app:layout_constraintStart_toStartOf="@+id/line_image_middle_5"
                     app:layout_constraintTop_toTopOf="@+id/line_image_middle_5" />
 
@@ -451,8 +474,8 @@
 
                 <ImageView
                     android:id="@+id/line_image_middle_5"
-                    android:layout_width="150dp"
-                    android:layout_height="420dp"
+                    android:layout_width="195dp"
+                    android:layout_height="546dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="false"
                     android:scaleType="fitXY"
@@ -462,8 +485,8 @@
 
                 <Button
                     android:id="@+id/line_button_pallet_9"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="18dp"
@@ -476,8 +499,8 @@
 
                 <Button
                     android:id="@+id/line_button_pallet_10"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="18dp"
@@ -490,8 +513,8 @@
 
                 <ImageView
                     android:id="@+id/line_image_end"
-                    android:layout_width="80dp"
-                    android:layout_height="420dp"
+                    android:layout_width="195dp"
+                    android:layout_height="546dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="false"
                     android:scaleType="fitXY"
@@ -501,8 +524,56 @@
 
                 <TextView
                     android:id="@+id/line_textView_brickOnTheLine_12"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
+                    android:background="@color/brick_color_14"
+                    android:gravity="center_vertical|center_horizontal|center"
+                    android:text="GRADE C"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/line_textView_brickOnTheLine_11"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
+                    android:layout_marginStart="52dp"
+                    android:background="@color/brick_color_14"
+                    android:gravity="center_vertical|center_horizontal|center"
+                    android:text="GRADE C"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/line_textView_brickOnTheLine_10"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
+                    android:layout_marginStart="124dp"
+                    android:background="@color/brick_color_14"
+                    android:gravity="center_vertical|center_horizontal|center"
+                    android:text="GRADE C"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/line_textView_brickOnTheLine_9"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
+                    android:layout_marginStart="196dp"
                     android:background="@color/brick_color_14"
                     android:gravity="center_vertical|center_horizontal|center"
                     android:text="GRADE C"
@@ -516,8 +587,8 @@
 
                 <TextView
                     android:id="@+id/line_textView_brickOnTheLine_8"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginStart="268dp"
                     android:background="@color/brick_color_14"
                     android:gravity="center_vertical|center_horizontal|center"
@@ -532,8 +603,8 @@
 
                 <TextView
                     android:id="@+id/line_textView_brickOnTheLine_7"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginStart="340dp"
                     android:background="@color/brick_color_14"
                     android:gravity="center_vertical|center_horizontal|center"
@@ -548,8 +619,8 @@
 
                 <TextView
                     android:id="@+id/line_textView_brickOnTheLine_6"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginStart="416dp"
                     android:background="@color/brick_color_14"
                     android:gravity="center_vertical|center_horizontal|center"
@@ -564,8 +635,8 @@
 
                 <TextView
                     android:id="@+id/line_textView_brickOnTheLine_5"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginStart="492dp"
                     android:background="@color/brick_color_14"
                     android:gravity="center_vertical|center_horizontal|center"
@@ -580,8 +651,8 @@
 
                 <TextView
                     android:id="@+id/line_textView_brickOnTheLine_4"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginStart="568dp"
                     android:background="@color/brick_color_14"
                     android:gravity="center_vertical|center_horizontal|center"
@@ -596,8 +667,8 @@
 
                 <TextView
                     android:id="@+id/line_textView_brickOnTheLine_3"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginStart="636dp"
                     android:background="@color/brick_color_14"
                     android:gravity="center_vertical|center_horizontal|center"
@@ -612,8 +683,8 @@
 
                 <TextView
                     android:id="@+id/line_textView_brickOnTheLine_2"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginStart="704dp"
                     android:background="@color/brick_color_14"
                     android:gravity="center_vertical|center_horizontal|center"
@@ -628,8 +699,8 @@
 
                 <TextView
                     android:id="@+id/line_textView_brickOnTheLine_1"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
+                    android:layout_width="@dimen/brick_size"
+                    android:layout_height="@dimen/brick_size"
                     android:layout_marginStart="776dp"
                     android:background="@color/brick_color_8"
                     android:gravity="center_vertical|center_horizontal|center"
