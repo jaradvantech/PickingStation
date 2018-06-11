@@ -134,6 +134,9 @@ public class TcpClient {
         }
     }
 
+    public static void ack(){
+        timeOuts = 0;
+    }
 
     private void closeSocket(){
         mMessageListener.connectionLost();

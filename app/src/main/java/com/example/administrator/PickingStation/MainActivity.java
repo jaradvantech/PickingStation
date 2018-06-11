@@ -29,7 +29,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Locale;
+
+import static com.example.administrator.PickingStation.Commands.RPRV;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -407,7 +412,7 @@ public class MainActivity extends AppCompatActivity
             }else if(values[1].contains("connectionestablished") && values[0].contains("connectionstatechange")){
                 appbar_connection.setImageResource(R.mipmap.linkup);
                 appbar_connection.clearColorFilter();
-                onSendCommand("RPRV_10\r\n");
+                onSendCommand(RPRV);
 
             }else if(values[1].contains("connectionlost") && values[0].contains("connectionstatechange")){
                 appbar_connection.setImageResource(R.mipmap.linkdown);
@@ -422,7 +427,71 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /*
+     * RBS: Parse information received from publishProgress()
 
+    @Override
+    protected void onProgressUpdate( String... values ) {
+        super.onProgressUpdate(values);
+            /*
+             * We have two types of information here:
+             *  values[0]: type of message received
+             *  values[1]: the message, either a JSON command or information
+             *                  about the state of the TCP connexion
+             *
+        if(values[0].equals("cmdreceived")) {
+            processCommands(values[1]);
+        }
+        else if(values[0].equals("connectionstatechange")) {
+            updateConnectionStatus(values[1]);
+        }
+    }
+    */
+
+    public void processCommands(String receivedString) {
+
+        String cmdID = "Error";
+        try {
+            JSONObject JSONparser = new JSONObject(receivedString);
+            cmdID = JSONparser.getString("command_ID");
+
+        } catch (JSONException exc) {
+            Log.d("MainActivity", exc.getMessage());
+        }
+
+
+        if (cmdID.equals("Error")) {
+            Log.d("Bad CMD received", receivedString);
+
+        } else if (cmdID.equals("RGMV")) {
+            editor.onTcpReply(receivedString);
+
+        } else if (cmdID.equals("RPRV")) {
+            line.updateLineBrickInfo(receivedString);
+            if(FirstTimeRPRV) {
+                //first RPRV is the trigger to move from the loading screen to the line
+                FirstTimeRPRV=false;
+                onLoadingFinished();
+            }
+
+        } else if (cmdID.equals("PGSI")) {
+            debug.updateDebugData(receivedString);
+
+        } else if (cmdID.equals("PWDA")) {
+            manual.serverResponse(receivedString, getApplicationContext());
+
+        } else if (cmdID.equals("CHAL")) {
+            //Check for new alarms
+            alarms.updateAlarms(mAlarmManager.parseAlarmCMD(receivedString));
+            updateAppbarAlarms(mAlarmManager.getCurrentArmState());
+
+        } else if (cmdID.equals("GDIS")) {
+            debug_advanced.parseInternalStateDebugData(receivedString);
+
+        } else if (cmdID.equals("PING")) {
+            TcpClient.ack();
+        }
+    }
 
 
 
@@ -446,8 +515,17 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void updateConnectionStatus(String command) {
+        if (command.equals("connectionestablished")) {
+            appbar_connection.setImageResource(R.mipmap.linkup);
+            appbar_connection.clearColorFilter();
+            onSendCommand(RPRV);
 
-
+        } else if (command.equals("connectionlost")) {
+            appbar_connection.setImageResource(R.mipmap.linkdown);
+            appbar_connection.setColorFilter(Color.rgb(115, 0, 0));
+        }
+    }
 
     /*****************************************************
      *                            --PERIODIC TASKS--
