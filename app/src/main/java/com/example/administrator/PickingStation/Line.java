@@ -200,7 +200,6 @@ public class Line extends Fragment {
      * Update graphic information of the bricks laying in the conveyor line
      */
     private void updateBricksOnLine(String message) {
-
         //For every brick
         for (int i = 1; i <= NumberOfBricksOnLine; i++) {
             int brickPosition = Integer.parseInt(message.substring(30 + (NumberOfPallets - 1) * 19 + (i - 1) * 12, 36 + (NumberOfPallets - 1) * 19 + (i - 1) * 12));

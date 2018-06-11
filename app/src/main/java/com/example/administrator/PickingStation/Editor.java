@@ -319,8 +319,12 @@ public class Editor extends Fragment {
 
         mPageAdapter.notifyDataSetChanged();
         mFlippableStack.setCurrentItem(mPageAdapter.getCount()-1);
+        try{
 
-        mSwipeRefreshLayout.setRefreshing(false);
+        }catch(Exception e){
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+
     }
     private void createViewPagerFragments() {
         mViewPagerFragments = new ArrayList<>();

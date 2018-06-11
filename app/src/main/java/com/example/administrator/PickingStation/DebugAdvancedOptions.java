@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -133,8 +134,8 @@ public class DebugAdvancedOptions extends Fragment {
         });
 
         //debug
-        //String testString = "{\"command_ID\":\"GDIS\",\"Available_DNI_List\":[2,3,4,5,6,7,8,9,10],\"Manipulator_Order_List\":[{},{},{},{\"What\":false,\"When\":1058,\"Where\":false},{}],\"Bricks_Before_The_Line\":[],\"Bricks_On_The_Line\":[{\"DNI\":1,\"AssignedPallet\":8,\"Position\":7842,\"Type\":17},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":5642,\"Type\":0}],\"Bricks_Ready_For_Output\":[0,0,0,0,0,0,0,0,0,0],\"Manipulator_Fixed_Position\":[2900,5000,7000,8900,10800],\"Manipulator_Modes\":[1,1,1,1,1],\"Pallet_LowSpeedPulse_Height_List\":[5000,5000,5000,5000,5000,5000,5000,5000,5000,5000],\"Manipulator_TakenBrick\":[{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1}],\"Manipulator_State\":[{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0}]}";
-       // this.parseInternalStateDebugData(testString);
+        String testString = "{\"command_ID\":\"GDIS\",\"Available_DNI_List\":[2,3,4,5,6,7,8,9,10],\"Manipulator_Order_List\":[{},{},{},{\"What\":false,\"When\":1058,\"Where\":false},{}],\"Bricks_Before_The_Line\":[],\"Bricks_On_The_Line\":[{\"DNI\":1,\"AssignedPallet\":8,\"Position\":7842,\"Type\":17},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":5642,\"Type\":0}],\"Bricks_Ready_For_Output\":[0,0,0,0,0,0,0,0,0,0],\"Manipulator_Fixed_Position\":[2900,5000,7000,8900,10800],\"Manipulator_Modes\":[1,1,1,1,1],\"Pallet_LowSpeedPulse_Height_List\":[5000,5000,5000,5000,5000,5000,5000,5000,5000,5000],\"Manipulator_TakenBrick\":[{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1}],\"Manipulator_State\":[{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0}]}";
+        this.parseInternalStateDebugData(testString);
 
         autoUpdater = new Runnable() {
             @Override
@@ -189,6 +190,7 @@ public class DebugAdvancedOptions extends Fragment {
             BricksOn.setText("");
             BricksReady.setText("");
             ManipulatorInfo.setText("");
+            miscInformation.setText("");
 
             //Fill taken bricks
             takenBricks.append("Taken Bricks:\n");

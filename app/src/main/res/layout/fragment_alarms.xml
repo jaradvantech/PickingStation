@@ -36,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:onClick='"onClick"'
             android:text="@string/RecentAlarms"
             android:textSize="@dimen/text_big"
             app:layout_constraintBottom_toTopOf="@+id/alarms_ListView"

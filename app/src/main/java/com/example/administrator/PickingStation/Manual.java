@@ -72,7 +72,6 @@ public class Manual extends Fragment {
         manual_imageView_forward = (ImageView) view.findViewById(R.id.manual_imageView_forward);
         manual_imageView_backward = (ImageView) view.findViewById(R.id.manual_imageView_backward);
         manual_imageView_stop = (ImageView) view.findViewById(R.id.manual_imageView_stop);
-        manual_imageView_question_top = (ImageView) view.findViewById(R.id.manual_imageView_question_top);
 
 
         final GifImageView manual_GifimageView_sucker_animation = (GifImageView) view.findViewById(R.id.manual_GifimageView_sucker_animation);
@@ -273,13 +272,6 @@ public class Manual extends Fragment {
             }
         });
 
-        manual_imageView_question_top.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick( View view ) {
-
-
-            }
-        });
 
         return view;
     }

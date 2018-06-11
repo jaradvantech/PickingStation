@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Text sizes-->
+    <dimen name="text_verysmall">14sp</dimen>
     <dimen name="text_small">16sp</dimen>
     <dimen name="text_default">18sp</dimen>
     <dimen name="text_medium">24sp</dimen>

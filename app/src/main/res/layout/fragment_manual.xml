@@ -29,8 +29,8 @@
             android:id="@+id/manual_imageView_stop"
             android:layout_width="103dp"
             android:layout_height="56dp"
-            android:layout_marginBottom="128dp"
-            android:layout_marginEnd="144dp"
+            android:layout_marginBottom="136dp"
+            android:layout_marginEnd="120dp"
             android:background="@mipmap/box2"
             android:backgroundTint="@color/colorYellow"
             android:backgroundTintMode="multiply"
@@ -44,7 +44,8 @@
             android:id="@+id/manual_imageView_forward"
             android:layout_width="61dp"
             android:layout_height="46dp"
-            android:layout_marginBottom="36dp"
+            android:layout_marginBottom="44dp"
+            android:layout_marginStart="20dp"
             android:background="@mipmap/forward"
             android:backgroundTint="@color/colorSecondaryPale"
             android:backgroundTintMode="multiply"
@@ -57,8 +58,8 @@
             android:id="@+id/manual_imageView_backward"
             android:layout_width="61dp"
             android:layout_height="46dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginTop="34dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginTop="48dp"
             android:background="@mipmap/backward"
             android:backgroundTint="@color/colorSecondaryPale"
             android:backgroundTintMode="multiply"
@@ -71,8 +72,8 @@
             android:id="@+id/manual_imageView_left"
             android:layout_width="57dp"
             android:layout_height="46dp"
-            android:layout_marginBottom="64dp"
-            android:layout_marginEnd="108dp"
+            android:layout_marginBottom="44dp"
+            android:layout_marginEnd="112dp"
             android:background="@mipmap/left"
             android:backgroundTint="@color/colorSecondaryPale"
             android:backgroundTintMode="multiply"
@@ -85,7 +86,7 @@
             android:id="@+id/manual_imageView_right"
             android:layout_width="57dp"
             android:layout_height="46dp"
-            android:layout_marginStart="124dp"
+            android:layout_marginStart="112dp"
             android:layout_marginTop="56dp"
             android:background="@mipmap/right"
             android:backgroundTint="@color/colorSecondaryPale"
@@ -99,7 +100,7 @@
             android:id="@+id/manual_imageView_up"
             android:layout_width="48dp"
             android:layout_height="70dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="32dp"
             android:layout_marginEnd="11dp"
             android:layout_marginStart="11dp"
             android:background="@mipmap/up"
@@ -118,38 +119,41 @@
             android:layout_height="70dp"
             android:layout_marginEnd="11dp"
             android:layout_marginStart="11dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="28dp"
             android:background="@mipmap/down"
             android:backgroundTint="@color/colorSecondaryPale"
             android:backgroundTintMode="multiply"
             android:clickable="true"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="@+id/manual_imageView_stop"
+            app:layout_constraintHorizontal_bias="0.515"
             app:layout_constraintStart_toStartOf="@+id/manual_imageView_stop"
             app:layout_constraintTop_toBottomOf="@+id/manual_imageView_stop" />
-
-        <ImageView
-            android:id="@+id/manual_imageView_sucker"
-            android:layout_width="169dp"
-            android:layout_height="260dp"
-            android:layout_marginTop="4dp"
-            android:clickable="true"
-            android:scaleType="fitXY"
-            android:src="@mipmap/sucker_cut"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="@+id/manual_GifimageView_sucker_animation"
-            app:layout_constraintTop_toTopOf="@+id/manual_GifimageView_sucker_animation" />
 
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/manual_GifimageView_sucker_animation"
             android:layout_width="182dp"
             android:layout_height="266dp"
-            android:layout_marginStart="140dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="14dp"
             android:background="@mipmap/ventosa_cut_airflow"
             android:backgroundTint="@color/colorPrimaryDark"
             android:scaleType="fitXY"
             android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="@+id/manual_imageView_sucker"
+            app:layout_constraintStart_toStartOf="@+id/manual_imageView_sucker"
+            app:layout_constraintTop_toTopOf="@+id/manual_imageView_sucker" />
+
+        <ImageView
+            android:id="@+id/manual_imageView_sucker"
+            android:layout_width="140dp"
+            android:layout_height="240dp"
+            android:layout_marginStart="164dp"
+            android:layout_marginTop="3dp"
+            android:clickable="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/sucker_cut"
+            android:visibility="visible"
             app:layout_constraintStart_toStartOf="@+id/manual_imageView_zoomer"
             app:layout_constraintTop_toTopOf="@+id/manual_imageView_zoomer" />
 
@@ -165,21 +169,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.7" />
-
-        <ImageButton
-            android:id="@+id/manual_imageView_question_top"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@mipmap/question"
-            android:backgroundTint="@color/colorPrimaryPale"
-            android:clickable="true"
-            android:scaleType="fitXY"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <Switch
             android:id="@+id/manual_switch_mode"
@@ -249,23 +238,12 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
-        <ImageView
-            android:id="@+id/manual_imageView_arm"
-            android:layout_width="234dp"
-            android:layout_height="234dp"
-            android:layout_marginEnd="140dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/manual_manipulator"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="@+id/manual_imageView_line"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <Button
             android:id="@+id/manual_reset"
             android:layout_width="162dp"
             android:layout_height="57dp"
-            android:layout_marginBottom="96dp"
-            android:layout_marginEnd="336dp"
+            android:layout_marginBottom="68dp"
+            android:layout_marginEnd="384dp"
             android:text="RESET ALL"
             android:textSize="19sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -275,12 +253,23 @@
             android:id="@+id/manual_imageView_zoomer"
             android:layout_width="806dp"
             android:layout_height="312dp"
-            android:layout_marginEnd="208dp"
+            android:layout_marginEnd="204dp"
             android:layout_marginTop="32dp"
             android:scaleType="fitXY"
             android:src="@mipmap/bocadillo"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="@+id/manual_imageView_arm"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/manual_imageView_arm"
+            android:layout_width="234dp"
+            android:layout_height="234dp"
+            android:layout_marginEnd="140dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/manual_manipulator"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="@+id/manual_imageView_line"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

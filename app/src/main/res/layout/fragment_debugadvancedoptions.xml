@@ -8,32 +8,37 @@
 
     <TextView
         android:id="@+id/advanced_takenBricks"
-        android:layout_width="110dp"
-        android:layout_height="463dp"
-        android:layout_marginStart="20dp"
-        android:text="Taken Bricks:"
+        android:layout_width="161dp"
+        android:layout_height="564dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="40dp"
         android:textColor="@color/brick_color_1"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toEndOf="@+id/advanced_BricksOn"
-        app:layout_constraintTop_toTopOf="@+id/advanced_BricksOn" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/presets_button_placeorder"
         android:layout_width="126dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:text="Place order"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/presets_editText_when"
         app:layout_constraintTop_toBottomOf="@+id/presets_editText_when" />
 
     <Button
         android:id="@+id/presets_button_forcepallet"
         android:layout_width="126dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="40dp"
         android:text="Force pallet"
-        app:layout_constraintStart_toStartOf="@+id/presets_editText_forcetopallet"
-        app:layout_constraintTop_toBottomOf="@+id/presets_editText_forcetopallet" />
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/presets_button_placeorder"
+        app:layout_constraintTop_toBottomOf="@+id/presets_editText_when" />
 
     <EditText
         android:id="@+id/presets_editText_when"
@@ -78,14 +83,17 @@
 
     <Switch
         android:id="@+id/advanced_switch_enable16"
-        android:layout_width="280dp"
+        android:layout_width="305dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="44dp"
         android:layout_marginTop="16dp"
         android:enabled="true"
         android:text="WheterOrNotPutTheTileTo16 enable"
         android:textAlignment="textEnd"
+        app:layout_constraintEnd_toStartOf="@+id/advanced_BricksOn"
+        app:layout_constraintHorizontal_bias="0.13"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -103,17 +111,18 @@
     <Button
         android:id="@+id/presets_button_send"
         android:layout_width="126dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="40dp"
         android:text="SEND"
-        app:layout_constraintEnd_toEndOf="@+id/advanced_switch_forceinput"
-        app:layout_constraintTop_toBottomOf="@+id/advanced_switch_forceinput" />
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/presets_button_placeorder"
+        app:layout_constraintTop_toBottomOf="@+id/presets_editText_when" />
 
     <EditText
         android:id="@+id/presets_editText_forcetopallet"
-        android:layout_width="127dp"
+        android:layout_width="126dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
+        android:layout_marginStart="40dp"
         android:ems="10"
         android:hint="Pallet..."
         android:inputType="number"
@@ -122,48 +131,57 @@
 
     <TextView
         android:id="@+id/advanced_height"
-        android:layout_width="121dp"
-        android:layout_height="253dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="224dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="125dp"
+        android:layout_height="350dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/advanced_BricksReady"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/advanced_misc"
+        app:layout_constraintTop_toTopOf="@+id/advanced_misc" />
 
     <TextView
         android:id="@+id/advanced_BricksOn"
-        android:layout_width="110dp"
-        android:layout_height="463dp"
-        android:layout_marginStart="696dp"
-        android:layout_marginTop="16dp"
-        android:text="Bricks on the line:"
+        android:layout_width="140dp"
+        android:layout_height="564dp"
         android:textColor="@color/brick_color_8"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_verysmall"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/advanced_takenBricks"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/advanced_ManipulatorInfo"
+        app:layout_constraintTop_toTopOf="@+id/advanced_takenBricks" />
 
     <TextView
         android:id="@+id/advanced_BricksReady"
-        android:layout_width="142dp"
-        android:layout_height="253dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="124dp"
+        android:layout_height="350dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/advanced_ManipulatorInfo"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/advanced_height"
         app:layout_constraintTop_toTopOf="@+id/advanced_height" />
 
     <TextView
         android:id="@+id/advanced_ManipulatorInfo"
-        android:layout_width="357dp"
-        android:layout_height="253dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="224dp"
+        android:layout_width="427dp"
+        android:layout_height="350dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/advanced_BricksOn"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/advanced_BricksReady"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/advanced_BricksReady" />
 
     <TextView
         android:id="@+id/advanced_misc"
-        android:layout_width="121dp"
-        android:layout_height="156dp"
-        android:layout_marginTop="52dp"
-        app:layout_constraintStart_toStartOf="@+id/advanced_height"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="130dp"
+        android:layout_height="350dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="16dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/advanced_height"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/presets_button_send" />
 </android.support.constraint.ConstraintLayout>

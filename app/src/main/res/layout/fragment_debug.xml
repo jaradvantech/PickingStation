@@ -23,8 +23,8 @@
 
         <Button
             android:id="@+id/debug_read"
-            android:layout_width="85dp"
-            android:layout_height="47dp"
+            android:layout_width="110dp"
+            android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:text="Read"
             android:textSize="@dimen/text_default"
@@ -33,13 +33,14 @@
 
         <Button
             android:id="@+id/debug_clear"
-            android:layout_width="85dp"
-            android:layout_height="47dp"
+            android:layout_width="110dp"
+            android:layout_height="60dp"
             android:layout_marginBottom="@dimen/activity_bottom_margin"
+            android:layout_marginStart="24dp"
             android:text="CLEAR"
             android:textSize="@dimen/text_default"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:layout_editor_absoluteX="197dp" />
+            app:layout_constraintStart_toEndOf="@+id/debug_checkBox_autoupdate" />
 
         <TextView
             android:id="@+id/debug_armDataOutput"
@@ -54,8 +55,8 @@
 
         <Button
             android:id="@+id/debug_write"
-            android:layout_width="85dp"
-            android:layout_height="wrap_content"
+            android:layout_width="110dp"
+            android:layout_height="60dp"
             android:layout_marginStart="16dp"
             android:text="Write"
             android:textSize="@dimen/text_default"
@@ -336,8 +337,8 @@
 
         <ImageView
             android:id="@+id/debug_imageView_previous"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginTop="24dp"
             android:background="@mipmap/arrowhead_left"
             android:backgroundTint="@color/colorSecondary"
@@ -348,8 +349,8 @@
 
         <ImageView
             android:id="@+id/debug_imageView_next"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginTop="24dp"
             android:background="@mipmap/arrowhead_right"
             android:backgroundTint="@color/colorSecondary"
@@ -362,11 +363,11 @@
             android:id="@+id/debug_currentArm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="8dp"
             android:text="1"
             android:textColor="@color/colorPrimary"
-            android:textSize="60sp"
+            android:textSize="63sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/debug_write"
             app:layout_constraintStart_toEndOf="@+id/debug_write"
@@ -378,19 +379,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="@dimen/activity_left_margin"
             android:layout_marginTop="8dp"
             android:text="Auto-upd8"
             android:textSize="@dimen/text_default"
             app:layout_constraintBottom_toBottomOf="@+id/debug_clear"
-            app:layout_constraintEnd_toStartOf="@+id/debug_clear"
-            app:layout_constraintStart_toStartOf="@+id/debug_armDataOutput"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/debug_clear" />
 
         <Button
             android:id="@+id/debug_button_armPosition"
             android:layout_width="290dp"
-            android:layout_height="60dp"
+            android:layout_height="65dp"
             android:layout_marginTop="8dp"
             android:text="ARM POSITION"
             android:textSize="@dimen/text_default"
@@ -401,7 +401,7 @@
         <Button
             android:id="@+id/debug_button_advanced"
             android:layout_width="290dp"
-            android:layout_height="60dp"
+            android:layout_height="65dp"
             android:layout_marginTop="10dp"
             android:text="ADVANCED OPTIONS"
             android:textSize="@dimen/text_default"
@@ -412,7 +412,7 @@
         <Button
             android:id="@+id/debug_encoder3000"
             android:layout_width="290dp"
-            android:layout_height="60dp"
+            android:layout_height="70dp"
             android:layout_marginBottom="@dimen/activity_bottom_margin"
             android:layout_marginTop="8dp"
             android:text="Encoder + 3000"
