@@ -412,7 +412,7 @@ public class MainActivity extends AppCompatActivity
             }else if(values[1].contains("connectionestablished") && values[0].contains("connectionstatechange")){
                 appbar_connection.setImageResource(R.mipmap.linkup);
                 appbar_connection.clearColorFilter();
-                onSendCommand(RPRV);
+                onSendCommand("RPRV_10\r\n");
 
             }else if(values[1].contains("connectionlost") && values[0].contains("connectionstatechange")){
                 appbar_connection.setImageResource(R.mipmap.linkdown);
