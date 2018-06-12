@@ -16,5 +16,4 @@ public class Commands {
 
     public static final String GDIS = " {\"command_ID\":\"GDIS\"}\n";
 
-
 }

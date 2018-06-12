@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.Locale;
 
+import static com.example.administrator.PickingStation.Commands.CHAL;
 import static com.example.administrator.PickingStation.Commands.RPRV;
 
 public class MainActivity extends AppCompatActivity
@@ -152,25 +153,17 @@ public class MainActivity extends AppCompatActivity
                 switchToLayout(R.id.nav_alarms);
             }
         });
-
-        //Start TCP connection
         new ConnectTask().execute("");
 
         startCheckingForAlarms();
     }
 
-    /*
-     * Release all resources before leaving app
-     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         mTcpClient.stopClient();
     }
 
-    /*
-     * When back button is pressed:
-     */
     @Override
     public void onBackPressed() {
 
@@ -348,7 +341,7 @@ public class MainActivity extends AppCompatActivity
     public class ConnectTask extends AsyncTask<String, String, TcpClient> {
 
         @Override
-        protected TcpClient doInBackground( String... message ) {
+        protected TcpClient doInBackground(String... message) {
 
             //we create a TCPClient object
             mTcpClient = new TcpClient(new TcpClient.OnMessageReceived() {
@@ -359,11 +352,11 @@ public class MainActivity extends AppCompatActivity
                     publishProgress("cmdreceived", message);
                 }
 
-                public void connectionEstablished(){
+                public void connectionEstablished() {
                     publishProgress("connectionstatechange", "connectionestablished");
                 }
 
-                public void connectionLost(){
+                public void connectionLost() {
                     publishProgress("connectionstatechange", "connectionlost");
                 }
             });
@@ -372,81 +365,26 @@ public class MainActivity extends AppCompatActivity
             return null;
         }
 
+
         /*
          * RBS: Parse information received from publishProgress()
          */
         @Override
-        protected void onProgressUpdate( String... values ) {
+        protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-
-            if(values[1].contains("Error") && values[0].contains("cmdreceived") ) {
-                Log.d("Bad CMD received", values[1]);
-
-            }else if(values[1].contains("RGMV") && values[0].contains("cmdreceived")) {
-                editor.onTcpReply(values[1]);
-
-            }else if(values[1].contains("RPRV") && values[0].contains("cmdreceived")){
-                line.updateLineBrickInfo(values[1]);
-                if(FirstTimeRPRV) {
-                    //first RPRV is the trigger to move from the loading screen to the line
-                    FirstTimeRPRV=false;
-                    onLoadingFinished();
-                }
-            }else if(values[1].contains("PGSI") && values[0].contains("cmdreceived")){
-                debug.updateDebugData(values[1]);
-
-            }else if(values[1].contains("PWDA") && values[0].contains("cmdreceived")){
-                manual.serverResponse(values[1], getApplicationContext());
-
-            }else if(values[1].contains("CHAL") && values[0].contains("cmdreceived")){
-                //Check for new alarms
-                alarms.updateAlarms(mAlarmManager.parseAlarmCMD(values[1]));
-                updateAppbarAlarms(mAlarmManager.getCurrentArmState());
-
-            }else if(values[1].contains("GDIS") && values[0].contains("cmdreceived")){
-                debug_advanced.parseInternalStateDebugData(values[1]);
-
-            }else if(values[1].contains("PING") && values[0].contains("cmdreceived")){
-                TcpClient.timeOuts=0;
-
-            }else if(values[1].contains("connectionestablished") && values[0].contains("connectionstatechange")){
-                appbar_connection.setImageResource(R.mipmap.linkup);
-                appbar_connection.clearColorFilter();
-                onSendCommand(RPRV);
-
-            }else if(values[1].contains("connectionlost") && values[0].contains("connectionstatechange")){
-                appbar_connection.setImageResource(R.mipmap.linkdown);
-                appbar_connection.setColorFilter(Color.rgb(115, 0, 0));
-            }
-        }
-    }
-
-    public void onSendCommand( String command ) {
-        if(mTcpClient!=null) {
-            mTcpClient.sendMessage(command);
-        }
-    }
-
-    /*
-     * RBS: Parse information received from publishProgress()
-
-    @Override
-    protected void onProgressUpdate( String... values ) {
-        super.onProgressUpdate(values);
             /*
              * We have two types of information here:
              *  values[0]: type of message received
              *  values[1]: the message, either a JSON command or information
              *                  about the state of the TCP connexion
-             *
-        if(values[0].equals("cmdreceived")) {
-            processCommands(values[1]);
-        }
-        else if(values[0].equals("connectionstatechange")) {
-            updateConnectionStatus(values[1]);
+             */
+            if (values[0].equals("cmdreceived")) {
+                processCommands(values[1]);
+            } else if (values[0].equals("connectionstatechange")) {
+                updateConnectionStatus(values[1]);
+            }
         }
     }
-    */
 
     public void processCommands(String receivedString) {
 
@@ -493,6 +431,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void onSendCommand( String command ) {
+        if(mTcpClient!=null) {
+            mTcpClient.sendMessage(command);
+        }
+    }
 
 
     /*****************************************************
@@ -535,7 +478,7 @@ public class MainActivity extends AppCompatActivity
         Runnable autoUpdater = new Runnable() {
             @Override
             public void run() {
-                onSendCommand("CHAL_14\r\n");
+                onSendCommand(CHAL);
                 alarmLoopHandler.postDelayed(this, ALARM_CHECK_PERIOD);
             }
         };
@@ -545,7 +488,7 @@ public class MainActivity extends AppCompatActivity
     final Runnable timer_lines = new Runnable() {
         @Override
         public void run() {
-            onSendCommand("RPRV_10\r\n"); //Ask for the UIDs
+            onSendCommand(RPRV); //Ask for the UIDs
             if(DoLoops == false) handler.removeCallbacksAndMessages(null);
             else handler.postDelayed(this,RPRV_PERIOD);
         }
@@ -559,7 +502,6 @@ public class MainActivity extends AppCompatActivity
     public void stopRPRV() {
         DoLoops = false;
     }
-
 
 
 

@@ -14,6 +14,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
+import static com.example.administrator.PickingStation.Commands.PING;
+
 public class TcpClient {
 
     Socket socket=null;
@@ -38,7 +40,7 @@ public class TcpClient {
     }
 
     public void sendMessage(String message) {
-        Log.e("TCP Client", "C: Sending...");
+        Log.d("TCP Client", "C: Sending...");
         if (mBufferOut != null && !mBufferOut.checkError()) {
             mBufferOut.println(message);
             mBufferOut.flush();
@@ -71,7 +73,7 @@ public class TcpClient {
 
             //Timeout Exception
             } catch(SocketTimeoutException timeOutEx){
-                sendMessage("PING_PLC14\r\n"); //Are you still there? ._.
+                sendMessage(PING); //Are you still there? ._.
                 timeOuts++;
                 if(timeOuts > 3) {
                     //Connection lost, Reconnect.
