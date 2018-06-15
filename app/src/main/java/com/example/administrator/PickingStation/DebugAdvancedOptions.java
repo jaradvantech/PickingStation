@@ -277,55 +277,47 @@ public class DebugAdvancedOptions extends Fragment {
 
 
     private void generateFOTP() {
-        String command = "FOTP_";
+        try {
+            JSONObject JSONOutput = new JSONObject();
 
-        command += inputToString(editText_forcetopallet, "%02d");
-        command += "\r\n";
+            JSONOutput.put("command", "FOTP");
+            JSONOutput.put("pallet", Util.inputToInt(editText_forcetopallet));
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
-        mFragmentInteraction.onSendCommand(command);
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
     }
 
     private void generateWADI() {
-        String command = "WADI_";
+        try {
+            JSONObject JSONOutput = new JSONObject();
 
-        command += boolToString(switch_enable16.isChecked());
-        command += boolToString(switch_forceOutput.isChecked());
-        command += boolToString(switch_forceInput.isChecked());
-        command += "\r\n";
+            JSONOutput.put("command", "WADI");
+            JSONOutput.put("enable16", switch_enable16.isChecked());
+            JSONOutput.put("forceOutput", switch_forceOutput.isChecked());
+            JSONOutput.put("forceInput", switch_forceInput.isChecked());
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
-        mFragmentInteraction.onSendCommand(command);
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
     }
 
     //PLace oRDer
     private void generatePLRD(){
-        String command = "PLRD_";
+        try {
+            JSONObject JSONOutput = new JSONObject();
 
-        command += inputToString(presets_editText_what, "%06d");
-        command += "_";
-        command += inputToString(presets_editText_when, "%06d");
-        command += "_";
-        command += inputToString(presets_editText_where, "%06d");
-        command += "\r\n";
+            JSONOutput.put("command", "PLRD");
+            JSONOutput.put("what", Util.inputToInt(presets_editText_what));
+            JSONOutput.put("when", Util.inputToInt(presets_editText_when));
+            JSONOutput.put("where", Util.inputToInt(presets_editText_where));
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
-        mFragmentInteraction.onSendCommand(command);
-    }
-
-    String inputToString(EditText mUserInput, String format) {
-        //Get int from input
-        String inputText = mUserInput.getText().toString();
-        //default is zero
-        if(TextUtils.isEmpty(inputText))
-            inputText = "0";
-        int inputNumber = Integer.parseInt(inputText);
-        //Format int into string
-        return String.format(format, inputNumber);
-    }
-
-    private String boolToString(Boolean mBol) {
-        if (mBol)
-            return "1";
-        else
-            return "0";
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
     }
 
     public void startAutoUpdate() {

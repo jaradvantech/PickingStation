@@ -15,8 +15,8 @@
         <com.bartoszlipinski.flippablestackview.FlippableStackView
             android:id="@+id/language_stack"
             android:layout_width="178dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="120dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -24,167 +24,17 @@
 
         </com.bartoszlipinski.flippablestackview.FlippableStackView>
 
-        <EditText
-            android:id="@+id/editText_PC_IP_Address_1"
-            android:layout_width="52dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="number"
-            android:nextFocusForward="@+id/editText_PC_IP_Address_2"
-            android:text="192"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_medium"
-            app:layout_constraintBottom_toBottomOf="@+id/settings_ImageView_save"
-            app:layout_constraintEnd_toStartOf="@+id/editText_PC_IP_Address_2"
-            app:layout_constraintHorizontal_bias="0.25"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/language_stack"
-            app:layout_constraintStart_toStartOf="@+id/settings_TextView_credits"
-            app:layout_constraintTop_toTopOf="@+id/settings_ImageView_save"
-            app:layout_constraintVertical_bias="0.26999998" />
-
-        <EditText
-            android:id="@+id/editText_PC_IP_Address_2"
-            android:layout_width="52dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="number"
-            android:nextFocusForward="@+id/editText_PC_IP_Address_3"
-            android:text="168"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_medium"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_PC_IP_Address_1"
-            app:layout_constraintEnd_toStartOf="@+id/editText_PC_IP_Address_3"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/editText_PC_IP_Address_1" />
-
-        <EditText
-            android:id="@+id/editText_PC_IP_Address_3"
-            android:layout_width="52dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="number"
-            android:nextFocusForward="@+id/editText_PC_IP_Address_4"
-            android:text="1"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_medium"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_PC_IP_Address_2"
-            app:layout_constraintEnd_toStartOf="@+id/editText_PC_IP_Address_4"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/editText_PC_IP_Address_2" />
-
-        <EditText
-            android:id="@+id/editText_PC_IP_Address_4"
-            android:layout_width="52dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="number"
-            android:nextFocusForward="@+id/editText_PC_IP_Address_Port"
-            android:text="100"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_medium"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_PC_IP_Address_3"
-            app:layout_constraintEnd_toStartOf="@+id/editText_PC_IP_Address_Port"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/editText_PC_IP_Address_3" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="12dp"
-            android:text=":"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_PC_IP_Address_4"
-            app:layout_constraintStart_toEndOf="@+id/editText_PC_IP_Address_4" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="."
-            app:layout_constraintBottom_toBottomOf="@+id/editText_PC_IP_Address_1"
-            app:layout_constraintStart_toEndOf="@+id/editText_PC_IP_Address_1" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="."
-            app:layout_constraintBottom_toBottomOf="@+id/editText_PC_IP_Address_2"
-            app:layout_constraintStart_toEndOf="@+id/editText_PC_IP_Address_2" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="."
-            app:layout_constraintBottom_toBottomOf="@+id/editText_PC_IP_Address_3"
-            app:layout_constraintStart_toEndOf="@+id/editText_PC_IP_Address_3" />
-
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="26dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/IPaddres"
-            android:textSize="@dimen/text_default"
-            app:layout_constraintEnd_toEndOf="@+id/editText_PC_IP_Address_4"
-            app:layout_constraintStart_toStartOf="@+id/editText_PC_IP_Address_1"
-            app:layout_constraintTop_toBottomOf="@+id/editText_PC_IP_Address_3" />
-
-        <EditText
-            android:id="@+id/editText_PC_IP_Address_Port"
-            android:layout_width="94dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:ems="10"
-            android:inputType="number"
-            android:text="24601"
-            android:textAlignment="center"
-            android:textSize="@dimen/text_medium"
-            app:layout_constraintBottom_toBottomOf="@+id/editText_PC_IP_Address_4"
-            app:layout_constraintEnd_toEndOf="@+id/settings_TextView_credits"
-            app:layout_constraintEnd_toStartOf="@+id/settings_ImageView_save"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/editText_PC_IP_Address_4" />
-
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="26dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/Port"
-            android:textSize="@dimen/text_default"
-            app:layout_constraintEnd_toEndOf="@+id/editText_PC_IP_Address_Port"
-            app:layout_constraintStart_toStartOf="@+id/editText_PC_IP_Address_Port"
-            app:layout_constraintTop_toBottomOf="@+id/editText_PC_IP_Address_Port" />
-
         <ImageView
             android:id="@+id/settings_ImageView_save"
-            android:layout_width="133dp"
-            android:layout_height="133dp"
-            android:layout_marginEnd="140dp"
+            android:layout_width="119dp"
+            android:layout_height="120dp"
+            android:layout_marginEnd="120dp"
             android:src="@mipmap/save"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/settings_constrainLayout_advanced"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.41000003" />
+            app:layout_constraintVertical_bias="0.42000002"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/settings_TextView_credits"
@@ -196,6 +46,91 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/settings_constrainLayout_ipsettings"
+            android:layout_width="430dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="80dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/settings_TextView_credits"
+            app:layout_constraintHorizontal_bias="0.559"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/settings_TextView_credits"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ListView
+                android:id="@+id/settings_listview_configs"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_constrainLayout_ipsettings"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/settings_constrainLayout_ipsettings"
+                app:layout_constraintVertical_bias="0.28" />
+        </android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/settings_textView_ip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="IP Address configuration:"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/settings_constrainLayout_ipsettings"
+            app:layout_constraintStart_toStartOf="@+id/settings_constrainLayout_ipsettings" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/settings_constrainLayout_advanced"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/settings_ImageView_save"
+            app:layout_constraintStart_toStartOf="@+id/settings_ImageView_save"
+            app:layout_constraintTop_toBottomOf="@+id/settings_ImageView_save">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Machine\ncalibration"
+                android:textAlignment="textStart"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_ImageView_calibration"
+                app:layout_constraintStart_toEndOf="@+id/settings_ImageView_calibration" />
+
+            <ImageView
+                android:id="@+id/settings_ImageView_calibration"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@mipmap/calibration"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Reset to\ndefault"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_ImageView_factoryReset"
+                app:layout_constraintStart_toEndOf="@+id/settings_ImageView_factoryReset" />
+
+            <ImageView
+                android:id="@+id/settings_ImageView_factoryReset"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="20dp"
+                android:src="@mipmap/factorydefault"
+                app:layout_constraintStart_toStartOf="@+id/settings_ImageView_calibration"
+                app:layout_constraintTop_toBottomOf="@+id/settings_ImageView_calibration" />
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

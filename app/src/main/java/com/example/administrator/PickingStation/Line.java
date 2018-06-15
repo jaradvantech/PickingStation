@@ -38,7 +38,7 @@ public class Line extends Fragment {
     private final TextView PhysicalPallet_UID_Viewer[] = new TextView[10 + 1];
     private final TextView PhysicalBricksOnTheLine_Brick_Viewer[] = new TextView[12 + 1];
     private final Button PhysicalPallet_TopBrick[] = new Button[10 + 1];
-
+    private boolean autoUpdate;
     private int armNumber;
     private View view;
     private int NumberOfPallets;
@@ -328,6 +328,13 @@ public class Line extends Fragment {
         }
     }
 
+    public void startAutoUpdate() {
+        autoUpdate = true;
+    }
+
+    public void stopAutoUpdate() {
+        autoUpdate = false;
+    }
 
     private void setNumberOfManipulators(int n) {
         this.armNumber = n;

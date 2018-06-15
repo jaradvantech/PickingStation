@@ -18,11 +18,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import static android.app.Activity.RESULT_OK;
+import static com.example.administrator.PickingStation.Util.boolToString;
+import static com.example.administrator.PickingStation.Util.inputToInt;
+import static com.example.administrator.PickingStation.Util.inputToString;
 
 public class Debug extends Fragment {
 
     private OnFragmentInteractionListener mFragmentInteraction;
+    private Boolean autoUpdate;
     private Button buttonRead;
     private Button buttonWrite;
     private Button buttonClear;
@@ -100,13 +107,13 @@ public class Debug extends Fragment {
 
         buttonRead.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mFragmentInteraction.onSendCommand("PGSI_14_" + String.format("%02d", currentArm) + "\r\n"); //Starting at index
+                requestDebugData();
             }
         });
 
         buttonWrite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mFragmentInteraction.onSendCommand(writeDebugData());
+                sendDebugData();
             }
         });
 
@@ -144,7 +151,7 @@ public class Debug extends Fragment {
                     currentArm++;
                     currentArmText.setText(Integer.toString(currentArm));
                 }
-                mFragmentInteraction.onSendCommand("PGSI_14_" + String.format("%02d", currentArm));
+                requestDebugData();
             }
         });
 
@@ -154,7 +161,7 @@ public class Debug extends Fragment {
                     currentArm--;
                     currentArmText.setText(Integer.toString(currentArm));
                 }
-                mFragmentInteraction.onSendCommand("PGSI_14_" + String.format("%02d", currentArm));
+                requestDebugData();
             }
         });
 
@@ -162,7 +169,7 @@ public class Debug extends Fragment {
             @Override
             public void run() {
                 if (autoUpdate.isChecked()) {
-                    mFragmentInteraction.onSendCommand("PGSI_14_" + String.format("%02d", currentArm));
+                    requestDebugData();
                 }
                 looperHandler.postDelayed(this, 200);
             }
@@ -188,123 +195,111 @@ public class Debug extends Fragment {
         mFragmentInteraction = null;
     }
 
-
     public interface OnFragmentInteractionListener {
         void onSendCommand(String command);
     }
 
-    public void updateDebugData(String mCmd) {
+    private void requestDebugData() {
         try {
-            if ((commonDataOutput != null) && (armDataOutput != null)) {
-                //Delete old data
-                commonDataOutput.setText("");
-                armDataOutput.setText("");
+            JSONObject JSONOutput = new JSONObject();
 
-                //Write New data
-                armDataOutput.append("### Data for arm number " + mCmd.substring(8, 10) + ":\n\n");
-                armDataOutput.append(">HasDischarged; " + mCmd.charAt(11) + "\n");
-                armDataOutput.append(">PhotosensorOfManipulator; " + mCmd.charAt(12) + "\n");
-                armDataOutput.append(">ManipulatorStatePosition; " + mCmd.charAt(13) + "\n");
-                armDataOutput.append(">DischargedTheBrickConfirm; " + mCmd.charAt(14) + "\n");
-                armDataOutput.append(">LeftStorageBinSecurity; " + mCmd.charAt(15) + "\n");
-                armDataOutput.append(">RightStorageBinSecurity; " + mCmd.charAt(16) + "\n");
-                armDataOutput.append(">AlarmArray; " + mCmd.substring(18, 23) + "\n");
-                armDataOutput.append(">ManipulatorRepositionState; " + mCmd.charAt(24) + "\n");
-                armDataOutput.append(">ActualValueEncoder; " + mCmd.substring(26, 36) + "\n\n");
+            JSONOutput.put("command", "PGSI");
+            JSONOutput.put("arm", currentArm);
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
-                commonDataOutput.append("### Common Data: \n\n");
-                commonDataOutput.append(">TheQueueOfPhotosensor_1; " + mCmd.charAt(37) + "\n");
-                commonDataOutput.append(">TheQueueOfPhotosensor_2; " + mCmd.charAt(38) + "\n");
-                commonDataOutput.append(">TheQueueOfPhotosensor_3; " + mCmd.charAt(39) + "\n");
-                commonDataOutput.append(">TheQueueOfPhotosensor_4; " + mCmd.charAt(40) + "\n");
-                commonDataOutput.append(">StationInterlock_16; " + mCmd.charAt(41) + "\n");
-                commonDataOutput.append(">WhetherOrNotPutTheTileTo_16; " + mCmd.charAt(42) + "\n");
-                commonDataOutput.append(">EquipmentAlarmArray; " + mCmd.substring(44, 49) + "\n");
-                commonDataOutput.append(">TileGrade; " + mCmd.substring(50, 53) + "\n");
-                commonDataOutput.append(">ChangeColor; " + mCmd.substring(54, 57) + "\n");
-                commonDataOutput.append(">SystemState; " + mCmd.substring(58, 61) + "\n");
-                commonDataOutput.append(">ActualValueOfTheLineEncoder; " + mCmd.substring(62, 72) + "\n");
-                commonDataOutput.append(">EnterTheTileStartingCodeValue; " + mCmd.substring(73, 83) + "\n");
-
-                lastChecked_encoderValue = Integer.parseInt(mCmd.substring(62, 72));
-            }
-
-        } catch (Exception PGSIexc){
-            Log.e("PGSI Exception", PGSIexc.toString());
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
         }
     }
 
-    public String writeDebugData() {
-        String writeCommand = "PWDA_14_";
+    public void updateDebugData(String mCmd) {
+            if ((commonDataOutput != null) && (armDataOutput != null)) {
+                try {
+                    JSONObject JSONparser = new JSONObject(mCmd);
+                    commonDataOutput.setText("");
+                    armDataOutput.setText("");
 
-        writeCommand += String.format("%02d", currentArm);
-        writeCommand += "_";
-        writeCommand += boolToString(checkBox_SBD.isChecked());
-        writeCommand += boolToString(checkBox_MR.isChecked());
-        writeCommand += boolToString(checkBox_SBFA.isChecked());
-        writeCommand += boolToString(checkBox_SBFB.isChecked());
-        writeCommand += boolToString(checkBox_BCRSA.isChecked());
-        writeCommand += boolToString(checkBox_BCRSB.isChecked());
-        writeCommand += boolToString(checkBox_MM.isChecked());
-        writeCommand += boolToString(checkBox_VV.isChecked());
-        writeCommand += "_";
-        writeCommand += inputToString(editText_MFB, "%03d");
-        writeCommand += "_";
-        writeCommand += inputToString(editText_MLR, "%03d");
-        writeCommand += "_";
-        writeCommand += inputToString(editText_MUD, "%03d");
-        writeCommand += "_";
-        writeCommand += inputToString(editText_COD, "%03d");
-        writeCommand += "_";
-        writeCommand += inputToString(editText_WTDWT, "%03d");
-        writeCommand += "_";
-        writeCommand += inputToString(editText_PZA, "%06d");
-        writeCommand += "_";
-        writeCommand += inputToString(editText_VOCD, "%06d");
-        writeCommand += "_";
-        writeCommand += boolToString(checkBox_CE.isChecked());
-        writeCommand += boolToString(checkBox_TP.isChecked());
-        writeCommand += boolToString(checkBox_ITT.isChecked());
-        writeCommand += boolToString(checkBox_TMD.isChecked());
-        writeCommand += "_";
-        writeCommand += inputToString(editText_PCS, "%03d");
-        writeCommand += "_";
-        writeCommand += inputToString(editText_ADD, "%06d");
-        writeCommand += "_";
-        writeCommand += inputToString(editText_ZASV, "%06d");
-        writeCommand += "_";
-        writeCommand += inputToString(editText_TPOX_AGB, "%06d");
-        writeCommand += "_";
-        writeCommand += inputToString(editText_TPOX_AAD, "%06d");
-        writeCommand += "\r\n";
+                    armDataOutput.append("### Data for arm number " + Integer.valueOf(JSONparser.getInt("arm")).toString() + ":\n\n");
+                    armDataOutput.append(">HasDischarged; " + Integer.valueOf(JSONparser.getInt("HasDischarged")).toString() + "\n");
+                    armDataOutput.append(">PhotosensorOfManipulator; " + Integer.valueOf(JSONparser.getInt("PhotosensorOfManipulator")).toString() + "\n");
+                    armDataOutput.append(">ManipulatorStatePosition; " + Integer.valueOf(JSONparser.getInt("ManipulatorStatePosition")).toString() + "\n");
+                    armDataOutput.append(">DischargedTheBrickConfirm; " + Integer.valueOf(JSONparser.getInt("DischargedTheBrickConfirm")).toString() + "\n");
+                    armDataOutput.append(">LeftStorageBinSecurity; " + Integer.valueOf(JSONparser.getInt("LeftStorageBinSecurity")).toString() + "\n");
+                    armDataOutput.append(">RightStorageBinSecurity; " + Integer.valueOf(JSONparser.getInt("RightStorageBinSecurity")).toString() + "\n");
+                    armDataOutput.append(">AlarmArray; " + Integer.valueOf(JSONparser.getInt("AlarmArray")).toString() + "\n");
+                    armDataOutput.append(">ManipulatorRepositionState; " + Integer.valueOf(JSONparser.getInt("ManipulatorRepositionState")).toString() + "\n");
+                    armDataOutput.append(">ActualValueEncoder; " + Integer.valueOf(JSONparser.getInt("ActualValueEncoder")).toString() + "\n\n");
 
-        return writeCommand;
+                    commonDataOutput.append("### Common Data: \n\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_1; " + Integer.valueOf(JSONparser.getInt("TheQueueOfPhotosensor_1")).toString() + "\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_2; " + Integer.valueOf(JSONparser.getInt("TheQueueOfPhotosensor_2")).toString() + "\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_3; " + Integer.valueOf(JSONparser.getInt("TheQueueOfPhotosensor_3")).toString() + "\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_4; " + Integer.valueOf(JSONparser.getInt("TheQueueOfPhotosensor_4")).toString() + "\n");
+                    commonDataOutput.append(">StationInterlock_16; " + Integer.valueOf(JSONparser.getInt("StationInterlock_16")).toString() + "\n");
+                    commonDataOutput.append(">WhetherOrNotPutTheTileTo_16; " + Integer.valueOf(JSONparser.getInt("WhetherOrNotPutTheTileTo_16")).toString() + "\n");
+                    commonDataOutput.append(">EquipmentAlarmArray; " + Integer.valueOf(JSONparser.getInt("EquipmentAlarmArray")).toString() + "\n");
+                    commonDataOutput.append(">TileGrade; " + Integer.valueOf(JSONparser.getInt("TileGrade")).toString() + "\n");
+                    commonDataOutput.append(">ChangeColor; " + Integer.valueOf(JSONparser.getInt("ChangeColor")).toString() + "\n");
+                    commonDataOutput.append(">SystemState; " + Integer.valueOf(JSONparser.getInt("SystemState")).toString() + "\n");
+                    commonDataOutput.append(">ActualValueOfTheLineEncoder; " + Integer.valueOf(JSONparser.getInt("ActualValueOfTheLineEncoder")).toString() + "\n");
+                    commonDataOutput.append(">EnterTheTileStartingCodeValue; " + Integer.valueOf(JSONparser.getInt("EnterTheTileStartingCodeValue")).toString() + "\n");
+
+                    lastChecked_encoderValue = Integer.valueOf(JSONparser.getInt("ActualValueOfTheLineEncoder"));
+                } catch (Exception jsonExc) {
+                    Log.e("JSON Exception", jsonExc.getMessage());
+                }
+            }
+    }
+
+    public void sendDebugData() {
+        try {
+            JSONObject JSONOutput = new JSONObject();
+
+            JSONOutput.put("command", "PWDA");
+
+            JSONOutput.put("arm", currentArm);
+            JSONOutput.put("SBD", boolToString(checkBox_SBD.isChecked()));
+            JSONOutput.put("MR", boolToString(checkBox_MR.isChecked()));
+            JSONOutput.put("SBFA", boolToString(checkBox_SBFA.isChecked()));
+            JSONOutput.put("SBFB", boolToString(checkBox_SBFB.isChecked()));
+            JSONOutput.put("BCRSA", boolToString(checkBox_BCRSA.isChecked()));
+            JSONOutput.put("BCRSB", boolToString(checkBox_BCRSB.isChecked()));
+            JSONOutput.put("MM", boolToString(checkBox_MM.isChecked()));
+            JSONOutput.put("VV", boolToString(checkBox_VV.isChecked()));
+            JSONOutput.put("MFB", inputToInt(editText_MFB));
+            JSONOutput.put("MLR", inputToInt(editText_MLR));
+            JSONOutput.put("MUD", inputToInt(editText_MUD));
+            JSONOutput.put("COD", inputToInt(editText_COD));
+            JSONOutput.put("WTDWT", inputToInt(editText_WTDWT));
+            JSONOutput.put("PZA", inputToInt(editText_PZA));
+            JSONOutput.put("VOCD", inputToInt(editText_VOCD));
+            JSONOutput.put("CE", boolToString(checkBox_CE.isChecked()));
+            JSONOutput.put("TP", boolToString(checkBox_TP.isChecked()));
+            JSONOutput.put("ITT", boolToString(checkBox_ITT.isChecked()));
+            JSONOutput.put("TMD", boolToString(checkBox_TMD.isChecked()));
+            JSONOutput.put("PCS", inputToInt(editText_PCS));
+            JSONOutput.put("ADD", inputToInt(editText_ADD));
+            JSONOutput.put("ZASV", inputToInt(editText_ZASV));
+            JSONOutput.put("TPOX_AGB", inputToInt(editText_TPOX_AGB));
+            JSONOutput.put("TPOX_AAD", inputToInt(editText_TPOX_AAD));
+
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
+
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
     }
 
 
-    String boolToString(Boolean mBol) {
-        if (mBol)
-            return "1";
-        else
-            return "0";
+    public void startAutoUpdate() {
+        autoUpdate = true;
     }
 
-    /*
-     *RBS: Read number from input and convert to properly formatted String
-     */
-    String inputToString(EditText mUserInput, String format) {
-        //Get int from input
-        String inputText = mUserInput.getText().toString();
-        //default is zero
-        if(TextUtils.isEmpty(inputText))
-            inputText = "0";
-        int inputNumber = Integer.parseInt(inputText);
-        //Format int into string
-        return String.format(format, inputNumber);
+    public void stopAutoUpdate() {
+        autoUpdate = false;
     }
 
-    //TODO this wont be needed
-
+    //TODO this wont be needed soon
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {

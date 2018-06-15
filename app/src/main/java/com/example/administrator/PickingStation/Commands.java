@@ -1,9 +1,5 @@
 package com.example.administrator.PickingStation;
 
-/**
- * Created by Administrator on 2018/4/24.
- */
-
 public class Commands {
 
     public static final String PING = " {\"command_ID\":\"PING\"}\n";

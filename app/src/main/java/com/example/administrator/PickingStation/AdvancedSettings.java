@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import static com.example.administrator.PickingStation.Util.inputToString;
+
 public class AdvancedSettings extends AppCompatActivity {
 
     private EditText advanced_edittext_arm1,
@@ -54,17 +56,5 @@ public class AdvancedSettings extends AppCompatActivity {
         intent.putExtra("CMDstring", command);
         setResult(RESULT_OK, intent);
         finish();
-    }
-
-
-    String inputToString(EditText mUserInput, String format) {
-        //Get int from input
-        String inputText = mUserInput.getText().toString();
-        //default is zero
-        if(TextUtils.isEmpty(inputText))
-            inputText = "0";
-        int inputNumber = Integer.parseInt(inputText);
-        //Format int into string
-        return String.format(format, inputNumber);
     }
 }

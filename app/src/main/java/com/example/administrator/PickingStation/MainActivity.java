@@ -61,9 +61,12 @@ public class MainActivity extends AppCompatActivity
     private Loading loading;
     private Alarms alarms;
     private int previous_id = R.id.holder_loading;
+    private AsyncTask<String, String, TcpClient> networkConnection;
     private final int TRANSITION_TIME = 400;
     private final int ALARM_CHECK_PERIOD = 2000;
     private final int RPRV_PERIOD = 300;
+    private final String DEFAULT_IP = "127.0.0.1";
+    private final String DEFAULT_PORT = "0";
     private final Handler alarmLoopHandler = new Handler(Looper.getMainLooper());
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final AlarmManager mAlarmManager = new AlarmManager(this);
@@ -153,9 +156,10 @@ public class MainActivity extends AppCompatActivity
                 switchToLayout(R.id.nav_alarms);
             }
         });
-        new ConnectTask().execute("");
 
+        startNetworking();
         startCheckingForAlarms();
+
     }
 
     @Override
@@ -341,7 +345,7 @@ public class MainActivity extends AppCompatActivity
     public class ConnectTask extends AsyncTask<String, String, TcpClient> {
 
         @Override
-        protected TcpClient doInBackground(String... message) {
+        protected TcpClient doInBackground(String... params) {
 
             //we create a TCPClient object
             mTcpClient = new TcpClient(new TcpClient.OnMessageReceived() {
@@ -360,7 +364,7 @@ public class MainActivity extends AppCompatActivity
                     publishProgress("connectionstatechange", "connectionlost");
                 }
             });
-            mTcpClient.run(getApplicationContext());
+            mTcpClient.run(getApplicationContext(), params[0], params[1]);
 
             return null;
         }
@@ -386,8 +390,35 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void processCommands(String receivedString) {
+    public void startNetworking() {
+        String ip = DEFAULT_IP;
+        String port = DEFAULT_PORT;
+        //Read IP and address from settings.
+        try {
+            JSONObject JSONparser = new JSONObject( SettingManager.getSetting("Machine controller", getApplicationContext()));
+            ip = JSONparser.getString("ip");
+            port = JSONparser.getString("port");
+        } catch (Exception jsonExc) {
+            Log.e("JSON Exception", jsonExc.getMessage());
+        }
+        networkConnection =  new ConnectTask();
+        networkConnection.execute(ip, port);
+    }
 
+    public void updateServerAddress() {
+        String ip = DEFAULT_IP;
+        String port = DEFAULT_PORT;
+        try {
+            JSONObject JSONparser = new JSONObject( SettingManager.getSetting("Machine controller", getApplicationContext()));
+            ip = JSONparser.getString("ip");
+            port = JSONparser.getString("port");
+        } catch (Exception jsonExc) {
+            Log.e("JSON Exception", jsonExc.getMessage());
+        }
+        mTcpClient.setAddress(ip, port);
+    }
+
+    public void processCommands(String receivedString) {
         String cmdID = "Error";
         try {
             JSONObject JSONparser = new JSONObject(receivedString);
@@ -396,7 +427,6 @@ public class MainActivity extends AppCompatActivity
         } catch (JSONException exc) {
             Log.d("MainActivity", exc.getMessage());
         }
-
 
         if (cmdID.equals("Error")) {
             Log.d("Bad CMD received", receivedString);

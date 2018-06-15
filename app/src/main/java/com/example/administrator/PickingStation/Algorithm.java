@@ -17,6 +17,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class Algorithm extends Fragment {
     private AlertDialog.Builder dialogBuilder;
@@ -219,7 +223,7 @@ public class Algorithm extends Fragment {
     public void saveAlgorithmData(){
         int color = algorithm_listView_colours.getCheckedItemPosition();
         if(color==0) color=1;
-        int grade = algorithm_listView_grades.getCheckedItemPosition(); //TODO RBS me da que este +1 arbitrario aqui va a traer problemas, asi que lo quito
+        int grade = algorithm_listView_grades.getCheckedItemPosition();
         if(grade==0) grade=1;
 
         //Save to APP preferences
@@ -228,18 +232,23 @@ public class Algorithm extends Fragment {
         sharedPrefEditor.putInt("CURRENT_COLOR", algorithm_listView_colours.getCheckedItemPosition());
         sharedPrefEditor.commit();
 
-        //Save to machine
-        String writeCommand = "ALSC_14_";
-        writeCommand += String.format("%02d",  color);
-        writeCommand += "_";
-        writeCommand += String.format("%03d",  grade); //Mira Raul, algunas partes de nuestra infraestructura soportan 100 calidades distintas
-        writeCommand += "_";
+        try {
+            JSONObject JSONOutput = new JSONObject();
 
-        for(int i=1; i<MANIPULATORS+1; i++)
-            writeCommand += manipulatorModes[i];
+            JSONOutput.put("command", "ALSC");
+            JSONOutput.put("color", color);
+            JSONOutput.put("grade", grade);
 
-        Log.d("Generated cmd", writeCommand);
-        mFragmentInteraction.onSendCommand(writeCommand);
+            JSONArray modes = new JSONArray();
+            for(int i=1; i<MANIPULATORS+1; i++)
+                modes.put(manipulatorModes[i]);
+            JSONOutput.put("modes", modes);
+
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
+
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
     }
 
     public void setDemoBrickGrade(int mGrade) {

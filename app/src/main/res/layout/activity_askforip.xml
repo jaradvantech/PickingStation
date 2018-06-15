@@ -1,0 +1,175 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.PickingStation.Settings">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <EditText
+            android:id="@+id/askforip_editText_field1"
+            android:layout_width="53dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:nextFocusForward="@+id/askforip_editText_field2"
+            android:text="192"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/askforip_editText_field2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.100000024" />
+
+        <EditText
+            android:id="@+id/askforip_editText_field2"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:nextFocusForward="@+id/askforip_editText_field3"
+            android:text="168"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_medium"
+            app:layout_constraintBottom_toBottomOf="@+id/askforip_editText_field1"
+            app:layout_constraintEnd_toStartOf="@+id/askforip_editText_field3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/askforip_editText_field1" />
+
+        <EditText
+            android:id="@+id/askforip_editText_field3"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:nextFocusForward="@+id/askforip_editText_field4"
+            android:text="0"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_medium"
+            app:layout_constraintBottom_toBottomOf="@+id/askforip_editText_field1"
+            app:layout_constraintEnd_toStartOf="@+id/askforip_editText_field4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/askforip_editText_field2" />
+
+        <EditText
+            android:id="@+id/askforip_editText_field4"
+            android:layout_width="52dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:focusedByDefault="true"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:nextFocusForward="@+id/askforip_editText_port"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_medium"
+            app:layout_constraintBottom_toBottomOf="@+id/askforip_editText_field1"
+            app:layout_constraintEnd_toStartOf="@+id/askforip_editText_port"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/askforip_editText_field3">
+
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/askforip_textview_separator4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:layout_marginStart="8dp"
+            android:text=":"
+            app:layout_constraintBottom_toBottomOf="@+id/askforip_editText_field4"
+            app:layout_constraintStart_toEndOf="@+id/askforip_editText_field4" />
+
+        <TextView
+            android:id="@+id/askforip_textview_separator1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="."
+            app:layout_constraintBottom_toBottomOf="@+id/askforip_editText_field1"
+            app:layout_constraintStart_toEndOf="@+id/askforip_editText_field1" />
+
+        <TextView
+            android:id="@+id/askforip_textview_separator2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="."
+            app:layout_constraintBottom_toBottomOf="@+id/askforip_editText_field1"
+            app:layout_constraintStart_toEndOf="@+id/askforip_editText_field2" />
+
+        <TextView
+            android:id="@+id/askforip_textview_separator3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="."
+            app:layout_constraintBottom_toBottomOf="@+id/askforip_editText_field3"
+            app:layout_constraintStart_toEndOf="@+id/askforip_editText_field3" />
+
+        <TextView
+            android:id="@+id/askforip_textview_address"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="IP Address"
+            android:textSize="@dimen/text_default"
+            app:layout_constraintEnd_toEndOf="@+id/askforip_editText_field4"
+            app:layout_constraintStart_toStartOf="@+id/askforip_editText_field1"
+            app:layout_constraintTop_toBottomOf="@+id/askforip_editText_field3" />
+
+        <EditText
+            android:id="@+id/askforip_editText_port"
+            android:layout_width="94dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:inputType="number"
+            android:text="24601"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_medium"
+            app:layout_constraintBottom_toBottomOf="@+id/askforip_editText_field1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/askforip_editText_field4" />
+
+        <TextView
+            android:id="@+id/askforip_textview_port"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/Port"
+            android:textSize="@dimen/text_default"
+            app:layout_constraintEnd_toEndOf="@+id/askforip_editText_port"
+            app:layout_constraintStart_toStartOf="@+id/askforip_editText_port"
+            app:layout_constraintTop_toBottomOf="@+id/askforip_editText_port" />
+
+        <ImageView
+            android:id="@+id/askforip_imageView_go"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@mipmap/go"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.328" />
+
+    </android.support.constraint.ConstraintLayout>
+</FrameLayout>

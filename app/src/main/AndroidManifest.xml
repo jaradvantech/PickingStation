@@ -37,7 +37,7 @@
             android:name="com.example.administrator.PickingStation.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
-
+        <activity android:name="com.example.administrator.PickingStation.AskForIP"></activity>
         <activity android:name="com.example.administrator.PickingStation.AdvancedSettings"></activity>
 
     </application>
