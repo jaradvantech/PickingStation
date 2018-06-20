@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +23,6 @@ import org.json.JSONObject;
 import static android.app.Activity.RESULT_OK;
 import static com.example.administrator.PickingStation.Util.boolToString;
 import static com.example.administrator.PickingStation.Util.inputToInt;
-import static com.example.administrator.PickingStation.Util.inputToString;
 
 public class Debug extends Fragment {
 
@@ -131,14 +129,6 @@ public class Debug extends Fragment {
         });
 
         //Launch advanced settings window (manipulator position etc.)
-        armPosition.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent i = new Intent(getContext(), AdvancedSettings.class);
-                startActivityForResult(i, 1);
-            }
-        });
-
-        //Launch advanced settings window (manipulator position etc.)
         advanced.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 ((MainActivity)getActivity()).switchToLayout(R.id.opt_debug_advanced);
@@ -220,23 +210,23 @@ public class Debug extends Fragment {
                     armDataOutput.setText("");
 
                     armDataOutput.append("### Data for arm number " + Integer.valueOf(JSONparser.getInt("arm")).toString() + ":\n\n");
-                    armDataOutput.append(">HasDischarged; " + Integer.valueOf(JSONparser.getInt("HasDischarged")).toString() + "\n");
-                    armDataOutput.append(">PhotosensorOfManipulator; " + Integer.valueOf(JSONparser.getInt("PhotosensorOfManipulator")).toString() + "\n");
-                    armDataOutput.append(">ManipulatorStatePosition; " + Integer.valueOf(JSONparser.getInt("ManipulatorStatePosition")).toString() + "\n");
-                    armDataOutput.append(">DischargedTheBrickConfirm; " + Integer.valueOf(JSONparser.getInt("DischargedTheBrickConfirm")).toString() + "\n");
-                    armDataOutput.append(">LeftStorageBinSecurity; " + Integer.valueOf(JSONparser.getInt("LeftStorageBinSecurity")).toString() + "\n");
-                    armDataOutput.append(">RightStorageBinSecurity; " + Integer.valueOf(JSONparser.getInt("RightStorageBinSecurity")).toString() + "\n");
+                    armDataOutput.append(">HasDischarged; " +  JSONparser.getBoolean("HasDischarged") + "\n");
+                    armDataOutput.append(">PhotosensorOfManipulator; " +  JSONparser.getBoolean("PhotosensorOfManipulator") + "\n");
+                    armDataOutput.append(">ManipulatorStatePosition; " + JSONparser.getBoolean("ManipulatorStatePosition") + "\n");
+                    armDataOutput.append(">DischargedTheBrickConfirm; " + JSONparser.getBoolean("DischargedTheBrickConfirm") + "\n");
+                    armDataOutput.append(">LeftStorageBinSecurity; " + JSONparser.getBoolean("LeftStorageBinSecurity") + "\n");
+                    armDataOutput.append(">RightStorageBinSecurity; " + JSONparser.getBoolean("RightStorageBinSecurity") + "\n");
                     armDataOutput.append(">AlarmArray; " + Integer.valueOf(JSONparser.getInt("AlarmArray")).toString() + "\n");
                     armDataOutput.append(">ManipulatorRepositionState; " + Integer.valueOf(JSONparser.getInt("ManipulatorRepositionState")).toString() + "\n");
                     armDataOutput.append(">ActualValueEncoder; " + Integer.valueOf(JSONparser.getInt("ActualValueEncoder")).toString() + "\n\n");
 
                     commonDataOutput.append("### Common Data: \n\n");
-                    commonDataOutput.append(">TheQueueOfPhotosensor_1; " + Integer.valueOf(JSONparser.getInt("TheQueueOfPhotosensor_1")).toString() + "\n");
-                    commonDataOutput.append(">TheQueueOfPhotosensor_2; " + Integer.valueOf(JSONparser.getInt("TheQueueOfPhotosensor_2")).toString() + "\n");
-                    commonDataOutput.append(">TheQueueOfPhotosensor_3; " + Integer.valueOf(JSONparser.getInt("TheQueueOfPhotosensor_3")).toString() + "\n");
-                    commonDataOutput.append(">TheQueueOfPhotosensor_4; " + Integer.valueOf(JSONparser.getInt("TheQueueOfPhotosensor_4")).toString() + "\n");
-                    commonDataOutput.append(">StationInterlock_16; " + Integer.valueOf(JSONparser.getInt("StationInterlock_16")).toString() + "\n");
-                    commonDataOutput.append(">WhetherOrNotPutTheTileTo_16; " + Integer.valueOf(JSONparser.getInt("WhetherOrNotPutTheTileTo_16")).toString() + "\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_1; " + JSONparser.getBoolean("TheQueueOfPhotosensor_1") + "\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_2; " + JSONparser.getBoolean("TheQueueOfPhotosensor_2") + "\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_3; " + JSONparser.getBoolean("TheQueueOfPhotosensor_3") + "\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_4; " + JSONparser.getBoolean("TheQueueOfPhotosensor_4") + "\n");
+                    commonDataOutput.append(">StationInterlock_16; " + JSONparser.getBoolean("StationInterlock_16") + "\n");
+                    commonDataOutput.append(">WhetherOrNotPutTheTileTo_16; " + JSONparser.getBoolean("WhetherOrNotPutTheTileTo_16") + "\n");
                     commonDataOutput.append(">EquipmentAlarmArray; " + Integer.valueOf(JSONparser.getInt("EquipmentAlarmArray")).toString() + "\n");
                     commonDataOutput.append(">TileGrade; " + Integer.valueOf(JSONparser.getInt("TileGrade")).toString() + "\n");
                     commonDataOutput.append(">ChangeColor; " + Integer.valueOf(JSONparser.getInt("ChangeColor")).toString() + "\n");
@@ -297,18 +287,6 @@ public class Debug extends Fragment {
 
     public void stopAutoUpdate() {
         autoUpdate = false;
-    }
-
-    //TODO this wont be needed soon
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
-                String sentCMD = data.getStringExtra("CMDstring");
-                mFragmentInteraction.onSendCommand(sentCMD);
-
-            }
-        }
     }
 
 }

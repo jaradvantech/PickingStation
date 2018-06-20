@@ -6,6 +6,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.animation.DynamicAnimation;
 import android.support.animation.SpringAnimation;
 import android.support.animation.SpringForce;
@@ -20,12 +22,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import static android.support.animation.SpringForce.DAMPING_RATIO_NO_BOUNCY;
 import static android.support.animation.SpringForce.STIFFNESS_VERY_LOW;
+import static com.example.administrator.PickingStation.Commands.RPRV;
 
-//Esta clase es una chapuza, de principio a fin
+//Pese a mis esfuerzos de adecentarla, esta clase es una chapuza, de principio a fin. firmado RBS
 
 public class Line extends Fragment {
     private OnFragmentInteractionListener mListener;
@@ -33,7 +39,6 @@ public class Line extends Fragment {
     //JAGM: Arbitrary constants to control the position of the bricks on the line
     private float OriginPosition = -116.35f; //smaller=later
     private float EncoderToPixelDivider = 10.1f; //mas grande, lo suelta antes
-
     private final ImageView PhysicalPallet[] = new ImageView[10 + 1];
     private final TextView PhysicalPallet_UID_Viewer[] = new TextView[10 + 1];
     private final TextView PhysicalBricksOnTheLine_Brick_Viewer[] = new TextView[12 + 1];
@@ -41,12 +46,18 @@ public class Line extends Fragment {
     private boolean autoUpdate;
     private int armNumber;
     private View view;
+    private int MANIPULATORS = 5; //Will be variable in the future. default 5
     private int NumberOfPallets;
     private int NumberOfBricksOnLine;
     private ArrayList DNIinUse = new ArrayList<>();
-    private int current_ManipulatorDNIs[] = new int[5+1];
-    private int last_ManipulatorDNIs[] = new int[5+1];
-    private int destinationPallets[] = new int[10+1];
+    private int current_ManipulatorDNIs[] = new int[MANIPULATORS+1];
+    private int last_ManipulatorDNIs[] = new int[MANIPULATORS+1];
+    private int destinationPallets[] = new int[(2*MANIPULATORS)+1];
+    private final int RPRV_PERIOD = 300;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private JSONArray palletInformation = null;
+    private JSONArray bricksOnLine = null;
+    private JSONArray takenBricks = null;
 
    /* Convert from pallet number (1-10) to px. (index 0 means origin)
     * (pixel) palletCoords[(x=0, y=1)][(pallet num)]
@@ -130,23 +141,33 @@ public class Line extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void ChangeToEditor(int index);
+        void onSendCommand(String command);
     }
 
     /*
      * Update all graphic information
      */
     public void updateLineBrickInfo(String message) {
+        try {
+            JSONObject JSONparser = new JSONObject(message);
+            palletInformation = JSONparser.getJSONArray("palletInformation");
+            bricksOnLine = JSONparser.getJSONArray("bricksOnTheLine");
+            takenBricks = JSONparser.getJSONArray("bricksTakenByManipulators");
 
-        NumberOfPallets = Integer.parseInt(message.substring(5, 7));
-        NumberOfBricksOnLine = Integer.parseInt(message.substring(27 + (NumberOfPallets - 1) * 19, 29 + (NumberOfPallets - 1) * 19));
+            NumberOfPallets = palletInformation.length(); //this won't be necessary in the future.
+            NumberOfBricksOnLine = bricksOnLine.length();
+
+        } catch (Exception jsonExc) {
+            Log.e("JSON Exception", jsonExc.getMessage());
+        }
 
         DNIinUse = new ArrayList<>();
 
-        updateBricksInPallets(message);
+        updateBricksInPallets();
 
-        updateBricksOnLine(message);
+        updateBricksOnLine();
 
-        checkForPickedBricks(message);
+        checkForPickedBricks();
 
         hideUnusedBricks();
     }
@@ -155,31 +176,36 @@ public class Line extends Fragment {
      *  Update UID and content of every pallet. Argument is the response
      *  of an RPRV command.
      */
-    private void updateBricksInPallets(String message) {
-
+    private void updateBricksInPallets() {
         //For every pallet in the line
         for (int i = 1; i <= NumberOfPallets; i++) {
-            String cutedUID = message.substring(8 + (i - 1) * 19, 24 + (i - 1) * 19);
-            int cutedNumberOfBricks = message.charAt(24 + (i - 1) * 19) - 17;
-            int cutedTopBrick = message.charAt(25 + (i - 1) * 19);
+            String palletUID = "0000000000000000";
+            int numberOfBricks=0, topBrick=0;
+            try {
+                palletUID = palletInformation.getJSONObject(i).getString("palletUID");
+                numberOfBricks = palletInformation.getJSONObject(i).getInt("numberOfBricks");
+                topBrick = palletInformation.getJSONObject(i).getInt("topBrick");
+            } catch (Exception jsonExc) {
+                Log.e("JSON Exception", jsonExc.getMessage());
+            }
 
             //Update pallets
-            if (cutedUID.contentEquals("0000000000000000")) {
+            if (palletUID.contentEquals("0000000000000000")) {
                 PhysicalPallet[i].setVisibility(View.INVISIBLE);
                 PhysicalPallet_UID_Viewer[i].setVisibility(View.INVISIBLE);
-                PhysicalPallet_UID_Viewer[i].setText(cutedUID);
+                PhysicalPallet_UID_Viewer[i].setText(palletUID);
                 PhysicalPallet_TopBrick[i].setBackgroundColor(Color.TRANSPARENT);
                 PhysicalPallet_TopBrick[i].setText("");
             } else {
                 PhysicalPallet[i].setVisibility(View.VISIBLE);
                 PhysicalPallet_UID_Viewer[i].setVisibility(View.VISIBLE);
-                PhysicalPallet_UID_Viewer[i].setText(cutedUID);
-                if (cutedNumberOfBricks > 0) {
-                    //Log.d("MemoryValue", "Memory uid: " + cutedUID );
-                    //Log.d("MemoryValue", "Memory raw nob: " + cutedNumberOfBricks );
-                    //Log.d("MemoryValue", "Memory raw top: " + cutedTopBrick );
-                    int colorID = getResources().getIdentifier("brick_color_" + (cutedTopBrick & 15), "color", getContext().getPackageName());
-                    String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (cutedTopBrick >> 4), "string", getContext().getPackageName()));
+                PhysicalPallet_UID_Viewer[i].setText(palletUID);
+                if (numberOfBricks > 0) {
+                    //Log.d("MemoryValue", "Memory uid: " + palletUID );
+                    //Log.d("MemoryValue", "Memory raw nob: " + numberOfBricks );
+                    //Log.d("MemoryValue", "Memory raw top: " + topBrick );
+                    int colorID = getResources().getIdentifier("brick_color_" + (topBrick & 15), "color", getContext().getPackageName());
+                    String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (topBrick >> 4), "string", getContext().getPackageName()));
 
                     GradientDrawable gd = new GradientDrawable();
                     gd.setColor(getResources().getColor(colorID)); // Changes this drawable to use a single color instead of a gradient
@@ -187,7 +213,7 @@ public class Line extends Fragment {
                     gd.setStroke(2, 0xFF000000);
                     PhysicalPallet_TopBrick[i].setBackground(gd);
 
-                    PhysicalPallet_TopBrick[i].setText("#: " + cutedNumberOfBricks + "\n\n" + grade);
+                    PhysicalPallet_TopBrick[i].setText("#: " + numberOfBricks + "\n\n" + grade);
                 } else {
                     PhysicalPallet_TopBrick[i].setBackgroundColor(Color.TRANSPARENT);
                     PhysicalPallet_TopBrick[i].setText("");
@@ -199,13 +225,17 @@ public class Line extends Fragment {
     /*
      * Update graphic information of the bricks laying in the conveyor line
      */
-    private void updateBricksOnLine(String message) {
-        //For every brick
+    private void updateBricksOnLine() {
         for (int i = 1; i <= NumberOfBricksOnLine; i++) {
-            int brickPosition = Integer.parseInt(message.substring(30 + (NumberOfPallets - 1) * 19 + (i - 1) * 12, 36 + (NumberOfPallets - 1) * 19 + (i - 1) * 12));
-            int brickRaw = message.charAt(36 + (NumberOfPallets - 1) * 19 + (i - 1) * 12);
-            int assignedPallet = Integer.parseInt(message.substring(37 + (NumberOfPallets - 1) * 19 + (i - 1) * 12, 39 + (NumberOfPallets - 1) * 19 + (i - 1) * 12));
-            int brickDNI = Integer.parseInt(message.substring(39 + (NumberOfPallets - 1) * 19 + (i - 1) * 12, 41 + (NumberOfPallets - 1) * 19 + (i - 1) * 12));
+            int brickPosition=0, brickRaw=0, assignedPallet=0, brickDNI=0;
+            try {
+                brickPosition = bricksOnLine.getJSONObject(i).getInt("position");
+                brickRaw = bricksOnLine.getJSONObject(i).getInt("type");
+                assignedPallet = bricksOnLine.getJSONObject(i).getInt("assignedPallet");
+                brickDNI = bricksOnLine.getJSONObject(i).getInt("DNI");
+            } catch (Exception jsonExc) {
+                Log.e("JSON Exception", jsonExc.getMessage());
+            }
 
             destinationPallets[brickDNI] = assignedPallet;
 
@@ -226,41 +256,34 @@ public class Line extends Fragment {
         }
     }
 
-    private void checkForPickedBricks(String message) {
-
-        //Skip everything until the part of the command where the manipulator info is
-        int paddingOfLastBlock = 29 + (NumberOfPallets - 1) * 19 + (NumberOfBricksOnLine * 12);
-        //Log.d("despues", String.valueOf(message.substring(paddingOfLastBlock)));
-
-        try {
-            for (int j = 1; j<6; j++) {
-                int ActualValueEncoder = Integer.parseInt(message.substring(1 + paddingOfLastBlock, 7 + paddingOfLastBlock));
-                int ValueOfCatchDrop = Integer.parseInt(message.substring(7 + paddingOfLastBlock, 13 + paddingOfLastBlock));
-                int Position = Integer.parseInt(message.substring(13 + paddingOfLastBlock, 19 + paddingOfLastBlock));
-                int rawType = Character.getNumericValue(message.charAt(19 + paddingOfLastBlock));
-                int assignedPallet = Integer.parseInt(message.substring(20 + paddingOfLastBlock, 22 + paddingOfLastBlock));
-                int DNI = Integer.parseInt(message.substring(22 + paddingOfLastBlock, 24 + paddingOfLastBlock));
-
-                current_ManipulatorDNIs[j] = Integer.parseInt(message.substring(22 + paddingOfLastBlock, 24 + paddingOfLastBlock));
-
-                //If certain manipulator was empty before, and now it has something on it,
-                //this means it's picking up something. Logic, isnt it?
-                if ((current_ManipulatorDNIs[j] != last_ManipulatorDNIs[j]) && current_ManipulatorDNIs[j] != 0) {
-                    Log.d("DNI", "has changed");
-                    moveToPalletAnim(current_ManipulatorDNIs[j], assignedPallet);
-                    last_ManipulatorDNIs[j] = current_ManipulatorDNIs[j];
-                }
-
-                //If DNI picked by manipulator
-                if(current_ManipulatorDNIs[j] != 0) {
-                    DNIinUse.add(DNI);
-                }
-
-                //Skip to next manipulator
-                paddingOfLastBlock += 24;
+    private void checkForPickedBricks() {
+        for (int j = 1; j<MANIPULATORS+1; j++) {
+            int currentXEncoderValue=0, ValueOfCatchDrop=0, Position=0, rawType=0, assignedPallet=0, DNI=0;
+            try {
+                currentXEncoderValue = takenBricks.getJSONObject(j).getInt("currentXEncoderValue");
+                ValueOfCatchDrop = takenBricks.getJSONObject(j).getInt("valueOfCatchDrop");
+                Position = takenBricks.getJSONObject(j).getInt("position");
+                rawType = takenBricks.getJSONObject(j).getInt("rawType");
+                assignedPallet = takenBricks.getJSONObject(j).getInt("assignedPallet");
+                DNI = takenBricks.getJSONObject(j).getInt("DNI");
+            } catch (Exception jsonExc) {
+                Log.e("JSON Exception", jsonExc.getMessage());
             }
-        } catch (NumberFormatException formatException) {
-            Log.d("BAD CMD", formatException.toString());
+
+            current_ManipulatorDNIs[j] = DNI;
+
+            //If certain manipulator was empty before, and now it has something on it,
+            //this means it has picked up something. Logic, isn't it?
+            if ((current_ManipulatorDNIs[j] != last_ManipulatorDNIs[j]) && current_ManipulatorDNIs[j] != 0) {
+                Log.d("DNI", "has been taken");
+                moveToPalletAnim(current_ManipulatorDNIs[j], assignedPallet);
+                last_ManipulatorDNIs[j] = current_ManipulatorDNIs[j];
+            }
+
+            //If DNI picked by manipulator
+            if(current_ManipulatorDNIs[j] != 0) {
+                DNIinUse.add(DNI);
+            }
         }
     }
 
@@ -328,14 +351,34 @@ public class Line extends Fragment {
         }
     }
 
-    public void startAutoUpdate() {
-        autoUpdate = true;
+
+    /*****************************************************
+     *                        --AUTOUPDATE CONTENTS--
+     *****************************************************/
+    final Runnable timer_lines = new Runnable() {
+        @Override
+        public void run() {
+            mListener.onSendCommand(RPRV); //Ask for the UIDs
+            if(autoUpdate == false) handler.removeCallbacksAndMessages(null);
+            else handler.postDelayed(this, RPRV_PERIOD);
+        }
+    };
+
+    public void startUpdating() {
+        handler.postDelayed(timer_lines, RPRV_PERIOD);
+        autoUpdate=true;
     }
 
-    public void stopAutoUpdate() {
+    public void stopUpdating() {
         autoUpdate = false;
     }
 
+
+
+
+    /*****************************************************
+     *               --DRAW SCREEN FOR N MANIPULATORS--
+     *****************************************************/
     private void setNumberOfManipulators(int n) {
         this.armNumber = n;
 

@@ -17,9 +17,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
 import com.bartoszlipinski.flippablestackview.FlippableStackView;
 import com.bartoszlipinski.flippablestackview.StackPageTransformer;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +31,19 @@ import java.util.List;
 public class Editor extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    FlippableStackView mFlippableStack;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private FlippableStackView mFlippableStack;
     private List<Fragment> mViewPagerFragments;
     private ColorFragmentAdapter mPageAdapter;
-
     final ToggleButton PalletButton[]=new ToggleButton[10+1];
-    //This view. RBS. And yes--it's not final.
-    View finalview;
+    private ListView editor_listView_colours;
+    private ListView editor_listView_grades;
+    private View view;
+    private Button editor_button_add;
+    private Button editor_button_delete;
+    private Button editor_button_format;
+    private TextView editor_textView_Indicator;
+    private TextView editor_textView_Indicator2;
 
     public Editor() {
     }
@@ -46,29 +53,38 @@ public class Editor extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public void  onTcpReply(String mMessage) {
-        //This might be void under certain circumstances
-        if((mMessage.length() != 0) && (finalview != null) && (PalletButton != null)) {
-            updateViewPagerFragments(mMessage);
-            int index = Integer.parseInt(mMessage.substring(5,7));
-            //Set Button
-            for (int j = 1; j < PalletButton.length; j++) {
-                //uncheck buttons
-                PalletButton[j].setChecked(false);
-            }
-            final TextView editor_textView_Indicator2 = (TextView) finalview.findViewById(R.id.editor_textView_Indicator2);
-            editor_textView_Indicator2.setText("Pallet " + Integer.toString(index + 1));
-            PalletButton[index + 1].setChecked(true);
-        }
-    }
-
     @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState ) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_editor, container, false);
-        //RBS change name
-        finalview = view;
+    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
+        view = inflater.inflate(R.layout.fragment_editor, container, false);
+        editor_listView_colours = (ListView) view.findViewById(R.id.editor_listView_colours);
+        editor_listView_grades = (ListView) view.findViewById(R.id.editor_listView_grades);
+        editor_button_add = (Button) view.findViewById(R.id.editor_button_add);
+        editor_button_delete = (Button) view.findViewById(R.id.editor_button_delete);
+        editor_button_format = (Button) view.findViewById(R.id.editor_button_format);
+        editor_textView_Indicator=(TextView) view.findViewById(R.id.editor_textView_Indicator);
+        editor_textView_Indicator2 = (TextView) view.findViewById(R.id.editor_textView_Indicator2);
+
+        mViewPagerFragments = new ArrayList<>();
+
+        editor_listView_colours.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,long arg3) {
+                view.getFocusables(position);
+                view.setSelected(true);
+            }
+        });
+        editor_listView_grades.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,long arg3) {
+                view.setSelected(true);
+            }
+        });
+
+
+        //createViewPagerFragments();
+
 /*
         mSwipeRefreshLayout=(SwipeRefreshLayout) view.findViewById(R.id.editor_SwipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -88,16 +104,10 @@ public class Editor extends Fragment {
         ////////////////////////////////////////
         // PALLET OVERVIEW
         ////////////////////////////////////////
-
-        createViewPagerFragments();
-
         mPageAdapter = new ColorFragmentAdapter(getFragmentManager(), mViewPagerFragments);
         mFlippableStack = (FlippableStackView) view.findViewById(R.id.editor_flipview_bricks_stack);
         mFlippableStack.initStack(8, StackPageTransformer.Orientation.VERTICAL, (float)1,(float)0.5,(float)0,StackPageTransformer.Gravity.BOTTOM);
         mFlippableStack.setAdapter(mPageAdapter);
-        final TextView editor_textView_Indicator=(TextView) view.findViewById(R.id.editor_textView_Indicator);
-
-
         mFlippableStack.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
 
             public void onPageSelected( int position ) {
@@ -138,9 +148,7 @@ public class Editor extends Fragment {
                         }
                         //CODE MESSAGE HERE
                         PalletButton[index].setChecked(true);
-                        String mSend;
-                        mSend="RGMV_"+ String.format("%02d",index-1);
-                        mListener.onSendCommand(mSend);
+                        askForPalletContents(index-1);
                     }
                 });
             }
@@ -148,13 +156,9 @@ public class Editor extends Fragment {
         ////////////////////////////////////////
         // ADD BUTTON
         ////////////////////////////////////////
-
-        final Button editor_button_add = (Button) finalview.findViewById(R.id.editor_button_add);
-
         editor_button_add.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
-                String mSend;
                 int index = 1;
                 for (int j = 1; j < PalletButton.length; j++) {
                     if (PalletButton[j].isChecked()) {
@@ -162,30 +166,19 @@ public class Editor extends Fragment {
                         break;
                     }
                 }
-
-                mSend="RAMV_"+ String.format("%02d",index-1)+ "_";
-                ListView editor_listView_colours = (ListView) finalview.findViewById(R.id.editor_listView_colours);
-                ListView editor_listView_grades = (ListView) finalview.findViewById(R.id.editor_listView_grades);
-
-                int mToAdd= ((editor_listView_grades.getCheckedItemPosition()+1)<<4)+ editor_listView_colours.getCheckedItemPosition()+1 ;
-
-                mSend+=Character.toString((char) mToAdd);
-
-                mListener.onSendCommand(mSend);
-                mListener.onSendCommand("RGMV_"+ String.format("%02d",index-1));
+                int type = ((editor_listView_grades.getCheckedItemPosition()+1)<<4)+editor_listView_colours.getCheckedItemPosition()+1 ;
+                addBrick(index-1, type);
+                askForPalletContents(index-1);
             }
 
         });
+
         ////////////////////////////////////////
         // Delete BUTTON
         ////////////////////////////////////////
-
-        final Button editor_button_delete = (Button) finalview.findViewById(R.id.editor_button_delete);
-
         editor_button_delete.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
-                String mSend;
                 int index = 1;
                 for (int j = 1; j < PalletButton.length; j++) {
                     if (PalletButton[j].isChecked()) {
@@ -193,17 +186,8 @@ public class Editor extends Fragment {
                         break;
                     }
                 }
-
-                mSend="RDMV_"+ String.format("%02d",index-1)+ "_";
-                ListView editor_listView_colours = (ListView) finalview.findViewById(R.id.editor_listView_colours);
-                ListView editor_listView_grades = (ListView) finalview.findViewById(R.id.editor_listView_grades);
-
-                int mPositionToDelete=mFlippableStack.getCurrentItem();
-
-                mSend+=String.format("%03d",mPositionToDelete);
-
-                mListener.onSendCommand(mSend);
-                mListener.onSendCommand("RGMV_"+ String.format("%02d",index-1));
+                deleteBrick(index-1,  mFlippableStack.getCurrentItem());
+                askForPalletContents(index-1);
             }
 
         });
@@ -211,13 +195,9 @@ public class Editor extends Fragment {
         ////////////////////////////////////////
         // FORMAT BUTTON
         ////////////////////////////////////////
-
-        final Button editor_button_format = (Button) finalview.findViewById(R.id.editor_button_format);
-
         editor_button_format.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
-                String mSend;
                 int index = 1;
                 for (int j = 1; j < PalletButton.length; j++) {
                     if (PalletButton[j].isChecked()) {
@@ -226,47 +206,11 @@ public class Editor extends Fragment {
                     }
                 }
 
-                mSend="RFMV_"+ String.format("%02d",index-1);
-                mListener.onSendCommand(mSend);
-                mListener.onSendCommand("RGMV_"+ String.format("%02d",index-1));
+                formatPallet(index-1);
+                askForPalletContents(index-1);
             }
 
         });
-
-
-        ////////////////////////////////////////
-        // COLOUR LISTVIEW
-        ////////////////////////////////////////
-
-        final ListView editor_listView_colours=(ListView) view.findViewById(R.id.editor_listView_colours);
-
-        editor_listView_colours.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,long arg3) {
-
-                view.getFocusables(position);
-                view.setSelected(true);
-
-            }
-        });
-
-        final ListView editor_listView_grades=(ListView) view.findViewById(R.id.editor_listView_grades);
-        editor_listView_grades.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,long arg3) {
-                view.setSelected(true);
-            }
-        });
-
-
-        //PalletButton[1].setChecked(true);
-        //mListener.onSendCommand("RGMV_00");
-
-        editor_listView_colours.setSelection(1);
-        editor_listView_grades.setSelection(1);
-        //editor_listView_colours.getAdapter().notifyA();
         return view;
     }
 
@@ -291,55 +235,99 @@ public class Editor extends Fragment {
         void onSendCommand( String command );
     }
 
+    public void askForPalletContents(int palletNumber) {
+        try {
+            JSONObject RGMVCommand = new JSONObject();
+            RGMVCommand.put("command", "RGMV");
+            RGMVCommand.put("palletNumber", palletNumber);
+            mListener.onSendCommand(RGMVCommand.toString());
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
+    }
 
-    public void updateViewPagerFragments(String memory){
+    public void deleteBrick(int palletNumber, int position) {
+        try {
+            JSONObject RDRMCommand = new JSONObject();
+            RDRMCommand.put("command", "RDMV");
+            RDRMCommand.put("positionToDelete",position);
+            RDRMCommand.put("palletNumber", palletNumber);
+            mListener.onSendCommand(RDRMCommand.toString());
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
+    }
+
+    public void formatPallet(int palletNumber) {
+        try {
+            JSONObject RDRMCommand = new JSONObject();
+            RDRMCommand.put("command", "RFMV");
+            RDRMCommand.put("selectedPallet", palletNumber);
+            mListener.onSendCommand(RDRMCommand.toString());
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
+    }
+
+    public void addBrick(int palletNumber, int type) {
+        try {
+            JSONObject RDRMCommand = new JSONObject();
+            RDRMCommand.put("command", "RAMV");
+            RDRMCommand.put("selectedPallet", palletNumber);
+            RDRMCommand.put("valueToAdd", type);
+            mListener.onSendCommand(RDRMCommand.toString());
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
+    }
+
+    public void onTcpReply(String mMessage) {
+        //This might be void under certain circumstances RBS: should be fixed, then
+        if((mMessage.length() != 0) && (view != null) && (PalletButton != null)) {
+            updateViewPagerFragments(mMessage);
+            int index = 0;
+            try {
+                JSONObject JSONparser = new JSONObject(mMessage);
+                index = JSONparser.getInt("palletNumber");
+            } catch (Exception jsonExc) {
+                Log.e("JSON Exception", jsonExc.getMessage());
+            }
+            //Set Button
+            for (int j = 1; j < PalletButton.length; j++) {
+                //uncheck buttons
+                PalletButton[j].setChecked(false);
+            }
+            editor_textView_Indicator2.setText("Pallet " + Integer.toString(index + 1));
+            PalletButton[index + 1].setChecked(true);
+        }
+    }
+
+    public void updateViewPagerFragments(String JSONData){
         if(mViewPagerFragments!=null) {
-                //while(mViewPagerFragments.size()>0){
-
-                //}
             mViewPagerFragments.clear();
             mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(R.color.colorPrimaryPale),"Pallet"));
-
             mPageAdapter.notifyDataSetChanged();
-            //ViewPagerFragments.setSaveFromParentEnabled(false);
         }
-        Log.d("MemoryValue", "Memory Value: " + memory );
-        int Number=(int) memory.charAt(8);
-        Log.d("MemoryValue", "Memory raw nob: " + Number );
-             for (int i = 0; i < Number - 17; i++) {
-                int value = (int) memory.charAt(9 + i);
-                 Log.d("MemoryValue", "Memory raw b: " + value );
-                int colorID = getResources().getIdentifier("brick_color_" + (value & 15), "color", getContext().getPackageName());
-                String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (value >> 4), "string", getContext().getPackageName()));
+
+        int tutalBricks=0, current_brick=0;
+        try {
+            JSONObject JSONparser = new JSONObject(JSONData);
+            JSONArray values = JSONparser.getJSONArray("memoryValues");
+            tutalBricks = JSONparser.getInt("totalBricks");
+
+            for (int i = 0; i < tutalBricks; i++) {
+                current_brick = values.getJSONObject(i).getInt("memoryValue");
+                int colorID = getResources().getIdentifier("brick_color_" + (current_brick & 15), "color", getContext().getPackageName());
+                String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (current_brick >> 4), "string", getContext().getPackageName()));
                 mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(colorID),grade));
             }
 
-
-
+        } catch (Exception jsonExc) {
+            Log.e("JSON Exception", jsonExc.getMessage());
+        }
 
         mPageAdapter.notifyDataSetChanged();
         mFlippableStack.setCurrentItem(mPageAdapter.getCount()-1);
-        try{
-
-        }catch(Exception e){
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-
-    }
-    private void createViewPagerFragments() {
-        mViewPagerFragments = new ArrayList<>();
-        //int startColor1 = getResources().getColor(R.color.colorPrimaryPale);
-        //mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(android.R.color.holo_orange_dark),"Grade A"));
-        //mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(android.R.color.holo_green_light),"Grade B"));
-        //mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(android.R.color.holo_orange_dark),"Grade C"));
-        //mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(android.R.color.holo_green_light),"Grade A"));
-        //mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(android.R.color.holo_green_light),"Grade A"));
-        //mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(android.R.color.holo_red_light),"Grade A"));
-        //mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(android.R.color.holo_red_light),"Grade B"));
-        //mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(android.R.color.holo_orange_dark),"Grade A"));
-        //mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(android.R.color.holo_red_light),"Grade B"));
-        //mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(android.R.color.holo_green_light),"Grade A"));
-        //mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(android.R.color.holo_green_light),"Grade A"));
     }
 
     private class ColorFragmentAdapter extends FragmentStatePagerAdapter {

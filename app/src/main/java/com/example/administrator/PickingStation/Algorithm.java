@@ -255,6 +255,7 @@ public class Algorithm extends Fragment {
         demoBrick.setText(getResources().getStringArray(R.array.Grades)[mGrade]);
     }
 
+    //TODO replace with  int colorID = getResources().getIdentifier("brick_color_" + (mBrickRaw & 15), "color", getContext().getPackageName());
     public void setDemoBrickColor(int mColor ) {
         switch(mColor){
             case 0:

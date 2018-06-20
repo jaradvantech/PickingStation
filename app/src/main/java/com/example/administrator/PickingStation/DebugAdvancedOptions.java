@@ -194,6 +194,7 @@ public class DebugAdvancedOptions extends Fragment {
             miscInformation.setText("");
 
             //Fill taken bricks
+            //TODO RBS check if i-m missing orders here, maybe a for is required
             takenBricks.append("Taken Bricks:\n");
             for(int i=0; i<manipulatorTakenBricks.length(); i++) {
                 takenBricks.append("\nManipulator " + i + ":\n");

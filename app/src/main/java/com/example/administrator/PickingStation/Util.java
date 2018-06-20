@@ -3,10 +3,6 @@ package com.example.administrator.PickingStation;
 import android.text.TextUtils;
 import android.widget.EditText;
 
-/**
- * Created by RBS on 2018/6/12.
- */
-
 public class Util {
 
     public static String inputToString(EditText mUserInput, String format) {
@@ -32,5 +28,13 @@ public class Util {
             return "1";
         else
             return "0";
+    }
+
+    public static Boolean charToBoolean(char c)
+    {
+        if(c=='0')
+            return true;
+        else
+            return false;
     }
 }

@@ -29,7 +29,7 @@ public class TcpClient {
     private boolean mRun = false;
     private PrintWriter mBufferOut;
     private BufferedReader mBufferIn;
-    public static int timeOuts = 0;
+    private static int timeOuts = 0;
 
     /**
      * Constructor of the class. OnMessagedReceived listens for the messages received from server
@@ -39,7 +39,7 @@ public class TcpClient {
     }
 
     public void sendMessage(String message) {
-        Log.d("TCP Client", "C: Sending...");
+        Log.d("TCP Send", message);
         if (mBufferOut != null && !mBufferOut.checkError()) {
             mBufferOut.println(message);
             mBufferOut.flush();
@@ -55,7 +55,7 @@ public class TcpClient {
         }
     }
 
-    public void run(Context mContext, String ip, String port) {
+    public void run(String ip, String port) {
         setAddress(ip, port);
 
         mRun = true;
@@ -79,6 +79,8 @@ public class TcpClient {
                 sendMessage(PING); //Are you still there? ._.
                 timeOuts++;
                 if(timeOuts > 3) {
+                    timeOuts = 0;
+                    Log.d("TCP Timeout", "Trying to reconnect...");
                     closeSocket();
                     connectToServer();
                 }

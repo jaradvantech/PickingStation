@@ -50,6 +50,7 @@ public class Settings extends Fragment {
     private ImageView calibration;
     private ImageView factoryReset;
     private static final int GET_IP_REQUEST = 42;
+    private static final int LOGIN_REQUEST = 27;
     private final int languageFlags[][]={
             /*
              *RBS Another trick to ensure proper UX. The flag stack will show all three countries no matter
@@ -101,7 +102,8 @@ public class Settings extends Fragment {
         });
         calibration.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                Intent intent = new Intent(getContext(), LogInActivity.class);
+                startActivityForResult(intent, LOGIN_REQUEST);
             }
         });
         factoryReset.setOnClickListener(new View.OnClickListener() {
@@ -179,6 +181,15 @@ public class Settings extends Fragment {
                     listAdapter.notifyDataSetChanged();
                 } catch(JSONException exc) {
                     Log.e("JSON exception", exc.getMessage());
+                }
+            }
+        } else if (requestCode == LOGIN_REQUEST) {
+            if(resultCode == RESULT_OK) {
+                if(data.getStringExtra("authentication").equals("ok")) {
+                    Log.d("Authentication", "successful");
+                    ((MainActivity)getActivity()).switchToLayout(R.id.opt_calibration);
+                } else {
+                    Log.d("Authentication", "unsuccessful");
                 }
             }
         }

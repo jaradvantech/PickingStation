@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/editor_textView_colors"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Color"
@@ -21,7 +21,7 @@
             app:layout_constraintStart_toStartOf="@+id/editor_listView_colours" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/editor_textView_grades"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Grade"

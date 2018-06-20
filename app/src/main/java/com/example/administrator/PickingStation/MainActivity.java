@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
         Debug.OnFragmentInteractionListener,
         DebugAdvancedOptions.OnFragmentInteractionListener,
         Alarms.OnFragmentInteractionListener,
+        MachineCalibration.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     private TcpClient mTcpClient;
@@ -60,22 +61,18 @@ public class MainActivity extends AppCompatActivity
     private Settings settings;
     private Loading loading;
     private Alarms alarms;
+    private MachineCalibration machineCalibration;
     private int previous_id = R.id.holder_loading;
     private AsyncTask<String, String, TcpClient> networkConnection;
     private final int TRANSITION_TIME = 400;
-    private final int ALARM_CHECK_PERIOD = 2000;
-    private final int RPRV_PERIOD = 300;
     private final String DEFAULT_IP = "127.0.0.1";
     private final String DEFAULT_PORT = "0";
-    private final Handler alarmLoopHandler = new Handler(Looper.getMainLooper());
-    private final Handler handler = new Handler(Looper.getMainLooper());
     private final AlarmManager mAlarmManager = new AlarmManager(this);
     private Button appbarTransparentButton;
     private TextView title;
     private ImageView appbar_connection;
     private ImageView manipulatorAlarmIcon[] = new ImageView[5];
     private ImageView equipmentAlarmIcon;
-    private volatile boolean DoLoops = false;
     private String CurrentLanguage = "en"; //default
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -117,6 +114,7 @@ public class MainActivity extends AppCompatActivity
         settings = new Settings();
         loading = new Loading();
         alarms = new Alarms();
+        machineCalibration = new MachineCalibration();
 
         //Replace built-in title with custom title
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -146,6 +144,7 @@ public class MainActivity extends AppCompatActivity
         manager.beginTransaction().replace(R.id.holder_settings, settings, settings.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_loading, loading, loading.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_alarms, alarms, alarms.getTag()).commit();
+        manager.beginTransaction().replace(R.id.holder_machine_calibration, machineCalibration, machineCalibration.getTag()).commit();
 
         //On any icon pressed in the Appbar, switch to alarm view.
         appbarTransparentButton.setOnClickListener(new View.OnClickListener()
@@ -158,8 +157,6 @@ public class MainActivity extends AppCompatActivity
         });
 
         startNetworking();
-        startCheckingForAlarms();
-
     }
 
     @Override
@@ -181,7 +178,6 @@ public class MainActivity extends AppCompatActivity
             if(previous_id == R.id.opt_debug_advanced) switchToLayout(R.id.nav_debug);
 
             else {
-                startRPRV();
                 switchToLayout(R.id.nav_lines);
             }
         }
@@ -222,8 +218,8 @@ public class MainActivity extends AppCompatActivity
          * when the user leaves the "Line status" screen, and they start
          * again just before switching back to Line Status
          */
-        if(previous_id == R.id.nav_lines) stopRPRV();
-        if(new_id == R.id.nav_lines) startRPRV();
+        if(previous_id == R.id.nav_lines) line.stopUpdating();
+        if(new_id == R.id.nav_lines) line.startUpdating();
 
         /*
          * Enable/disable autoupdate of debug fragment
@@ -281,6 +277,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_settings:
                 retLayout = (ConstraintLayout) this.findViewById(R.id.holder_settings);
                 break;
+            case R.id.opt_calibration:
+                retLayout = (ConstraintLayout) this.findViewById(R.id.holder_machine_calibration);
+                break;
         }
         return retLayout;
     }
@@ -333,6 +332,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_settings:
                 title.setText(getResources().getString(R.string.Settings));
                 break;
+            case R.id.opt_calibration:
+                title.setText("Machine Calibration");
+                break;
         }
     }
 
@@ -353,6 +355,7 @@ public class MainActivity extends AppCompatActivity
                 //here the messageReceived method is implemented
                 public void messageReceived(String message) {
                     //this method calls the onProgressUpdate
+                    Log.d("messageReceived", message);
                     publishProgress("cmdreceived", message);
                 }
 
@@ -364,7 +367,7 @@ public class MainActivity extends AppCompatActivity
                     publishProgress("connectionstatechange", "connectionlost");
                 }
             });
-            mTcpClient.run(getApplicationContext(), params[0], params[1]);
+            mTcpClient.run(params[0], params[1]);
 
             return null;
         }
@@ -446,7 +449,7 @@ public class MainActivity extends AppCompatActivity
             debug.updateDebugData(receivedString);
 
         } else if (cmdID.equals("PWDA")) {
-            manual.serverResponse(receivedString, getApplicationContext());
+            manual.serverResponse(receivedString);
 
         } else if (cmdID.equals("CHAL")) {
             //Check for new alarms
@@ -457,6 +460,7 @@ public class MainActivity extends AppCompatActivity
             debug_advanced.parseInternalStateDebugData(receivedString);
 
         } else if (cmdID.equals("PING")) {
+            Log.d("PING", "ack");
             TcpClient.ack();
         }
     }
@@ -500,41 +504,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /*****************************************************
-     *                            --PERIODIC TASKS--
-     *****************************************************/
-    //checks for alarm information to PLC every two secs.
-    private void startCheckingForAlarms(){
-        Runnable autoUpdater = new Runnable() {
-            @Override
-            public void run() {
-                onSendCommand(CHAL);
-                alarmLoopHandler.postDelayed(this, ALARM_CHECK_PERIOD);
-            }
-        };
-        autoUpdater.run();
-    }
-
-    final Runnable timer_lines = new Runnable() {
-        @Override
-        public void run() {
-            onSendCommand(RPRV); //Ask for the UIDs
-            if(DoLoops == false) handler.removeCallbacksAndMessages(null);
-            else handler.postDelayed(this,RPRV_PERIOD);
-        }
-    };
-
-    public void startRPRV() {
-        handler.postDelayed(timer_lines, RPRV_PERIOD);
-        DoLoops=true;
-    }
-
-    public void stopRPRV() {
-        DoLoops = false;
-    }
-
-
-
 
     /*****************************************************
      *                              --USER EXPERIENCE--
@@ -573,6 +542,7 @@ public class MainActivity extends AppCompatActivity
         mainMenu.findItem(R.id.nav_editor).setTitle(getString(R.string.PalletEditor));
         mainMenu.findItem(R.id.nav_logs).setTitle(getString(R.string.ProductionLogs));
         mainMenu.findItem(R.id.nav_manual).setTitle(getString(R.string.ManualControl));
+        //RBS TODO Add calibration and advanced
     }
 
     /* RBS April 19th, 2018
@@ -585,7 +555,6 @@ public class MainActivity extends AppCompatActivity
      * AndroidStudio editor, this has to be reverted.
      */
     public void correctDisplayMetrics() {
-
         DisplayMetrics displayMetrics =  this.getResources().getDisplayMetrics();
         Configuration config = this.getResources().getConfiguration();
 
