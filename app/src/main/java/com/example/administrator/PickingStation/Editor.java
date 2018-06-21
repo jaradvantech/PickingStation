@@ -83,8 +83,6 @@ public class Editor extends Fragment {
         });
 
 
-        //createViewPagerFragments();
-
 /*
         mSwipeRefreshLayout=(SwipeRefreshLayout) view.findViewById(R.id.editor_SwipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -97,13 +95,11 @@ public class Editor extends Fragment {
                         break;
                     }
                 }
-                mListener.onSendCommand("RGMV_"+ String.format("%02d",index-1));
+                askForPalletContents(index);
             }
-        });*/
+        });
+        */
 
-        ////////////////////////////////////////
-        // PALLET OVERVIEW
-        ////////////////////////////////////////
         mPageAdapter = new ColorFragmentAdapter(getFragmentManager(), mViewPagerFragments);
         mFlippableStack = (FlippableStackView) view.findViewById(R.id.editor_flipview_bricks_stack);
         mFlippableStack.initStack(8, StackPageTransformer.Orientation.VERTICAL, (float)1,(float)0.5,(float)0,StackPageTransformer.Gravity.BOTTOM);
@@ -118,100 +114,74 @@ public class Editor extends Fragment {
                 }
             }
 
-
             public void onPageScrollStateChanged( int state ) {
-                //dummytextbox.setText(state);
+
             }
 
             public void onPageScrolled( int position, float positionOffset, int positionOffsetPixels ) {
-                //dummytextbox.setText(position);
             }
         });
 
-        ////////////////////////////////////////
-        // PALLET BUTTONS
-        ////////////////////////////////////////
         for(int i=1; i<PalletButton.length; i++) {
-                String buttonID = "editor_button_pallet_" + (i);
+            String buttonID = "editor_button_pallet_" + (i);
+            int resID = getResources().getIdentifier(buttonID, "id", getActivity().getPackageName());
 
-                int resID = getResources().getIdentifier(buttonID, "id", getActivity().getPackageName());
-                PalletButton[i] = ((ToggleButton) view.findViewById(resID));
-                PalletButton[i].setOnClickListener(new View.OnClickListener() {
-                    public void onClick( View v ) {
-
-                        int index = 1;
-                        for (int j = 1; j < PalletButton.length; j++) {
-                            if (PalletButton[j].getId() == v.getId()) {
-                                index = j;
-                            }
-                            //PalletButton[j].setChecked(false);
+            PalletButton[i] = ((ToggleButton) view.findViewById(resID));
+            PalletButton[i].setOnClickListener(new View.OnClickListener() {
+                public void onClick( View v ) {
+                    int index = 1;
+                    //When pressing on a pallet, uncheck everyButton
+                    for (int j = 1; j < PalletButton.length; j++) {
+                        if (PalletButton[j].getId() == v.getId()) {
+                            index = j;
                         }
-                        //CODE MESSAGE HERE
-                        PalletButton[index].setChecked(true);
-                        askForPalletContents(index-1);
+                        PalletButton[j].setChecked(false);
                     }
-                });
-            }
+                    //And check that button
+                    PalletButton[index].setChecked(true);
+                    askForPalletContents(index);
+                }
+            });
+        }
 
-        ////////////////////////////////////////
-        // ADD BUTTON
-        ////////////////////////////////////////
         editor_button_add.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
-                int index = 1;
-                for (int j = 1; j < PalletButton.length; j++) {
-                    if (PalletButton[j].isChecked()) {
-                        index = j;
-                        break;
-                    }
-                }
                 int type = ((editor_listView_grades.getCheckedItemPosition()+1)<<4)+editor_listView_colours.getCheckedItemPosition()+1 ;
-                addBrick(index-1, type);
-                askForPalletContents(index-1);
+                addBrick(getSelectedPallet(), type);
+                askForPalletContents(getSelectedPallet());
             }
 
         });
 
-        ////////////////////////////////////////
-        // Delete BUTTON
-        ////////////////////////////////////////
         editor_button_delete.setOnClickListener(new View.OnClickListener(){
-
             public void onClick(View v){
-                int index = 1;
-                for (int j = 1; j < PalletButton.length; j++) {
-                    if (PalletButton[j].isChecked()) {
-                        index = j;
-                        break;
-                    }
-                }
-                deleteBrick(index-1,  mFlippableStack.getCurrentItem());
-                askForPalletContents(index-1);
+                deleteBrick(getSelectedPallet(),  mFlippableStack.getCurrentItem());
+                askForPalletContents(getSelectedPallet());
             }
 
         });
 
-        ////////////////////////////////////////
-        // FORMAT BUTTON
-        ////////////////////////////////////////
         editor_button_format.setOnClickListener(new View.OnClickListener(){
-
             public void onClick(View v){
-                int index = 1;
-                for (int j = 1; j < PalletButton.length; j++) {
-                    if (PalletButton[j].isChecked()) {
-                        index = j;
-                        break;
-                    }
-                }
-
-                formatPallet(index-1);
-                askForPalletContents(index-1);
+                formatPallet(getSelectedPallet());
+                askForPalletContents(getSelectedPallet());
             }
 
         });
+
         return view;
+    }
+
+    private int getSelectedPallet() {
+        int index = 1;
+        for (int j = 1; j < PalletButton.length; j++) {
+            if (PalletButton[j].isChecked()) {
+                index = j;
+                break;
+            }
+        }
+        return index;
     }
 
     @Override
@@ -235,10 +205,10 @@ public class Editor extends Fragment {
         void onSendCommand( String command );
     }
 
-    public void askForPalletContents(int palletNumber) {
+    private void askForPalletContents(int palletNumber) {
         try {
             JSONObject RGMVCommand = new JSONObject();
-            RGMVCommand.put("command", "RGMV");
+            RGMVCommand.put("command_ID", "RGMV");
             RGMVCommand.put("palletNumber", palletNumber);
             mListener.onSendCommand(RGMVCommand.toString());
         } catch(JSONException exc) {
@@ -246,36 +216,36 @@ public class Editor extends Fragment {
         }
     }
 
-    public void deleteBrick(int palletNumber, int position) {
+    private void deleteBrick(int palletNumber, int position) {
         try {
-            JSONObject RDRMCommand = new JSONObject();
-            RDRMCommand.put("command", "RDMV");
-            RDRMCommand.put("positionToDelete",position);
-            RDRMCommand.put("palletNumber", palletNumber);
-            mListener.onSendCommand(RDRMCommand.toString());
+            JSONObject RDMVCommand = new JSONObject();
+            RDMVCommand.put("command_ID", "RDMV");
+            RDMVCommand.put("positionToDelete", position);
+            RDMVCommand.put("selectedPallet", palletNumber);
+            mListener.onSendCommand(RDMVCommand.toString());
         } catch(JSONException exc) {
             Log.d("JSON exception", exc.getMessage());
         }
     }
 
-    public void formatPallet(int palletNumber) {
+    private void formatPallet(int palletNumber) {
         try {
-            JSONObject RDRMCommand = new JSONObject();
-            RDRMCommand.put("command", "RFMV");
-            RDRMCommand.put("selectedPallet", palletNumber);
-            mListener.onSendCommand(RDRMCommand.toString());
+            JSONObject RFMVCommand = new JSONObject();
+            RFMVCommand.put("command_ID", "RFMV");
+            RFMVCommand.put("selectedPallet", palletNumber);
+            mListener.onSendCommand(RFMVCommand.toString());
         } catch(JSONException exc) {
             Log.d("JSON exception", exc.getMessage());
         }
     }
 
-    public void addBrick(int palletNumber, int type) {
+    private void addBrick(int palletNumber, int type) {
         try {
-            JSONObject RDRMCommand = new JSONObject();
-            RDRMCommand.put("command", "RAMV");
-            RDRMCommand.put("selectedPallet", palletNumber);
-            RDRMCommand.put("valueToAdd", type);
-            mListener.onSendCommand(RDRMCommand.toString());
+            JSONObject RAMVCommand = new JSONObject();
+            RAMVCommand.put("command_ID", "RAMV");
+            RAMVCommand.put("selectedPallet", palletNumber);
+            RAMVCommand.put("valueToAdd", type);
+            mListener.onSendCommand(RAMVCommand.toString());
         } catch(JSONException exc) {
             Log.d("JSON exception", exc.getMessage());
         }
@@ -285,7 +255,7 @@ public class Editor extends Fragment {
         //This might be void under certain circumstances RBS: should be fixed, then
         if((mMessage.length() != 0) && (view != null) && (PalletButton != null)) {
             updateViewPagerFragments(mMessage);
-            int index = 0;
+            int index = 1;
             try {
                 JSONObject JSONparser = new JSONObject(mMessage);
                 index = JSONparser.getInt("palletNumber");
@@ -297,25 +267,25 @@ public class Editor extends Fragment {
                 //uncheck buttons
                 PalletButton[j].setChecked(false);
             }
-            editor_textView_Indicator2.setText("Pallet " + Integer.toString(index + 1));
-            PalletButton[index + 1].setChecked(true);
+            editor_textView_Indicator2.setText("Pallet " + Integer.toString(index));
+            PalletButton[index].setChecked(true);
         }
     }
 
-    public void updateViewPagerFragments(String JSONData){
+    private void updateViewPagerFragments(String JSONData){
         if(mViewPagerFragments!=null) {
             mViewPagerFragments.clear();
             mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(R.color.colorPrimaryPale),"Pallet"));
             mPageAdapter.notifyDataSetChanged();
         }
 
-        int tutalBricks=0, current_brick=0;
+        int totalBricks=0, current_brick=0;
         try {
             JSONObject JSONparser = new JSONObject(JSONData);
             JSONArray values = JSONparser.getJSONArray("memoryValues");
-            tutalBricks = JSONparser.getInt("totalBricks");
+            totalBricks = JSONparser.getInt("totalBricks");
 
-            for (int i = 0; i < tutalBricks; i++) {
+            for (int i = 0; i < totalBricks; i++) {
                 current_brick = values.getJSONObject(i).getInt("memoryValue");
                 int colorID = getResources().getIdentifier("brick_color_" + (current_brick & 15), "color", getContext().getPackageName());
                 String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (current_brick >> 4), "string", getContext().getPackageName()));

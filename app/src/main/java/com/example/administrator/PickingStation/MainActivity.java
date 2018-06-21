@@ -197,7 +197,15 @@ public class MainActivity extends AppCompatActivity
 
     //this is used when selecting a pallet in the line view.
     public void ChangeToEditor(int index){
-        onSendCommand("RGMV_"+ String.format("%02d",index-1));
+        try {
+            JSONObject RGMVCommand = new JSONObject();
+            RGMVCommand.put("command_ID", "RGMV");
+            RGMVCommand.put("palletNumber", index);
+            onSendCommand(RGMVCommand.toString());
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
+
         switchToLayout(R.id.nav_editor);
     }
 

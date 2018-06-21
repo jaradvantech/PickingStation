@@ -193,7 +193,7 @@ public class Debug extends Fragment {
         try {
             JSONObject JSONOutput = new JSONObject();
 
-            JSONOutput.put("command", "PGSI");
+            JSONOutput.put("command_ID", "PGSI");
             JSONOutput.put("arm", currentArm);
             mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
@@ -245,7 +245,7 @@ public class Debug extends Fragment {
         try {
             JSONObject JSONOutput = new JSONObject();
 
-            JSONOutput.put("command", "PWDA");
+            JSONOutput.put("command_ID", "PWDA");
 
             JSONOutput.put("arm", currentArm);
             JSONOutput.put("SBD", boolToString(checkBox_SBD.isChecked()));

@@ -382,7 +382,7 @@ public class Line extends Fragment {
     private void setNumberOfManipulators(int n) {
         this.armNumber = n;
 
-        LinearLayout mainLayout = (LinearLayout) view.findViewById(R.id.line_linearLayout_canvas);
+        //LinearLayout mainLayout = (LinearLayout) view.findViewById(R.id.line_linearLayout_canvas);
 
         /*Structure is as follows*/
         //Line Start --> always

@@ -159,7 +159,7 @@ public class MachineCalibration extends Fragment {
         try {
             JSONObject JSONOutput = new JSONObject();
             JSONArray positionArray = new JSONArray();
-            JSONOutput.put("command", "SCAP");
+            JSONOutput.put("command_ID", "SCAP");
             JSONOutput.put("totalArms", MANIPULATORS);
             for(int i=0; i<MANIPULATORS; i++) {
                 positionArray.put(Integer.parseInt(textViews.get(i).getText().toString()));
@@ -182,7 +182,7 @@ public class MachineCalibration extends Fragment {
     public void setLineMotor(Boolean state) {
         try {
             JSONObject JSONOutput = new JSONObject();
-            JSONOutput.put("command", "PWDA");
+            JSONOutput.put("command_ID", "PWDA");
             if(state == true) {
             /*Start the line*/
                 JSONOutput.put("TransmissionManualDebugging", true);

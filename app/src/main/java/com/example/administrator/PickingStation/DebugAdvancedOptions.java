@@ -281,7 +281,7 @@ public class DebugAdvancedOptions extends Fragment {
         try {
             JSONObject JSONOutput = new JSONObject();
 
-            JSONOutput.put("command", "FOTP");
+            JSONOutput.put("command_ID", "FOTP");
             JSONOutput.put("pallet", Util.inputToInt(editText_forcetopallet));
             mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
@@ -294,7 +294,7 @@ public class DebugAdvancedOptions extends Fragment {
         try {
             JSONObject JSONOutput = new JSONObject();
 
-            JSONOutput.put("command", "WADI");
+            JSONOutput.put("command_ID", "WADI");
             JSONOutput.put("enable16", switch_enable16.isChecked());
             JSONOutput.put("forceOutput", switch_forceOutput.isChecked());
             JSONOutput.put("forceInput", switch_forceInput.isChecked());
@@ -310,7 +310,7 @@ public class DebugAdvancedOptions extends Fragment {
         try {
             JSONObject JSONOutput = new JSONObject();
 
-            JSONOutput.put("command", "PLRD");
+            JSONOutput.put("command_ID", "PLRD");
             JSONOutput.put("what", Util.inputToInt(presets_editText_what));
             JSONOutput.put("when", Util.inputToInt(presets_editText_when));
             JSONOutput.put("where", Util.inputToInt(presets_editText_where));

@@ -235,7 +235,7 @@ public class Algorithm extends Fragment {
         try {
             JSONObject JSONOutput = new JSONObject();
 
-            JSONOutput.put("command", "ALSC");
+            JSONOutput.put("command_ID", "ALSC");
             JSONOutput.put("color", color);
             JSONOutput.put("grade", grade);
 

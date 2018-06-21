@@ -300,7 +300,7 @@ public class Manual extends Fragment {
     public void writePLCData(int MUD, int MLR, int MFB, int mArm) {
         try {
             JSONObject JSONOutput = new JSONObject();
-            JSONOutput.put("command", "PWDA");
+            JSONOutput.put("command_ID", "PWDA");
             JSONOutput.put("selectedArm", mArm);
             JSONOutput.put("ManipulatorMode", boolToString(!manualMode[mArm]));
             JSONOutput.put("VacuumValve", boolToString(VV[mArm]));
@@ -355,7 +355,7 @@ public class Manual extends Fragment {
     public void setLineMotor(Boolean state) {
         try {
             JSONObject JSONOutput = new JSONObject();
-            JSONOutput.put("command", "PWDA");
+            JSONOutput.put("command_ID", "PWDA");
             if(state == true) {
             /*Start the line*/
                 JSONOutput.put("TransmissionManualDebugging", true);
