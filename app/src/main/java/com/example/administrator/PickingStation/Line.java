@@ -204,6 +204,7 @@ public class Line extends Fragment {
                 PhysicalPallet_UID_Viewer[i].setVisibility(View.VISIBLE);
                 PhysicalPallet_UID_Viewer[i].setText(palletUID);
                 if (numberOfBricks > 0) {
+                    Log.e("Topbrick", topBrick+"");
                     int colorID = getResources().getIdentifier("brick_color_" + (topBrick & 15), "color", getContext().getPackageName());
                     String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (topBrick >> 4), "string", getContext().getPackageName()));
 
@@ -311,23 +312,15 @@ public class Line extends Fragment {
      * Make certain brick visible and display information on top of it
      */
     private void showBrick(int mBrickDNI, int mBrickRaw, int mBrickPosition, int mAssignedPallet) {
-        int colorID = getResources().getIdentifier("brick_color_" + (mBrickRaw & 15), "color", getContext().getPackageName());
-        String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (mBrickRaw >> 4), "string", getContext().getPackageName()));
 
         if(mBrickDNI == 0) {
             Log.e("ERROR", "Received DNI 0 from server");
-            Toast.makeText(getActivity(), "WARNING, DNI=0", Toast.LENGTH_LONG).show();
-
+            Toast.makeText(getActivity(), "Received DNI 0 from server", Toast.LENGTH_LONG).show();
         } else {
+            //RBS TODO there is a better way to insert variables inside strings while supporting different languages
             PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setVisibility(View.VISIBLE);
-            PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setText(getString(R.string.At) + " " + mBrickPosition + "\nDNI: " + mBrickDNI + "\n" + grade + "\n " + getString(R.string.To) + " " + mAssignedPallet);
-
-            //update visual value of brick colour
-            GradientDrawable gd = new GradientDrawable();
-            gd.setColor(getResources().getColor(colorID)); // Changes this drawable to use a single color instead of a gradient
-            gd.setCornerRadius(1);
-            gd.setStroke(2, 0xFF000000);
-            PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setBackground(gd);
+            PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setText(getString(R.string.At) + " " + mBrickPosition + "\nDNI: " + mBrickDNI + "\n" + getGrade(mBrickRaw) + "\n " + getString(R.string.To) + " " + mAssignedPallet);
+            PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setBackground(generateBrickBackground(mBrickRaw));
         }
     }
 
@@ -336,7 +329,6 @@ public class Line extends Fragment {
 
             //If the brick is no longer in the line
             if (DNIinUse.contains(i) == false) {
-
                 //Make invisible
                 PhysicalBricksOnTheLine_Brick_Viewer[i].setVisibility(View.INVISIBLE);
 
@@ -372,6 +364,25 @@ public class Line extends Fragment {
             else handler.postDelayed(this, RPRV_PERIOD);
         }
     };
+
+    private String getGrade(int type) {
+        return getResources().getString(getResources().getIdentifier("brick_grade_" + (type >> 4), "string", getContext().getPackageName()));
+    }
+
+    private int getColor(int type) {
+        return getResources().getIdentifier("brick_color_" + (type & 15), "color", getContext().getPackageName());
+    }
+
+    private GradientDrawable generateBrickBackground(int type) {
+        /*
+         * To draw a brick we just use a drawable of the brick color as background
+         */
+        GradientDrawable gd = new GradientDrawable();
+        gd.setColor(getResources().getColor(getColor(type)));
+        gd.setCornerRadius(1);
+        gd.setStroke(2, 0xFF000000);
+        return gd;
+    }
 
     public void startUpdating() {
         handler.postDelayed(timer_lines, RPRV_PERIOD);
