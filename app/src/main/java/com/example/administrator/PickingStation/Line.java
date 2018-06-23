@@ -23,13 +23,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import static android.support.animation.SpringForce.DAMPING_RATIO_NO_BOUNCY;
 import static android.support.animation.SpringForce.STIFFNESS_VERY_LOW;
-import static com.example.administrator.PickingStation.Commands.RPRV;
 
 //Pese a mis esfuerzos de adecentarla, esta clase es una chapuza, de principio a fin. firmado RBS
 
@@ -47,6 +47,7 @@ public class Line extends Fragment {
     private int armNumber;
     private View view;
     private int MANIPULATORS = 5; //Will be variable in the future. default 5
+    private int PALLETS = 2*MANIPULATORS;
     private int NumberOfPallets;
     private int NumberOfBricksOnLine;
     private ArrayList DNIinUse = new ArrayList<>();
@@ -118,7 +119,7 @@ public class Line extends Fragment {
                 }
             });
         }
-
+        startUpdating();
         return view;
     }
 
@@ -181,10 +182,12 @@ public class Line extends Fragment {
         for (int i = 1; i <= NumberOfPallets; i++) {
             String palletUID = "0000000000000000";
             int numberOfBricks=0, topBrick=0;
+            //RBS TODO by the time we finally rewrite all of this, hopefully during the summer,
+            //TODO we MUST finally put an end to this index0-index1 salad
             try {
-                palletUID = palletInformation.getJSONObject(i).getString("palletUID");
-                numberOfBricks = palletInformation.getJSONObject(i).getInt("numberOfBricks");
-                topBrick = palletInformation.getJSONObject(i).getInt("topBrick");
+                palletUID = palletInformation.getJSONObject(i-1).getString("palletUID");
+                numberOfBricks = palletInformation.getJSONObject(i-1).getInt("numberOfBricks");
+                topBrick = palletInformation.getJSONObject(i-1).getInt("topBrick");
             } catch (Exception jsonExc) {
                 Log.e("JSON Exception", jsonExc.getMessage());
             }
@@ -201,9 +204,6 @@ public class Line extends Fragment {
                 PhysicalPallet_UID_Viewer[i].setVisibility(View.VISIBLE);
                 PhysicalPallet_UID_Viewer[i].setText(palletUID);
                 if (numberOfBricks > 0) {
-                    //Log.d("MemoryValue", "Memory uid: " + palletUID );
-                    //Log.d("MemoryValue", "Memory raw nob: " + numberOfBricks );
-                    //Log.d("MemoryValue", "Memory raw top: " + topBrick );
                     int colorID = getResources().getIdentifier("brick_color_" + (topBrick & 15), "color", getContext().getPackageName());
                     String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (topBrick >> 4), "string", getContext().getPackageName()));
 
@@ -212,8 +212,8 @@ public class Line extends Fragment {
                     gd.setCornerRadius(1);
                     gd.setStroke(2, 0xFF000000);
                     PhysicalPallet_TopBrick[i].setBackground(gd);
-
                     PhysicalPallet_TopBrick[i].setText("#: " + numberOfBricks + "\n\n" + grade);
+
                 } else {
                     PhysicalPallet_TopBrick[i].setBackgroundColor(Color.TRANSPARENT);
                     PhysicalPallet_TopBrick[i].setText("");
@@ -358,7 +358,16 @@ public class Line extends Fragment {
     final Runnable timer_lines = new Runnable() {
         @Override
         public void run() {
-            mListener.onSendCommand(RPRV); //Ask for the UIDs
+            try {
+                JSONObject RPRVCommand = new JSONObject();
+                RPRVCommand.put("command_ID", "RPRV");
+                RPRVCommand.put("numberOfPallets", PALLETS);
+                mListener.onSendCommand(RPRVCommand.toString());
+            } catch(JSONException exc) {
+                Log.d("JSON exception", exc.getMessage());
+            }
+
+
             if(autoUpdate == false) handler.removeCallbacksAndMessages(null);
             else handler.postDelayed(this, RPRV_PERIOD);
         }

@@ -194,7 +194,7 @@ public class Debug extends Fragment {
             JSONObject JSONOutput = new JSONObject();
 
             JSONOutput.put("command_ID", "PGSI");
-            JSONOutput.put("arm", currentArm);
+            JSONOutput.put("selectedArm", currentArm);
             mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
         } catch(JSONException exc) {
@@ -209,32 +209,32 @@ public class Debug extends Fragment {
                     commonDataOutput.setText("");
                     armDataOutput.setText("");
 
-                    armDataOutput.append("### Data for arm number " + Integer.valueOf(JSONparser.getInt("arm")).toString() + ":\n\n");
-                    armDataOutput.append(">HasDischarged; " +  JSONparser.getBoolean("HasDischarged") + "\n");
-                    armDataOutput.append(">PhotosensorOfManipulator; " +  JSONparser.getBoolean("PhotosensorOfManipulator") + "\n");
-                    armDataOutput.append(">ManipulatorStatePosition; " + JSONparser.getBoolean("ManipulatorStatePosition") + "\n");
-                    armDataOutput.append(">DischargedTheBrickConfirm; " + JSONparser.getBoolean("DischargedTheBrickConfirm") + "\n");
-                    armDataOutput.append(">LeftStorageBinSecurity; " + JSONparser.getBoolean("LeftStorageBinSecurity") + "\n");
-                    armDataOutput.append(">RightStorageBinSecurity; " + JSONparser.getBoolean("RightStorageBinSecurity") + "\n");
-                    armDataOutput.append(">AlarmArray; " + Integer.valueOf(JSONparser.getInt("AlarmArray")).toString() + "\n");
-                    armDataOutput.append(">ManipulatorRepositionState; " + Integer.valueOf(JSONparser.getInt("ManipulatorRepositionState")).toString() + "\n");
-                    armDataOutput.append(">ActualValueEncoder; " + Integer.valueOf(JSONparser.getInt("ActualValueEncoder")).toString() + "\n\n");
+                    armDataOutput.append("### Data for arm number " + Integer.valueOf(JSONparser.getInt("selectedArm")).toString() + ":\n\n");
+                    armDataOutput.append(">HasDischarged; " +  JSONparser.getBoolean("hasDischarged") + "\n");
+                    armDataOutput.append(">PhotosensorOfManipulator; " +  JSONparser.getBoolean("photosensorOfManipulator") + "\n");
+                    armDataOutput.append(">ManipulatorStatePosition; " + JSONparser.getBoolean("manipulatorStatePosition") + "\n");
+                    armDataOutput.append(">DischargedTheBrickConfirm; " + JSONparser.getBoolean("dischargedTheBrickConfirm") + "\n");
+                    armDataOutput.append(">LeftStorageBinSecurity; " + JSONparser.getBoolean("leftStorageBinSecurity") + "\n");
+                    armDataOutput.append(">RightStorageBinSecurity; " + JSONparser.getBoolean("rightStorageBinSecurity") + "\n");
+                    armDataOutput.append(">AlarmArray; " + Integer.valueOf(JSONparser.getInt("alarmArray")).toString() + "\n");
+                    armDataOutput.append(">ManipulatorRepositionState; " + Integer.valueOf(JSONparser.getInt("manipulatorRepositionState")).toString() + "\n");
+                    armDataOutput.append(">ActualValueEncoder; " + Integer.valueOf(JSONparser.getInt("actualValueEncoder")).toString() + "\n\n");
 
                     commonDataOutput.append("### Common Data: \n\n");
-                    commonDataOutput.append(">TheQueueOfPhotosensor_1; " + JSONparser.getBoolean("TheQueueOfPhotosensor_1") + "\n");
-                    commonDataOutput.append(">TheQueueOfPhotosensor_2; " + JSONparser.getBoolean("TheQueueOfPhotosensor_2") + "\n");
-                    commonDataOutput.append(">TheQueueOfPhotosensor_3; " + JSONparser.getBoolean("TheQueueOfPhotosensor_3") + "\n");
-                    commonDataOutput.append(">TheQueueOfPhotosensor_4; " + JSONparser.getBoolean("TheQueueOfPhotosensor_4") + "\n");
-                    commonDataOutput.append(">StationInterlock_16; " + JSONparser.getBoolean("StationInterlock_16") + "\n");
-                    commonDataOutput.append(">WhetherOrNotPutTheTileTo_16; " + JSONparser.getBoolean("WhetherOrNotPutTheTileTo_16") + "\n");
-                    commonDataOutput.append(">EquipmentAlarmArray; " + Integer.valueOf(JSONparser.getInt("EquipmentAlarmArray")).toString() + "\n");
-                    commonDataOutput.append(">TileGrade; " + Integer.valueOf(JSONparser.getInt("TileGrade")).toString() + "\n");
-                    commonDataOutput.append(">ChangeColor; " + Integer.valueOf(JSONparser.getInt("ChangeColor")).toString() + "\n");
-                    commonDataOutput.append(">SystemState; " + Integer.valueOf(JSONparser.getInt("SystemState")).toString() + "\n");
-                    commonDataOutput.append(">ActualValueOfTheLineEncoder; " + Integer.valueOf(JSONparser.getInt("ActualValueOfTheLineEncoder")).toString() + "\n");
-                    commonDataOutput.append(">EnterTheTileStartingCodeValue; " + Integer.valueOf(JSONparser.getInt("EnterTheTileStartingCodeValue")).toString() + "\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_1; " + JSONparser.getBoolean("theQueueOfPhotosensor_1") + "\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_2; " + JSONparser.getBoolean("theQueueOfPhotosensor_2") + "\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_3; " + JSONparser.getBoolean("theQueueOfPhotosensor_3") + "\n");
+                    commonDataOutput.append(">TheQueueOfPhotosensor_4; " + JSONparser.getBoolean("theQueueOfPhotosensor_4") + "\n");
+                    commonDataOutput.append(">StationInterlock_16; " + JSONparser.getBoolean("stationInterlock_16") + "\n");
+                    commonDataOutput.append(">WhetherOrNotPutTheTileTo_16; " + JSONparser.getBoolean("whetherOrNotPutTheTileTo_16") + "\n");
+                    commonDataOutput.append(">EquipmentAlarmArray; " + Integer.valueOf(JSONparser.getInt("equipmentAlarmArray")).toString() + "\n");
+                    commonDataOutput.append(">TileGrade; " + Integer.valueOf(JSONparser.getInt("tileGrade")).toString() + "\n");
+                    commonDataOutput.append(">ChangeColor; " + Integer.valueOf(JSONparser.getInt("changeColor")).toString() + "\n");
+                    commonDataOutput.append(">SystemState; " + Integer.valueOf(JSONparser.getInt("systemState")).toString() + "\n");
+                    commonDataOutput.append(">ActualValueOfTheLineEncoder; " + Integer.valueOf(JSONparser.getInt("actualValueOfTheLineEncoder")).toString() + "\n");
+                    commonDataOutput.append(">EnterTheTileStartingCodeValue; " + Integer.valueOf(JSONparser.getInt("enterTheTileStartingCodeValue")).toString() + "\n");
 
-                    lastChecked_encoderValue = Integer.valueOf(JSONparser.getInt("ActualValueOfTheLineEncoder"));
+                    lastChecked_encoderValue = Integer.valueOf(JSONparser.getInt("actualValueOfTheLineEncoder"));
                 } catch (Exception jsonExc) {
                     Log.e("JSON Exception", jsonExc.getMessage());
                 }
@@ -247,7 +247,7 @@ public class Debug extends Fragment {
 
             JSONOutput.put("command_ID", "PWDA");
 
-            JSONOutput.put("arm", currentArm);
+            JSONOutput.put("selectedArm", currentArm);
             JSONOutput.put("SBD", boolToString(checkBox_SBD.isChecked()));
             JSONOutput.put("MR", boolToString(checkBox_MR.isChecked()));
             JSONOutput.put("SBFA", boolToString(checkBox_SBFA.isChecked()));

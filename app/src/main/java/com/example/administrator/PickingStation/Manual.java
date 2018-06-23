@@ -214,7 +214,6 @@ public class Manual extends Fragment {
             public void onClick( View view ) {
                 if(manual_GifimageView_line_wheel_Drawable.isPlaying()){
                     manual_GifimageView_line_wheel_Drawable.stop();
-                    //manual_GifimageView_line_wheel_Drawable.seekToFrame(0);
                     manual_textView_line.setText("Line stoped");
                     setLineMotor(false);
 
@@ -302,12 +301,11 @@ public class Manual extends Fragment {
             JSONObject JSONOutput = new JSONObject();
             JSONOutput.put("command_ID", "PWDA");
             JSONOutput.put("selectedArm", mArm);
-            JSONOutput.put("ManipulatorMode", boolToString(!manualMode[mArm]));
-            JSONOutput.put("VacuumValve", boolToString(VV[mArm]));
-
-            JSONOutput.put("ManualForwardBackard", MFB);
-            JSONOutput.put("ManualLeftRight", MLR);
-            JSONOutput.put("ManualUpDown", MUD);
+            JSONOutput.put("MM", manualMode[mArm]); //RBS this ! might be needed again
+            JSONOutput.put("VV", VV[mArm]);
+            JSONOutput.put("MFB", MFB);
+            JSONOutput.put("MLR", MLR);
+            JSONOutput.put("MUD", MUD);
 
             mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
         } catch(JSONException exc) {
@@ -319,9 +317,9 @@ public class Manual extends Fragment {
         //Tint icons as feedback
         try {
             JSONObject JSONparser = new JSONObject(mResponse);
-            int MFBFeedback = JSONparser.getInt("manualForwardBackwardFeedback");
-            int MLRFeedback = JSONparser.getInt("manualLeftRightFeedback");
-            int MUDFeedback = JSONparser.getInt("manualUpDownFeedback");
+            int MFBFeedback = JSONparser.getInt("MFBFeedback");
+            int MLRFeedback = JSONparser.getInt("MLRFeedback");
+            int MUDFeedback = JSONparser.getInt("MUDFeedback");
 
             if(MFBFeedback == 1) {
                 resetColorFilters();
@@ -358,12 +356,12 @@ public class Manual extends Fragment {
             JSONOutput.put("command_ID", "PWDA");
             if(state == true) {
             /*Start the line*/
-                JSONOutput.put("TransmissionManualDebugging", true);
-                JSONOutput.put("PCState", 3);
+                JSONOutput.put("TMD", true);
+                JSONOutput.put("PCS", 3);
             } else {
             /*Stop the line*/
-                JSONOutput.put("TransmissionManualDebugging", false);
-                JSONOutput.put("PCState", 1);
+                JSONOutput.put("TMD", false);
+                JSONOutput.put("PCS", 1);
             }
             mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
         } catch(JSONException exc) {
@@ -378,13 +376,6 @@ public class Manual extends Fragment {
         manual_imageView_down.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorSecondaryPale)));
         manual_imageView_left.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorSecondaryPale)));
         manual_imageView_right.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorSecondaryPale)));
-    }
-
-    private String boolToString(Boolean mBol) {
-        if (mBol)
-            return "1";
-        else
-            return "0";
     }
 
     public interface OnFragmentInteractionListener {

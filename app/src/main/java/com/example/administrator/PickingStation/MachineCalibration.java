@@ -2,6 +2,7 @@ package com.example.administrator.PickingStation;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ public class MachineCalibration extends Fragment {
     private Button setManipulators, send, startStop, advance, microAdvance;
     private EditText manipulatorNum;
     private Boolean motorRuning = false;
+    private int encoderIncrement = 0;
     private final int ADVANCE_PERIOD = 500;
     private final int MICROADVANCE_PERIOD = 100;
 
@@ -95,20 +97,27 @@ public class MachineCalibration extends Fragment {
         advance.setOnClickListener(new View.OnClickListener() {
             public void onClick( View v ) {
                 setLineMotor(true);
-                //wait
-                setLineMotor(false);
+                Handler handlerAdvance = new Handler();
+                handlerAdvance.postDelayed(new Runnable() {
+                    public void run() {
+                        setLineMotor(false);
+                    }
+                }, ADVANCE_PERIOD);
             }
         });
 
         microAdvance.setOnClickListener(new View.OnClickListener() {
             public void onClick( View v ) {
                 setLineMotor(true);
-                //wait
-                setLineMotor(false);
+                Handler handlerMicroAdvance = new Handler();
+                handlerMicroAdvance.postDelayed(new Runnable() {
+                    public void run() {
+                        setLineMotor(false);
+                    }
+                }, MICROADVANCE_PERIOD);
             }
         });
-
-
+        
         return view;
     }
 

@@ -34,9 +34,6 @@ import org.json.JSONObject;
 
 import java.util.Locale;
 
-import static com.example.administrator.PickingStation.Commands.CHAL;
-import static com.example.administrator.PickingStation.Commands.RPRV;
-
 public class MainActivity extends AppCompatActivity
         implements
         Line.OnFragmentInteractionListener,
@@ -504,7 +501,16 @@ public class MainActivity extends AppCompatActivity
         if (command.equals("connectionestablished")) {
             appbar_connection.setImageResource(R.mipmap.linkup);
             appbar_connection.clearColorFilter();
-            onSendCommand(RPRV);
+            //RBS TODO I admit this is very dirty and should be fixed ASAP
+            //but there is so much to fix and I only have two hands D:
+            try {
+                JSONObject RPRVCommand = new JSONObject();
+                RPRVCommand.put("command_ID", "RPRV");
+                RPRVCommand.put("numberOfPallets", 10); //TODO Magic number
+                onSendCommand(RPRVCommand.toString());
+            } catch(JSONException exc) {
+                Log.d("JSON exception", exc.getMessage());
+            }
 
         } else if (command.equals("connectionlost")) {
             appbar_connection.setImageResource(R.mipmap.linkdown);
