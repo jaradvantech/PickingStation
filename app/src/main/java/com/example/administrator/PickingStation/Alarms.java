@@ -105,7 +105,7 @@ public class Alarms extends Fragment {
                 lastSelectedItem = position;
                 AlertDialog dialog = builder.create();
                 dialog.setIcon(R.mipmap.warning);
-                dialog.show();
+                BiggerDialogs.show(dialog);
                 return true;
              }
         });

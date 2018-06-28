@@ -42,23 +42,13 @@ public class Manual extends Fragment {
     public Manual() {
     }
 
-
-    public static Manual newInstance( String param1, String param2 ) {
-        Manual fragment = new Manual();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState ) {
-        // Inflate the layout for this fragment
+    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         View view = inflater.inflate(R.layout.fragment_manual, container, false);
 
         Button manual_reset = (Button) view.findViewById(R.id.manual_reset);
@@ -296,12 +286,33 @@ public class Manual extends Fragment {
         mFragmentInteraction = null;
     }
 
-    public void writePLCData(int MUD, int MLR, int MFB, int mArm) {
+    private void getManualStatus() {
+        try {
+            JSONObject JSONOutput = new JSONObject();
+            JSONOutput.put("command_ID", "GEMS"); //GE Manual Status
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
+    }
+
+    public void onGetManualStatusResult(String CMD) {
+        try {
+            JSONObject JSONparser = new JSONObject(CMD);
+            boolean lineRunning = JSONparser.getBoolean("lineRunning");
+            JSONArray controlModes = JSONparser.getJSONArray("controlmodes");
+
+        } catch (Exception jsonExc) {
+            Log.e("JSON Exception", jsonExc.getMessage());
+        }
+    }
+
+    private void writePLCData(int MUD, int MLR, int MFB, int mArm) {
         try {
             JSONObject JSONOutput = new JSONObject();
             JSONOutput.put("command_ID", "PWDA");
             JSONOutput.put("selectedArm", mArm);
-            JSONOutput.put("MM", manualMode[mArm]); //RBS this ! might be needed again
+            JSONOutput.put("MM", !manualMode[mArm]);
             JSONOutput.put("VV", VV[mArm]);
             JSONOutput.put("MFB", MFB);
             JSONOutput.put("MLR", MLR);
@@ -355,11 +366,11 @@ public class Manual extends Fragment {
             JSONObject JSONOutput = new JSONObject();
             JSONOutput.put("command_ID", "PWDA");
             if(state == true) {
-            /*Start the line*/
+                /*Start the line*/
                 JSONOutput.put("TMD", true);
                 JSONOutput.put("PCS", 3);
             } else {
-            /*Stop the line*/
+                /*Stop the line*/
                 JSONOutput.put("TMD", false);
                 JSONOutput.put("PCS", 1);
             }
@@ -380,5 +391,13 @@ public class Manual extends Fragment {
 
     public interface OnFragmentInteractionListener {
         void onSendCommand( String command );
+    }
+
+    public void whenEnteringFragment() {
+
+    }
+
+    public void whenLeavingFragment() {
+
     }
 }

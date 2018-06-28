@@ -27,11 +27,11 @@ import static com.example.administrator.PickingStation.Util.inputToInt;
 public class Debug extends Fragment {
 
     private OnFragmentInteractionListener mFragmentInteraction;
-    private Boolean autoUpdate;
+    private boolean autoUpdate = false;
     private Button buttonRead;
     private Button buttonWrite;
     private Button buttonClear;
-    private Button debug_encoder3000, armPosition, advanced;
+    private Button debug_encoder3000, advanced;
     private TextView armDataOutput;
     private TextView commonDataOutput;
     private CheckBox checkBox_SBD, checkBox_MR, checkBox_SBFA;
@@ -68,12 +68,10 @@ public class Debug extends Fragment {
         buttonWrite = (Button) view.findViewById(R.id.debug_write);
         buttonClear = (Button) view.findViewById(R.id.debug_clear);
         debug_encoder3000 = (Button) view.findViewById(R.id.debug_encoder3000);
-        armPosition = (Button) view.findViewById(R.id.debug_button_armPosition);
         advanced = (Button) view.findViewById(R.id.debug_button_advanced);
         commonDataOutput = (TextView) view.findViewById(R.id.debug_commonDataOutput);
         armDataOutput = (TextView) view.findViewById(R.id.debug_armDataOutput);
         final TextView currentArmText = (TextView) view.findViewById(R.id.debug_currentArm);
-        final CheckBox autoUpdate = (CheckBox) view.findViewById(R.id.debug_checkBox_autoupdate);
         checkBox_SBD = (CheckBox) view.findViewById(R.id.debug_checkBox_SBD);
         checkBox_MR = (CheckBox) view.findViewById(R.id.debug_checkBox_MR);
         checkBox_SBFA = (CheckBox) view.findViewById(R.id.debug_checkBox_SBFA);
@@ -158,7 +156,7 @@ public class Debug extends Fragment {
         Runnable autoUpdater = new Runnable() {
             @Override
             public void run() {
-                if (autoUpdate.isChecked()) {
+                if (autoUpdate) { //TODO improve
                     requestDebugData();
                 }
                 looperHandler.postDelayed(this, 200);
@@ -280,12 +278,11 @@ public class Debug extends Fragment {
         }
     }
 
-
-    public void startAutoUpdate() {
+    public void whenEnteringFragment() {
         autoUpdate = true;
     }
 
-    public void stopAutoUpdate() {
+    public void whenLeavingFragment() {
         autoUpdate = false;
     }
 

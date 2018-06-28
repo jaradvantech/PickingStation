@@ -275,21 +275,17 @@ public class Editor extends Fragment {
     private void updateViewPagerFragments(String JSONData){
         if(mViewPagerFragments!=null) {
             mViewPagerFragments.clear();
-            mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(R.color.colorPrimaryPale),"Pallet"));
+            mViewPagerFragments.add(ColorFragment.newInstancePicture(R.mipmap.pallet));
             mPageAdapter.notifyDataSetChanged();
         }
-
-        int totalBricks=0, current_brick=0;
         try {
             JSONObject JSONparser = new JSONObject(JSONData);
             JSONArray values = JSONparser.getJSONArray("memoryValues");
-            totalBricks = JSONparser.getInt("totalBricks");
+            int totalBricks = JSONparser.getInt("totalBricks");
 
             for (int i = 0; i < totalBricks; i++) {
-                current_brick = values.getJSONObject(i).getInt("memoryValue");
-                int colorID = getResources().getIdentifier("brick_color_" + (current_brick & 15), "color", getContext().getPackageName());
-                String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (current_brick >> 4), "string", getContext().getPackageName()));
-                mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(getResources().getColor(colorID),grade));
+                int currentBrickRawType = values.getJSONObject(i).getInt("memoryValue");
+                mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(BrickManager.getColorFromRaw(currentBrickRawType), BrickManager.getGradeFromRaw(currentBrickRawType)));
             }
 
         } catch (Exception jsonExc) {
@@ -322,5 +318,13 @@ public class Editor extends Fragment {
         public int getItemPosition(Object object){
             return PagerAdapter.POSITION_NONE;
         }
+    }
+
+    public void whenEnteringFragment() {
+
+    }
+
+    public void whenLeavingFragment() {
+
     }
 }

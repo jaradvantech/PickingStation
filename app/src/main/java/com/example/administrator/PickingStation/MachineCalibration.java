@@ -1,10 +1,8 @@
 package com.example.administrator.PickingStation;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,8 +19,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.example.administrator.PickingStation.Util.inputToInt;
-
 
 public class MachineCalibration extends Fragment {
 
@@ -32,11 +28,11 @@ public class MachineCalibration extends Fragment {
     private ArrayList<EditText> textFields;
     private ArrayList<TextView> textViews;
     private Button setManipulators, send, startStop, advance, microAdvance;
-    private EditText manipulatorNum;
+    private EditText manipulatorNum, standByValue, waitingPosition;
     private Boolean motorRuning = false;
-    private int encoderIncrement = 0;
-    private final int ADVANCE_PERIOD = 500;
-    private final int MICROADVANCE_PERIOD = 100;
+    private int encoderIncrement = 0,  currentStep = 0;
+    private final int ADVANCE_PERIOD = 300;
+    private final int MICROADVANCE_PERIOD = 70;
 
     /*
      * RBS, 20th June, 2018;
@@ -67,17 +63,20 @@ public class MachineCalibration extends Fragment {
             textViews.add((TextView) view.findViewById(getResources().getIdentifier("calibration_textview_arm" + (i + 1), "id", getActivity().getPackageName())));
         }
 
-        setManipulators = (Button) view.findViewById(R.id.calibration_button_setManipulators);
-        send = (Button) view.findViewById(R.id.calibration_button_send);
-        startStop = (Button) view.findViewById(R.id.calibration_button_motorRun);
-        advance = (Button) view.findViewById(R.id.calibration_button_advance);
-        microAdvance = (Button) view.findViewById(R.id.calibration_button_microAdvance);
-        manipulatorNum = (EditText) view.findViewById(R.id.calibration_editText_totalManipulators);
+        setManipulators = view.findViewById(R.id.calibration_button_setManipulators);
+        send = view.findViewById(R.id.calibration_button_send);
+        startStop = view.findViewById(R.id.calibration_button_motorRun);
+        advance = view.findViewById(R.id.calibration_button_advance);
+        microAdvance = view.findViewById(R.id.calibration_button_microAdvance);
+        manipulatorNum = view.findViewById(R.id.calibration_editText_totalManipulators);
+        standByValue =  view.findViewById(R.id.calibration_editText_tSBV);
+        waitingPosition = view.findViewById(R.id.calibration_editText_AGBTTWPIA);
 
         setManipulators.setOnClickListener(new View.OnClickListener() {
             public void onClick( View v ) {
-                if(MANIPULATORS > 0) {
-                    setManipulators(Integer.parseInt(manipulatorNum.getText().toString()));
+                int fieldValue = Util.inputToInt(manipulatorNum);
+                if(fieldValue > 0) {
+                    setManipulators(fieldValue);
                 }
             }
         });
@@ -117,7 +116,7 @@ public class MachineCalibration extends Fragment {
                 }, MICROADVANCE_PERIOD);
             }
         });
-        
+
         return view;
     }
 
@@ -169,23 +168,20 @@ public class MachineCalibration extends Fragment {
             JSONObject JSONOutput = new JSONObject();
             JSONArray positionArray = new JSONArray();
             JSONOutput.put("command_ID", "SCAP");
-            JSONOutput.put("totalArms", MANIPULATORS);
-            for(int i=0; i<MANIPULATORS; i++) {
-                positionArray.put(Integer.parseInt(textViews.get(i).getText().toString()));
-            }
+            JSONOutput.put("armNumber", MANIPULATORS);
             JSONOutput.put("positions", positionArray);
+            for(int i=0; i<MANIPULATORS; i++) {
+                positionArray.put(Integer.parseInt(textFields.get(i).getText().toString()));
+            }
+            JSONOutput.put("SBV", Util.inputToInt(standByValue));
+            JSONOutput.put("AGBTTWPIA", Util.inputToInt(waitingPosition));
             mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
-            saveParameters();
+
+            //Save to local config
+            SettingManager.setTotalManipulators(MANIPULATORS);
         } catch(JSONException exc) {
             Log.d("JSON exception", exc.getMessage());
         }
-    }
-
-    /*
-     * Save to local config as well
-     */
-    private void saveParameters() {
-
     }
 
     public void setLineMotor(Boolean state) {
@@ -194,14 +190,14 @@ public class MachineCalibration extends Fragment {
             JSONOutput.put("command_ID", "PWDA");
             if(state == true) {
             /*Start the line*/
-                JSONOutput.put("TransmissionManualDebugging", true);
-                JSONOutput.put("PCState", 3);
+                JSONOutput.put("TMD", true);
+                JSONOutput.put("PCS", 3);
                 startStop.setText("STOP");
                 motorRuning = true;
             } else {
             /*Stop the line*/
-                JSONOutput.put("TransmissionManualDebugging", false);
-                JSONOutput.put("PCState", 1);
+                JSONOutput.put("TMD", false);
+                JSONOutput.put("PCS", 1);
                 startStop.setText("START");
                 motorRuning = false;
             }

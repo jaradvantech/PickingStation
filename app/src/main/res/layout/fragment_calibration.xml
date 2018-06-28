@@ -10,16 +10,16 @@
         android:id="@+id/calibration_edittext_arm1"
         android:layout_width="154dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginTop="92dp"
         android:ems="10"
         android:inputType="number"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm6"
         app:layout_constraintEnd_toStartOf="@+id/calibration_edittext_arm2"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/calibration_edittext_arm8"
@@ -75,6 +75,49 @@
         app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm6" />
 
     <TextView
+        android:id="@+id/calibration_textView_standByValue"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="VERTICAL STANDBY\nVALUE"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_editText_tSBV"
+        app:layout_constraintStart_toStartOf="@+id/calibration_editText_tSBV" />
+
+    <EditText
+        android:id="@+id/calibration_editText_tSBV"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="number"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/calibration_editText_AGBTTWPIA"
+        app:layout_constraintTop_toBottomOf="@+id/calibration_textView_AGBTTWPIA" />
+
+    <EditText
+        android:id="@+id/calibration_editText_AGBTTWPIA"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="192dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:inputType="number"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/calibration_button_microAdvance"
+        app:layout_constraintTop_toTopOf="@+id/calibration_button_microAdvance" />
+
+    <TextView
+        android:id="@+id/calibration_textView_AGBTTWPIA"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text='"WaitingPosition"\n(TPOX_AGBTTWPIA)'
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_editText_AGBTTWPIA"
+        app:layout_constraintStart_toStartOf="@+id/calibration_editText_AGBTTWPIA" />
+
+    <TextView
         android:id="@+id/calibration_textview_arm7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,16 +130,16 @@
         android:id="@+id/calibration_edittext_arm6"
         android:layout_width="154dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginTop="44dp"
         android:ems="10"
         android:inputType="number"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/calibration_edittext_arm7"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calibration_edittext_arm1" />
 
     <EditText
         android:id="@+id/calibration_edittext_arm7"
@@ -155,15 +198,15 @@
         app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm9" />
 
     <Button
-        android:id="@+id/calibration_button_advance"
+        android:id="@+id/calibration_button_microAdvance"
         android:layout_width="45dp"
         android:layout_height="131dp"
         android:layout_marginStart="16dp"
         android:text=">"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/calibration_button_microAdvance"
-        app:layout_constraintTop_toTopOf="@+id/calibration_button_microAdvance" />
+        app:layout_constraintStart_toEndOf="@+id/calibration_button_advance"
+        app:layout_constraintTop_toTopOf="@+id/calibration_button_advance" />
 
     <TextView
         android:id="@+id/calibration_textview_arm4"
@@ -197,23 +240,25 @@
         android:id="@+id/calibration_button_send"
         android:layout_width="161dp"
         android:layout_height="140dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginStart="16dp"
         android:text="SEND"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/calibration_button_setManipulators"
-        app:layout_constraintStart_toEndOf="@+id/calibration_editText_totalManipulators" />
+        app:layout_constraintStart_toEndOf="@+id/calibration_editText_totalManipulators"
+        app:layout_constraintTop_toTopOf="@+id/calibration_textView_manipulators" />
 
     <Button
         android:id="@+id/calibration_button_motorRun"
         android:layout_width="146dp"
         android:layout_height="132dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginStart="44dp"
         android:text="START"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/calibration_textView_info"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.625" />
 
     <Button
         android:id="@+id/calibration_button_cue"
@@ -223,8 +268,8 @@
         android:layout_marginTop="68dp"
         android:text="CUE"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/calibration_button_advance"
-        app:layout_constraintTop_toTopOf="@+id/calibration_button_advance" />
+        app:layout_constraintStart_toEndOf="@+id/calibration_button_microAdvance"
+        app:layout_constraintTop_toTopOf="@+id/calibration_button_microAdvance" />
 
     <Button
         android:id="@+id/calibration_button_clear"
@@ -233,20 +278,19 @@
         android:layout_marginStart="16dp"
         android:text="CLEAR"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/calibration_button_advance"
-        app:layout_constraintTop_toTopOf="@+id/calibration_button_advance" />
+        app:layout_constraintStart_toEndOf="@+id/calibration_button_microAdvance"
+        app:layout_constraintTop_toTopOf="@+id/calibration_button_microAdvance" />
 
     <EditText
         android:id="@+id/calibration_editText_totalManipulators"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="188dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginStart="16dp"
         android:ems="10"
         android:inputType="number"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/calibration_textView_info"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/calibration_editText_tSBV"
+        app:layout_constraintTop_toTopOf="@+id/calibration_editText_tSBV" />
 
     <EditText
         android:id="@+id/calibration_edittext_arm2"
@@ -318,7 +362,7 @@
         app:layout_constraintStart_toStartOf="@+id/calibration_editText_totalManipulators" />
 
     <Button
-        android:id="@+id/calibration_button_microAdvance"
+        android:id="@+id/calibration_button_advance"
         android:layout_width="95dp"
         android:layout_height="132dp"
         android:layout_marginStart="12dp"
@@ -328,15 +372,4 @@
         app:layout_constraintStart_toEndOf="@+id/calibration_button_motorRun"
         app:layout_constraintTop_toTopOf="@+id/calibration_button_motorRun" />
 
-    <TextView
-        android:id="@+id/calibration_textView_info"
-        android:layout_width="854dp"
-        android:layout_height="115dp"
-        android:layout_marginBottom="60dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

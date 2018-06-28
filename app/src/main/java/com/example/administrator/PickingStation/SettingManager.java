@@ -12,22 +12,33 @@ import java.util.List;
 
 public class SettingManager {
 
-    static ArrayList<SettingObject> getFromPreferences(Context mainApplicationContext) {
-        Gson gson = new Gson();
-        SharedPreferences sharedPref = mainApplicationContext.getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE);
+    /*
+     * Each Manipulator needs two channels, and every server has 4.
+     * Default is 3
+     */
+    private static int numberOfRFIDServers = 3;
+    private static Context appContext;
+    private static Gson gson;
+
+    static void initSettingManager(Context mContext) {
+        appContext = mContext;
+        gson = new Gson();
+    }
+
+    static ArrayList<SettingObject> getFromPreferences() {
+        SharedPreferences sharedPref = appContext.getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE);
         String jsonPreferences = sharedPref.getString("USER_SETTINGS", "");
         Type type = new TypeToken<List<SettingObject>>() {}.getType();
 
         ArrayList<SettingObject> settings = gson.fromJson(jsonPreferences, type);
         if(settings == null) settings = new ArrayList<SettingObject>();
 
-
         return settings;
     }
     
-    static String getSetting(String name, Context mainApplicationContext) {
+    static String getSetting(String name) {
         String retVal = "";
-        ArrayList<SettingObject> settings = getFromPreferences(mainApplicationContext);
+        ArrayList<SettingObject> settings = getFromPreferences();
         for(int i=0; i<settings.size(); i++) {
             if(settings.get(i).setting.equals(name)) {
                 retVal = settings.get(i).value;
@@ -35,20 +46,9 @@ public class SettingManager {
         }
         return retVal;
     }
-    
-    static void saveSetting(SettingObject boxToSave, Context mainApplicationContext) {
-        ArrayList<SettingObject> settings = getFromPreferences(mainApplicationContext);
 
-        //Append design to array
-        settings.add(boxToSave);
-
-        //Save Array
-        saveToPreferences(settings, mainApplicationContext);
-    }
-
-    static void saveToPreferences(ArrayList<SettingObject> currentSettings, Context mainApplicationContext) {
-        Gson gson = new Gson();
-        SharedPreferences sharedPref = mainApplicationContext.getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE);
+    static void saveToPreferences(ArrayList<SettingObject> currentSettings) {
+        SharedPreferences sharedPref = appContext.getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
         //Serialize objects to a String that can be saved by using the Google Gson library.
@@ -57,16 +57,14 @@ public class SettingManager {
         editor.commit();
     }
 
-    static void loadDefaults(Context mainApplicationContext) {
+    static void loadDefaults() {
         ArrayList settingArrayList = new ArrayList<SettingObject>();
         settingArrayList.add(new SettingObject("Machine controller", "", "ip"));
         settingArrayList.add(new SettingObject("PLC Address", "", "ip"));
-        settingArrayList.add(new SettingObject("RFID server 1", "", "ip"));
-        settingArrayList.add(new SettingObject("RFID server 2", "", "ip"));
-        settingArrayList.add(new SettingObject("RFID server 3", "", "ip"));
+        for(int i=0; i<numberOfRFIDServers; i++)
+            settingArrayList.add(new SettingObject("RFID server " + (i+1), "", "ip"));
 
-        Gson gson = new Gson();
-        SharedPreferences sharedPref = mainApplicationContext.getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = appContext.getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
         String serializedObjects = gson.toJson(settingArrayList);
@@ -74,9 +72,38 @@ public class SettingManager {
         editor.commit();
     }
 
-    static boolean previousConfigurationExists(Context mainApplicationContext) {
-        SharedPreferences sharedPref = mainApplicationContext.getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE);
+    static boolean previousConfigurationExists() {
+        SharedPreferences sharedPref = appContext.getSharedPreferences("USER_SETTINGS", Context.MODE_PRIVATE);
         String settingsString = sharedPref.getString("USER_SETTINGS", "");
         return !settingsString.equals("");
+    }
+
+    /*
+     *  Local IN-APP configurations.
+     *  These are independent from the settings stored in the machine.
+     */
+    static int getLanguage() {
+        SharedPreferences sharedPref = appContext.getSharedPreferences(appContext.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return sharedPref.getInt("LANGUAGE", 0); //Default language is 0
+    }
+
+    static void setLanguage(int selectedLanguage) {
+        SharedPreferences sharedPref = appContext.getSharedPreferences(appContext.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPref_editor = sharedPref.edit();
+        sharedPref_editor.putInt("LANGUAGE", selectedLanguage);
+        sharedPref_editor.commit();
+    }
+
+    static int getTotalManipulators() {
+        SharedPreferences sharedPref = appContext.getSharedPreferences(appContext.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return sharedPref.getInt("MANIPULATORS", 5); //Default Number is 5
+    }
+
+    static void setTotalManipulators(int numberOfManipulators) {
+        SharedPreferences sharedPref = appContext.getSharedPreferences(appContext.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPref_editor = sharedPref.edit();
+        sharedPref_editor.putInt("MANIPULATORS", numberOfManipulators);
+        sharedPref_editor.commit();
+        numberOfRFIDServers = (int) Math.ceil(numberOfManipulators / 2);
     }
 }

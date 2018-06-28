@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,7 +39,7 @@ public class Line extends Fragment {
     private float OriginPosition = -116.35f; //smaller=later
     private float EncoderToPixelDivider = 10.1f; //mas grande, lo suelta antes
     private final ImageView PhysicalPallet[] = new ImageView[10 + 1];
-    private final TextView PhysicalPallet_UID_Viewer[] = new TextView[10 + 1];
+    private final TextView PhysicalPallet_UID_Viewer[] = new TextView[10 + 1]; //RBS TODO make this start at 0
     private final TextView PhysicalBricksOnTheLine_Brick_Viewer[] = new TextView[12 + 1];
     private final Button PhysicalPallet_TopBrick[] = new Button[10 + 1];
     private boolean autoUpdate;
@@ -55,6 +54,7 @@ public class Line extends Fragment {
     private int last_ManipulatorDNIs[] = new int[MANIPULATORS+1];
     private int destinationPallets[] = new int[(2*MANIPULATORS)+1];
     private final int RPRV_PERIOD = 300;
+    private final  String NULL_UID = "0000000000000000";
     private final Handler handler = new Handler(Looper.getMainLooper());
     private JSONArray palletInformation = null;
     private JSONArray bricksOnLine = null;
@@ -119,7 +119,8 @@ public class Line extends Fragment {
                 }
             });
         }
-        startUpdating();
+        handler.postDelayed(timer_lines, RPRV_PERIOD);
+        autoUpdate=true; //start updating.  //TODO RBS change the way this trigger works
         return view;
     }
 
@@ -159,18 +160,22 @@ public class Line extends Fragment {
             NumberOfBricksOnLine = bricksOnLine.length();
 
         } catch (Exception jsonExc) {
-            Log.e("JSON Exception", jsonExc.getMessage());
+            Log.e("JSON Exception", "updateLineBrickInfo(): " + jsonExc.getMessage());
         }
 
         DNIinUse = new ArrayList<>();
+        try {
+            updateBricksInPallets();
 
-        updateBricksInPallets();
+            updateBricksOnLine();
 
-        updateBricksOnLine();
+            checkForPickedBricks();
 
-        checkForPickedBricks();
-
-        hideUnusedBricks();
+            hideUnusedBricks();
+        } catch(Exception e) {
+            //Today this cannot fail //TODO remove tomorrow
+            Log.e("RPRV fail", e.toString());
+        }
     }
 
     /*
@@ -180,7 +185,7 @@ public class Line extends Fragment {
     private void updateBricksInPallets() {
         //For every pallet in the line
         for (int i = 1; i <= NumberOfPallets; i++) {
-            String palletUID = "0000000000000000";
+            String palletUID = NULL_UID;
             int numberOfBricks=0, topBrick=0;
             //RBS TODO by the time we finally rewrite all of this, hopefully during the summer,
             //TODO we MUST finally put an end to this index0-index1 salad
@@ -189,11 +194,11 @@ public class Line extends Fragment {
                 numberOfBricks = palletInformation.getJSONObject(i-1).getInt("numberOfBricks");
                 topBrick = palletInformation.getJSONObject(i-1).getInt("topBrick");
             } catch (Exception jsonExc) {
-                Log.e("JSON Exception", jsonExc.getMessage());
+                Log.e("JSON Exception", "updateBricksInPallets(): " + jsonExc.getMessage());
             }
 
             //Update pallets
-            if (palletUID.contentEquals("0000000000000000")) {
+            if (palletUID.contentEquals(NULL_UID)) {
                 PhysicalPallet[i].setVisibility(View.INVISIBLE);
                 PhysicalPallet_UID_Viewer[i].setVisibility(View.INVISIBLE);
                 PhysicalPallet_UID_Viewer[i].setText(palletUID);
@@ -204,7 +209,6 @@ public class Line extends Fragment {
                 PhysicalPallet_UID_Viewer[i].setVisibility(View.VISIBLE);
                 PhysicalPallet_UID_Viewer[i].setText(palletUID);
                 if (numberOfBricks > 0) {
-                    Log.e("Topbrick", topBrick+"");
                     int colorID = getResources().getIdentifier("brick_color_" + (topBrick & 15), "color", getContext().getPackageName());
                     String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (topBrick >> 4), "string", getContext().getPackageName()));
 
@@ -228,62 +232,58 @@ public class Line extends Fragment {
      */
     private void updateBricksOnLine() {
         for (int i = 1; i <= NumberOfBricksOnLine; i++) {
-            int brickPosition=0, brickRaw=0, assignedPallet=0, brickDNI=0;
             try {
-                brickPosition = bricksOnLine.getJSONObject(i).getInt("position");
-                brickRaw = bricksOnLine.getJSONObject(i).getInt("type");
-                assignedPallet = bricksOnLine.getJSONObject(i).getInt("assignedPallet");
-                brickDNI = bricksOnLine.getJSONObject(i).getInt("DNI");
+                int brickPosition = bricksOnLine.getJSONObject(i-1).getInt("position"); //INDEX
+                int brickRaw = bricksOnLine.getJSONObject(i-1).getInt("type");
+                int assignedPallet = bricksOnLine.getJSONObject(i-1).getInt("assignedPallet"); //SALAD
+                int brickDNI = bricksOnLine.getJSONObject(i-1).getInt("DNI"); //!!@@#!#fgfdb
+
+                destinationPallets[brickDNI] = assignedPallet;
+
+                //Make brick visible
+                showBrick(brickDNI, brickRaw, brickPosition, assignedPallet);
+                DNIinUse.add(brickDNI);
+
+                //Update visual position of the brick
+                SpringForce force = new SpringForce();
+                force.setDampingRatio(DAMPING_RATIO_NO_BOUNCY).setStiffness(STIFFNESS_VERY_LOW);
+                float finalpos = OriginPosition + brickPosition / (EncoderToPixelDivider);
+                final SpringAnimation springAnim = new SpringAnimation(PhysicalBricksOnTheLine_Brick_Viewer[brickDNI], DynamicAnimation.X).setSpring(force);
+                springAnim.animateToFinalPosition(finalpos);
+
             } catch (Exception jsonExc) {
-                Log.e("JSON Exception", jsonExc.getMessage());
+                Log.e("JSON Exception", "updateBricksOnLine(): " + jsonExc.getMessage());
             }
-
-            destinationPallets[brickDNI] = assignedPallet;
-
-            //Make brick visible
-            showBrick(brickDNI, brickRaw, brickPosition, assignedPallet);
-            DNIinUse.add(brickDNI);
-
-            //Update visual position of the brick
-            SpringForce force = new SpringForce();
-            force.setDampingRatio(DAMPING_RATIO_NO_BOUNCY).setStiffness(STIFFNESS_VERY_LOW);
-
-            //Calculate new position
-            float finalpos = OriginPosition + brickPosition / (EncoderToPixelDivider);
-            final SpringAnimation springAnim = new SpringAnimation(PhysicalBricksOnTheLine_Brick_Viewer[brickDNI], DynamicAnimation.X).setSpring(force);
-
-            //Start animation
-            springAnim.animateToFinalPosition(finalpos);
         }
     }
 
     private void checkForPickedBricks() {
         for (int j = 1; j<MANIPULATORS+1; j++) {
-            int currentXEncoderValue=0, ValueOfCatchDrop=0, Position=0, rawType=0, assignedPallet=0, DNI=0;
             try {
-                currentXEncoderValue = takenBricks.getJSONObject(j).getInt("currentXEncoderValue");
-                ValueOfCatchDrop = takenBricks.getJSONObject(j).getInt("valueOfCatchDrop");
-                Position = takenBricks.getJSONObject(j).getInt("position");
-                rawType = takenBricks.getJSONObject(j).getInt("rawType");
-                assignedPallet = takenBricks.getJSONObject(j).getInt("assignedPallet");
-                DNI = takenBricks.getJSONObject(j).getInt("DNI");
+                int currentXEncoderValue = takenBricks.getJSONObject(j-1).getInt("currentXEncoderValue"); //j-1 because index salad
+                int ValueOfCatchDrop = takenBricks.getJSONObject(j-1).getInt("valueOfCatchDrop");
+                int Position = takenBricks.getJSONObject(j-1).getInt("position");
+                int rawType = takenBricks.getJSONObject(j-1).getInt("type");
+                int assignedPallet = takenBricks.getJSONObject(j-1).getInt("assignedPallet");
+                int DNI = takenBricks.getJSONObject(j-1).getInt("DNI");
+
+                current_ManipulatorDNIs[j] = DNI;
+
+                //If certain manipulator was empty before, and now it has something on it,
+                //this means it has picked up something. Logic, isn't it?
+                if ((current_ManipulatorDNIs[j] != last_ManipulatorDNIs[j]) && current_ManipulatorDNIs[j] != 0) {
+                    Log.d("DNI", "has been taken");
+                    moveToPalletAnim(current_ManipulatorDNIs[j], assignedPallet);
+                    last_ManipulatorDNIs[j] = current_ManipulatorDNIs[j];
+                }
+
+                //If DNI picked by manipulator
+                if(current_ManipulatorDNIs[j] != 0) {
+                    DNIinUse.add(DNI);
+                }
+
             } catch (Exception jsonExc) {
-                Log.e("JSON Exception", jsonExc.getMessage());
-            }
-
-            current_ManipulatorDNIs[j] = DNI;
-
-            //If certain manipulator was empty before, and now it has something on it,
-            //this means it has picked up something. Logic, isn't it?
-            if ((current_ManipulatorDNIs[j] != last_ManipulatorDNIs[j]) && current_ManipulatorDNIs[j] != 0) {
-                Log.d("DNI", "has been taken");
-                moveToPalletAnim(current_ManipulatorDNIs[j], assignedPallet);
-                last_ManipulatorDNIs[j] = current_ManipulatorDNIs[j];
-            }
-
-            //If DNI picked by manipulator
-            if(current_ManipulatorDNIs[j] != 0) {
-                DNIinUse.add(DNI);
+                Log.e("JSON Exception", "checkForPickedBricks(): " + jsonExc.getMessage());
             }
         }
     }
@@ -300,7 +300,7 @@ public class Line extends Fragment {
         AnimatorSet animSetline = new AnimatorSet();
         animSetline.playTogether(editorLayoutAnimation_x, editorLayoutAnimation_y);
 
-        //Move for three seconds (or whatever takes in real life)
+        //Move for three seconds (or whatever it takes in real life)
         animSetline.setDuration(2500);
 
         //Wait for 1s (pick-up motion delay)
@@ -319,7 +319,7 @@ public class Line extends Fragment {
         } else {
             //RBS TODO there is a better way to insert variables inside strings while supporting different languages
             PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setVisibility(View.VISIBLE);
-            PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setText(getString(R.string.At) + " " + mBrickPosition + "\nDNI: " + mBrickDNI + "\n" + getGrade(mBrickRaw) + "\n " + getString(R.string.To) + " " + mAssignedPallet);
+            PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setText(getString(R.string.At) + " " + mBrickPosition + "\nDNI: " + mBrickDNI + "\n" + BrickManager.getGradeFromRaw(mBrickRaw) + "\n " + getString(R.string.To) + " " + mAssignedPallet);
             PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setBackground(generateBrickBackground(mBrickRaw));
         }
     }
@@ -365,34 +365,26 @@ public class Line extends Fragment {
         }
     };
 
-    private String getGrade(int type) {
-        return getResources().getString(getResources().getIdentifier("brick_grade_" + (type >> 4), "string", getContext().getPackageName()));
-    }
-
-    private int getColor(int type) {
-        return getResources().getIdentifier("brick_color_" + (type & 15), "color", getContext().getPackageName());
-    }
 
     private GradientDrawable generateBrickBackground(int type) {
         /*
          * To draw a brick we just use a drawable of the brick color as background
          */
         GradientDrawable gd = new GradientDrawable();
-        gd.setColor(getResources().getColor(getColor(type)));
+        gd.setColor(getResources().getColor(BrickManager.getColorFromRaw(type)));
         gd.setCornerRadius(1);
         gd.setStroke(2, 0xFF000000);
         return gd;
     }
 
-    public void startUpdating() {
+    public void whenEnteringFragment() {
         handler.postDelayed(timer_lines, RPRV_PERIOD);
         autoUpdate=true;
     }
 
-    public void stopUpdating() {
+    public void whenLeavingFragment() {
         autoUpdate = false;
     }
-
 
 
 

@@ -13,46 +13,30 @@
 
 
         <TextView
-            android:id="@+id/login_textview_warning"
-            android:layout_width="wrap_content"
-            android:layout_height="95dp"
-            android:layout_marginBottom="8dp"
-            android:text="Attention!  - 注意"
-            android:textColor="@color/colorRed"
-            android:textSize="68sp"
-            app:layout_constraintBottom_toBottomOf="@+id/login_imageView_warning"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/login_imageView_warning"
-            app:layout_constraintTop_toTopOf="@+id/login_imageView_warning" />
-
-        <TextView
             android:id="@+id/login_textview_info"
             android:layout_width="883dp"
-            android:layout_height="105dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="128dp"
-            android:layout_marginTop="32dp"
-            android:text="Only a trained tecnician is allowed to perform this operation.\n Incorrect configuration of these parameters can have undesired side effects.\n Please insert password to continue: "
+            android:layout_height="73dp"
+            android:layout_marginTop="18dp"
+            android:text="Only a trained tecnician is allowed to perform this operation.\nPlease insert password to continue: "
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_textview_warning" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_imageView_warning" />
 
         <EditText
             android:id="@+id/login_editText_password"
             android:layout_width="187dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="24dp"
             android:ems="10"
             android:inputType="textPassword"
             android:textAlignment="center"
             android:textSize="@dimen/text_medium"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_textview_info" />
 
@@ -72,11 +56,11 @@
             android:id="@+id/login_imageView_warning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
+            android:layout_marginTop="18dp"
             android:src="@mipmap/warning"
-            app:layout_constraintEnd_toStartOf="@+id/login_textview_warning"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

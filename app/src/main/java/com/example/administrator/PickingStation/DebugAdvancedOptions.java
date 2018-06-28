@@ -134,7 +134,7 @@ public class DebugAdvancedOptions extends Fragment {
             }
         });
 
-        //debug
+
         //String testString = "{\"command_ID\":\"GDIS\",\"Available_DNI_List\":[2,3,4,5,6,7,8,9,10],\"Manipulator_Order_List\":[{},{},{},{\"What\":false,\"When\":1058,\"Where\":false},{}],\"Bricks_Before_The_Line\":[],\"Bricks_On_The_Line\":[{\"DNI\":1,\"AssignedPallet\":8,\"Position\":7842,\"Type\":17},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":5642,\"Type\":0}],\"Bricks_Ready_For_Output\":[0,0,0,0,0,0,0,0,0,0],\"Manipulator_Fixed_Position\":[2900,5000,7000,8900,10800],\"Manipulator_Modes\":[1,1,1,1,1],\"Pallet_LowSpeedPulse_Height_List\":[5000,5000,5000,5000,5000,5000,5000,5000,5000,5000],\"Manipulator_TakenBrick\":[{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1}],\"Manipulator_State\":[{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0}]}";
         //this.parseInternalStateDebugData(testString);
 
@@ -311,9 +311,9 @@ public class DebugAdvancedOptions extends Fragment {
             JSONObject JSONOutput = new JSONObject();
 
             JSONOutput.put("command_ID", "PLRD");
-            JSONOutput.put("what", Util.inputToInt(presets_editText_what));
-            JSONOutput.put("when", Util.inputToInt(presets_editText_when));
-            JSONOutput.put("where", Util.inputToInt(presets_editText_where));
+            JSONOutput.put("type", Util.inputToInt(presets_editText_what));
+            JSONOutput.put("position", Util.inputToInt(presets_editText_when));
+            JSONOutput.put("pallet", Util.inputToInt(presets_editText_where));
             mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
         } catch(JSONException exc) {
@@ -321,11 +321,11 @@ public class DebugAdvancedOptions extends Fragment {
         }
     }
 
-    public void startAutoUpdate() {
+    public void whenEnteringFragment() {
         autoUpdate = true;
     }
 
-    public void stopAutoUpdate() {
+    public void whenLeavingFragment() {
         autoUpdate = false;
     }
 

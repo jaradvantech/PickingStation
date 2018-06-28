@@ -3,15 +3,11 @@ package com.example.administrator.PickingStation;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -28,11 +24,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -43,6 +38,7 @@ public class MainActivity extends AppCompatActivity
         Debug.OnFragmentInteractionListener,
         DebugAdvancedOptions.OnFragmentInteractionListener,
         Alarms.OnFragmentInteractionListener,
+        Settings.OnFragmentInteractionListener,
         MachineCalibration.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
@@ -84,8 +80,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
+
+        //Start-up configurations
         correctDisplayMetrics();
         setContentView(R.layout.activity_main);
+        SettingManager.initSettingManager(this);
+        BrickManager.initBrickManager(this);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         setGUILanguage();
@@ -219,23 +219,20 @@ public class MainActivity extends AppCompatActivity
         navigationView.setCheckedItem(new_id);
 
         /*
-         * Automatically enable/disable RPRV commands, so they stop
-         * when the user leaves the "Line status" screen, and they start
-         * again just before switching back to Line Status
+         * Notify the fragments
          */
-        if(previous_id == R.id.nav_lines) line.stopUpdating();
-        if(new_id == R.id.nav_lines) line.startUpdating();
-
-        /*
-         * Enable/disable autoupdate of debug fragment
-         */
-        if(previous_id == R.id.opt_debug_advanced) debug_advanced.stopAutoUpdate();
-        if(new_id == R.id.opt_debug_advanced) debug_advanced.startAutoUpdate();
-
-        /*
-         * Save&Load settings when leaving the Settings screen
-         */
-        if(previous_id == R.id.nav_settings) settings.saveSettings();
+        if(previous_id == R.id.nav_lines) line.whenLeavingFragment();
+        if(new_id == R.id.nav_lines) line.whenEnteringFragment();
+        if(previous_id == R.id.nav_debug) debug.whenLeavingFragment();
+        if(new_id == R.id.nav_debug) debug.whenEnteringFragment();
+        if(previous_id == R.id.opt_debug_advanced) debug_advanced.whenLeavingFragment();
+        if(new_id == R.id.opt_debug_advanced) debug_advanced.whenEnteringFragment();
+        if(previous_id == R.id.nav_settings) settings.whenLeavingFragment();
+        if(new_id == R.id.nav_settings) settings.whenEnteringFragment();
+        if(previous_id == R.id.opt_debug_advanced) debug_advanced.whenLeavingFragment();
+        if(new_id == R.id.opt_debug_advanced) debug_advanced.whenEnteringFragment();
+        if(previous_id == R.id.nav_manual) manual.whenLeavingFragment();
+        if(new_id == R.id.nav_manual) manual.whenEnteringFragment();
 
         //Select layouts to change
         ConstraintLayout new_layout = getLayoutByID(new_id);
@@ -403,7 +400,7 @@ public class MainActivity extends AppCompatActivity
         String port = DEFAULT_PORT;
         //Read IP and address from settings.
         try {
-            JSONObject JSONparser = new JSONObject( SettingManager.getSetting("Machine controller", getApplicationContext()));
+            JSONObject JSONparser = new JSONObject( SettingManager.getSetting("Machine controller"));
             ip = JSONparser.getString("ip");
             port = JSONparser.getString("port");
         } catch (Exception jsonExc) {
@@ -417,7 +414,7 @@ public class MainActivity extends AppCompatActivity
         String ip = DEFAULT_IP;
         String port = DEFAULT_PORT;
         try {
-            JSONObject JSONparser = new JSONObject( SettingManager.getSetting("Machine controller", getApplicationContext()));
+            JSONObject JSONparser = new JSONObject( SettingManager.getSetting("Machine controller"));
             ip = JSONparser.getString("ip");
             port = JSONparser.getString("port");
         } catch (Exception jsonExc) {
@@ -463,6 +460,9 @@ public class MainActivity extends AppCompatActivity
 
         } else if (cmdID.equals("GDIS")) {
             debug_advanced.parseInternalStateDebugData(receivedString);
+
+        } else if (cmdID.equals("GCFG")) {
+            settings.onSettingsRetrieved(receivedString);
 
         } else if (cmdID.equals("PING")) {
             Log.d("PING", "ack");
@@ -523,8 +523,7 @@ public class MainActivity extends AppCompatActivity
      *                              --USER EXPERIENCE--
      *****************************************************/
     private void setGUILanguage() {
-        SharedPreferences sharedPref = this.getSharedPreferences(this.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        switch(sharedPref.getInt("LANGUAGE", 0)) {
+        switch(SettingManager.getLanguage()) {
             case 0:
                 CurrentLanguage = "en";
                 break;
