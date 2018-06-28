@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.administrator.PickingStation.MachineCalibration">
+
+    <EditText
+        android:id="@+id/calibration_edittext_arm1"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="92dp"
+        android:ems="10"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/calibration_edittext_arm2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/calibration_edittext_arm8"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/calibration_edittext_arm9"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/calibration_edittext_arm7"
+        app:layout_constraintTop_toTopOf="@+id/calibration_edittext_arm7" />
+
+    <TextView
+        android:id="@+id/calibration_textview_arm2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Position of arm #2:"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm2"
+        app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm2" />
+
+    <TextView
+        android:id="@+id/calibration_textview_arm10"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:text="Position of arm #10:"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm10"
+        app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm10" />
+
+    <EditText
+        android:id="@+id/calibration_edittext_arm3"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/calibration_edittext_arm4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/calibration_edittext_arm2"
+        app:layout_constraintTop_toTopOf="@+id/calibration_edittext_arm2" />
+
+    <TextView
+        android:id="@+id/calibration_textview_arm6"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="Position of arm #6:"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm6"
+        app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm6" />
+
+    <TextView
+        android:id="@+id/calibration_textView_standByValue"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="VERTICAL STANDBY\nVALUE"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_editText_tSBV"
+        app:layout_constraintStart_toStartOf="@+id/calibration_editText_tSBV" />
+
+    <EditText
+        android:id="@+id/calibration_editText_tSBV"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="number"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/calibration_editText_AGBTTWPIA"
+        app:layout_constraintTop_toBottomOf="@+id/calibration_textView_AGBTTWPIA" />
+
+    <EditText
+        android:id="@+id/calibration_editText_AGBTTWPIA"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="192dp"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:inputType="number"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/calibration_button_microAdvance"
+        app:layout_constraintTop_toTopOf="@+id/calibration_button_microAdvance" />
+
+    <TextView
+        android:id="@+id/calibration_textView_AGBTTWPIA"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text='"WaitingPosition"\n(TPOX_AGBTTWPIA)'
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_editText_AGBTTWPIA"
+        app:layout_constraintStart_toStartOf="@+id/calibration_editText_AGBTTWPIA" />
+
+    <TextView
+        android:id="@+id/calibration_textview_arm7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Position of arm #7:"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm7"
+        app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm7" />
+
+    <EditText
+        android:id="@+id/calibration_edittext_arm6"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="44dp"
+        android:ems="10"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/calibration_edittext_arm7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/calibration_edittext_arm1" />
+
+    <EditText
+        android:id="@+id/calibration_edittext_arm7"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/calibration_edittext_arm8"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/calibration_edittext_arm6"
+        app:layout_constraintTop_toTopOf="@+id/calibration_edittext_arm6" />
+
+    <EditText
+        android:id="@+id/calibration_edittext_arm9"
+        android:layout_width="154dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/calibration_edittext_arm10"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/calibration_edittext_arm8"
+        app:layout_constraintTop_toTopOf="@+id/calibration_edittext_arm8" />
+
+    <EditText
+        android:id="@+id/calibration_edittext_arm10"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/calibration_edittext_arm9"
+        app:layout_constraintTop_toTopOf="@+id/calibration_edittext_arm9"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/calibration_textview_arm8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Position of arm #8:"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm8"
+        app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm8" />
+
+    <TextView
+        android:id="@+id/calibration_textview_arm9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Position of arm #9:"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm9"
+        app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm9" />
+
+    <Button
+        android:id="@+id/calibration_button_microAdvance"
+        android:layout_width="45dp"
+        android:layout_height="131dp"
+        android:layout_marginStart="16dp"
+        android:text=">"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/calibration_button_advance"
+        app:layout_constraintTop_toTopOf="@+id/calibration_button_advance" />
+
+    <TextView
+        android:id="@+id/calibration_textview_arm4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Position of arm #4:"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm4" />
+
+    <TextView
+        android:id="@+id/calibration_textview_arm5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Position of arm #5:"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm5"
+        app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm5"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/calibration_textview_arm3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Position of arm #3:"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm3"
+        app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm3" />
+
+    <Button
+        android:id="@+id/calibration_button_send"
+        android:layout_width="161dp"
+        android:layout_height="140dp"
+        android:layout_marginStart="16dp"
+        android:text="SEND"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/calibration_editText_totalManipulators"
+        app:layout_constraintTop_toTopOf="@+id/calibration_textView_manipulators" />
+
+    <Button
+        android:id="@+id/calibration_button_motorRun"
+        android:layout_width="146dp"
+        android:layout_height="132dp"
+        android:layout_marginStart="44dp"
+        android:text="START"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.625" />
+
+    <Button
+        android:id="@+id/calibration_button_cue"
+        android:layout_width="160dp"
+        android:layout_height="63dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="68dp"
+        android:text="CUE"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/calibration_button_microAdvance"
+        app:layout_constraintTop_toTopOf="@+id/calibration_button_microAdvance" />
+
+    <Button
+        android:id="@+id/calibration_button_clear"
+        android:layout_width="160dp"
+        android:layout_height="63dp"
+        android:layout_marginStart="16dp"
+        android:text="CLEAR"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/calibration_button_microAdvance"
+        app:layout_constraintTop_toTopOf="@+id/calibration_button_microAdvance" />
+
+    <EditText
+        android:id="@+id/calibration_editText_totalManipulators"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ems="10"
+        android:inputType="number"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/calibration_editText_tSBV"
+        app:layout_constraintTop_toTopOf="@+id/calibration_editText_tSBV" />
+
+    <EditText
+        android:id="@+id/calibration_edittext_arm2"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/calibration_edittext_arm3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/calibration_edittext_arm1"
+        app:layout_constraintTop_toTopOf="@+id/calibration_edittext_arm1" />
+
+    <EditText
+        android:id="@+id/calibration_edittext_arm4"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:ems="10"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/calibration_edittext_arm5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/calibration_edittext_arm3"
+        app:layout_constraintTop_toTopOf="@+id/calibration_edittext_arm3" />
+
+    <EditText
+        android:id="@+id/calibration_edittext_arm5"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/calibration_edittext_arm4"
+        app:layout_constraintTop_toTopOf="@+id/calibration_edittext_arm4" />
+
+    <TextView
+        android:id="@+id/calibration_textview_arm1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Position of arm #1:"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_edittext_arm1"
+        app:layout_constraintStart_toStartOf="@+id/calibration_edittext_arm1" />
+
+    <Button
+        android:id="@+id/calibration_button_setManipulators"
+        android:layout_width="160dp"
+        android:layout_height="56dp"
+        android:text="SET"
+        android:textColor="@color/colorRed"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/calibration_editText_totalManipulators"
+        app:layout_constraintTop_toBottomOf="@+id/calibration_editText_totalManipulators" />
+
+    <TextView
+        android:id="@+id/calibration_textView_manipulators"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="TOTAL MANIPULATORS\n IN THIS MACHINE"
+        android:textAlignment="center"
+        android:textColor="@color/colorRed"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/calibration_editText_totalManipulators"
+        app:layout_constraintStart_toStartOf="@+id/calibration_editText_totalManipulators" />
+
+    <Button
+        android:id="@+id/calibration_button_advance"
+        android:layout_width="95dp"
+        android:layout_height="132dp"
+        android:layout_marginStart="12dp"
+        android:text=">>"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/calibration_button_motorRun"
+        app:layout_constraintTop_toTopOf="@+id/calibration_button_motorRun" />
+
+</android.support.constraint.ConstraintLayout>

@@ -39,7 +39,7 @@ public class AlarmListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get view for row item
-        View rowView = mInflater.inflate(R.layout.alarm_list_item, parent, false);
+        View rowView = mInflater.inflate(R.layout.listitem_alarm, parent, false);
 
         // Get title element
         TextView titleTextView =

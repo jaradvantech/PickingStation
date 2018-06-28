@@ -17,6 +17,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class Algorithm extends Fragment {
     private AlertDialog.Builder dialogBuilder;
@@ -70,21 +74,21 @@ public class Algorithm extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch(which){
                     case DialogInterface.BUTTON_POSITIVE:
-                        saveAlgorithmData();
+                        saveAlgorithmConfiguration();
                         break;
 
-                    case DialogInterface.BUTTON_NEGATIVE:
+                    case DialogInterface.BUTTON_NEUTRAL:
                         break;
                 }
             }
         };
         dialogBuilder.setPositiveButton(getString(R.string.Save), dialogClickListener);
-        dialogBuilder.setNegativeButton(getString(R.string.Cancel), dialogClickListener);
+        dialogBuilder.setNeutralButton(getString(R.string.Cancel), dialogClickListener);
 
         //Set demo brick to current packaging grade read from preferences
         algorithmSavedPreferences = getActivity().getSharedPreferences(this.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        setDemoBrickGrade(algorithmSavedPreferences.getInt("CURRENT_GRADE", 0));
-        setDemoBrickColor(algorithmSavedPreferences.getInt("CURRENT_COLOR", 0));
+        setDemoBrickGrade(algorithmSavedPreferences.getInt("CURRENT_GRADE", 1));
+        setDemoBrickColor(algorithmSavedPreferences.getInt("CURRENT_COLOR", 1));
 
         //SAVE BUTTON
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +96,7 @@ public class Algorithm extends Fragment {
             public void onClick(View view) {
                 AlertDialog dialog = dialogBuilder.create();
                 dialog.setIcon(R.mipmap.faq);
-                dialog.show();
+                BiggerDialogs.show(dialog);
             }
         });
 
@@ -187,14 +191,14 @@ public class Algorithm extends Fragment {
         mFragmentInteraction = null;
     }
 
-    public void updateModes(int mManipulator) {
+    private void updateModes(int mManipulator) {
         manipulatorModes[mManipulator] += 1;
         if (manipulatorModes[mManipulator] > 3)
             manipulatorModes[mManipulator] = 0;
         updateDisplay();
     }
 
-    public void updateDisplay() {
+    private void updateDisplay() {
         for (int i = 1; i<MANIPULATORS+1; i++) {
             if (manipulatorModes[i] == 0) {
                 imageViews[i].setImageResource(R.mipmap.in);
@@ -216,84 +220,53 @@ public class Algorithm extends Fragment {
         }
     }
 
-    public void saveAlgorithmData(){
+    public void retrieveAlgorithmConfiguration() {
+
+    }
+
+    public void onAlgorithmConfigurationRetrieved() {
+
+    }
+
+    public void saveAlgorithmConfiguration(){
         int color = algorithm_listView_colours.getCheckedItemPosition();
         if(color==0) color=1;
-        int grade = algorithm_listView_grades.getCheckedItemPosition(); //TODO RBS me da que este +1 arbitrario aqui va a traer problemas, asi que lo quito
+        int grade = algorithm_listView_grades.getCheckedItemPosition();
         if(grade==0) grade=1;
 
-        //Save to APP preferences
-        sharedPrefEditor = algorithmSavedPreferences.edit();
-        sharedPrefEditor.putInt("CURRENT_GRADE", algorithm_listView_grades.getCheckedItemPosition());
-        sharedPrefEditor.putInt("CURRENT_COLOR", algorithm_listView_colours.getCheckedItemPosition());
-        sharedPrefEditor.commit();
+        try {
+            JSONObject JSONOutput = new JSONObject();
 
-        //Save to machine
-        String writeCommand = "ALSC_14_";
-        writeCommand += String.format("%02d",  color);
-        writeCommand += "_";
-        writeCommand += String.format("%03d",  grade); //Mira Raul, algunas partes de nuestra infraestructura soportan 100 calidades distintas
-        writeCommand += "_";
+            JSONOutput.put("command_ID", "ALSC");
+            JSONOutput.put("color", color);
+            JSONOutput.put("grade", grade);
 
-        for(int i=1; i<MANIPULATORS+1; i++)
-            writeCommand += manipulatorModes[i];
+            JSONArray modes = new JSONArray();
+            for(int i=1; i<MANIPULATORS+1; i++)
+                modes.put(manipulatorModes[i]);
+            JSONOutput.put("modes", modes);
 
-        Log.d("Generated cmd", writeCommand);
-        mFragmentInteraction.onSendCommand(writeCommand);
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
+
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
     }
 
     public void setDemoBrickGrade(int mGrade) {
-        demoBrick.setText(getResources().getStringArray(R.array.Grades)[mGrade]);
+        demoBrick.setText(BrickManager.getGrade(mGrade));
     }
 
     public void setDemoBrickColor(int mColor ) {
-        switch(mColor){
-            case 0:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_1));
-                break;
-            case 1:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_2));
-                break;
-            case 2:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_3));
-                break;
-            case 3:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_4));
-                break;
-            case 4:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_5));
-                break;
-            case 5:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_6));
-                break;
-            case 6:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_7));
-                break;
-            case 7:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_8));
-                break;
-            case 8:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_9));
-                break;
-            case 9:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_10));
-                break;
-            case 10:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_11));
-                break;
-            case 11:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_12));
-                break;
-            case 12:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_13));
-                break;
-            case 13:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_14));
-                break;
-            case 14:
-                demoBrick.setBackgroundColor(getResources().getColor(R.color.brick_color_15));
-                break;
-        }
+        demoBrick.setBackgroundColor(BrickManager.getColor(mColor+1));
+    }
+
+    public void whenEnteringFragment() {
+
+    }
+
+    public void whenLeavingFragment() {
+
     }
 
     public interface OnFragmentInteractionListener {

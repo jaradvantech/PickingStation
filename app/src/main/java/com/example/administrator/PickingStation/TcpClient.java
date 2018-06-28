@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -14,21 +16,20 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
+import static com.example.administrator.PickingStation.Commands.PING;
+import static java.security.AccessController.getContext;
+
 public class TcpClient {
 
-    Socket socket=null;
-    InetAddress SERVER_IP;
-    int SERVER_PORT;
-
-    // message to send to the server
+    private Socket socket = null;
+    private InetAddress SERVER_IP;
+    private int SERVER_PORT;
     private String mServerMessage;
-    // sends message received notifications
     private OnMessageReceived mMessageListener = null;
-
     private boolean mRun = false;
     private PrintWriter mBufferOut;
     private BufferedReader mBufferIn;
-    public static int timeOuts = 0;
+    private static int timeOuts = 0;
 
     /**
      * Constructor of the class. OnMessagedReceived listens for the messages received from server
@@ -38,25 +39,29 @@ public class TcpClient {
     }
 
     public void sendMessage(String message) {
-        Log.e("TCP Client", "C: Sending...");
+        Log.d("TCP Send", message);
         if (mBufferOut != null && !mBufferOut.checkError()) {
             mBufferOut.println(message);
             mBufferOut.flush();
         }
     }
 
-    public void run(Context mContext) {
+    public void setAddress(String IP, String port) {
+        try {
+            SERVER_IP = InetAddress.getByName(IP);
+            SERVER_PORT = Integer.parseInt(port);
+        } catch (Exception e) {
+            Log.e("IP/Port format error", e.toString());
+        }
+    }
 
+    public void run(String ip, String port) {
+        setAddress(ip, port);
 
         mRun = true;
+        connectToServer();
 
-        //Connect to server on first run
-        connectToServer(mContext);
-
-        //While connection is required
         while (mRun) {
-
-            //Attempt read
             try{
                 mServerMessage = mBufferIn.readLine();
                 if (mServerMessage != null && mMessageListener != null) {
@@ -66,17 +71,18 @@ public class TcpClient {
                 else{
                     Log.d("CMD received","false");
                     closeSocket();
-                    connectToServer(mContext);
+                    connectToServer();
                 }
 
-            //Timeout Exception
+
             } catch(SocketTimeoutException timeOutEx){
-                sendMessage("PING_PLC14\r\n"); //Are you still there? ._.
+                sendMessage(PING); //Are you still there? ._.
                 timeOuts++;
                 if(timeOuts > 3) {
-                    //Connection lost, Reconnect.
+                    timeOuts = 0;
+                    Log.d("TCP Timeout", "Trying to reconnect...");
                     closeSocket();
-                    connectToServer(mContext);
+                    connectToServer();
                 }
 
             //Any other exception
@@ -89,36 +95,23 @@ public class TcpClient {
     }
 
 
-    private void connectToServer(Context mContext){
-        Boolean Errors=true;
-        while(Errors){
+    private void connectToServer(){
+        Boolean Errors = true;
+        while (Errors) {
             try {
-                Errors=false;
-
-                //get IP and Port from preferences
-                try {
-                    SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                    SERVER_IP = InetAddress.getByName(sharedPref.getString(mContext.getResources().getString(R.string.Stored_PC_IP_Address),"192.168.0.0"));
-                    SERVER_PORT = Integer.parseInt(sharedPref.getString(mContext.getResources().getString(R.string.Stored_PC_IP_Port),"24601"));
-                } catch (Exception e) {
-                    Log.e("String to IP exc.", e.toString());
-                }
-
+                Errors = false;
                 //Create new socket and set timeout to 1000m
                 socket = new Socket();
-                socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT),1000);
+                socket.connect(new InetSocketAddress(SERVER_IP, SERVER_PORT), 1000);
                 socket.setSoTimeout(1000);
                 Log.e("TCP Client", "C: socket has been connected.");
 
                 mMessageListener.connectionEstablished();
 
-            } catch(Exception e){
-                Errors=true;
-
+            } catch (Exception e) {
+                Errors = true;
                 Log.e("TCP connection failed", "S: Error", e);
                 closeSocket();
-
-                System.gc(); //collect garbage
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException sleepExc) {
@@ -126,11 +119,11 @@ public class TcpClient {
                 }
             }
         }
-        try{
-            timeOuts=0;
+        try {
+            timeOuts = 0;
             mBufferOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
             mBufferIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-         }catch(Exception e) {
+            } catch (Exception e) {
         }
     }
 

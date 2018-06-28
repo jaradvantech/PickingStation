@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +16,20 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static com.example.administrator.PickingStation.Commands.CHAL;
+
 
 public class Alarms extends Fragment {
 
+    private Alarms.OnFragmentInteractionListener mFragmentInteraction;
     private AlertDialog.Builder builder;
     private AlarmListAdapter adapter;
     private int lastSelectedItem = 0;
     private TextView infoOutput;
     private ArrayList<AlarmObject> theAlarms;
     private ListView mListView;
+    private final int ALARM_CHECK_PERIOD = 2000;
+    private final Handler alarmLoopHandler = new Handler(Looper.getMainLooper());
 
     public Alarms() {
     }
@@ -41,6 +48,16 @@ public class Alarms extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    @Override
+    public void onAttach( Context context ) {
+        super.onAttach(context);
+        if (context instanceof Alarms.OnFragmentInteractionListener) {
+            mFragmentInteraction = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -88,7 +105,7 @@ public class Alarms extends Fragment {
                 lastSelectedItem = position;
                 AlertDialog dialog = builder.create();
                 dialog.setIcon(R.mipmap.warning);
-                dialog.show();
+                BiggerDialogs.show(dialog);
                 return true;
              }
         });
@@ -120,16 +137,17 @@ public class Alarms extends Fragment {
             }
         });
 
-
+        //Periodically check for alarms
+        Runnable autoUpdater = new Runnable() {
+            @Override
+            public void run() {
+                mFragmentInteraction.onSendCommand(CHAL);
+                alarmLoopHandler.postDelayed(this, ALARM_CHECK_PERIOD);
+            }
+        };
+        autoUpdater.run();
         return view;
     }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();
@@ -145,7 +163,6 @@ public class Alarms extends Fragment {
         //Update listview
         adapter.notifyDataSetChanged();
     }
-
 
     public interface OnFragmentInteractionListener {
         void onSendCommand(String command);

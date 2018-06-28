@@ -2,6 +2,10 @@ package com.example.administrator.PickingStation;
 
 
 import android.content.Context;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -10,10 +14,11 @@ import java.util.Calendar;
 
 public class AlarmManager {
 
+    private int MANIPULATORS = 5; //RBS, yes TODO
     private ArrayList<AlarmObject> newAlarms;
     private Context context;
     private int lastChecked_CommonAlarms;
-    private int lastChecked_Manipulatoralarms[] = new int[5+1]; //todo MAGIC NUMBER_5
+    private int lastChecked_Manipulatoralarms[] = new int[MANIPULATORS+1];
 
     /*
      * Conyext is needed.
@@ -26,22 +31,24 @@ public class AlarmManager {
      *Parse alarm command:
      * Will check new alarm codes against previosly received alarm commands
      * in order to detect only the newly generated alarms.
-     * Will return an array o AlarmObject with the new alarmswwwwwww
+     * Will return an array o AlarmObject with the new alarms
      */
     public ArrayList<AlarmObject> parseAlarmCMD(String CMD) {
         newAlarms = new ArrayList<>();
-        int current_manipulatoralarms[] = new int[5+1]; //todo MAGIC NUMBER_5
-        int new_manipulatoralarms[] = new int[5+1]; //todo MAGIC NUMBER_5
-        int new_commonAlarms = 0;
+        int current_manipulatoralarms[] = new int[MANIPULATORS+1];
+        int new_manipulatoralarms[] = new int[MANIPULATORS+1];
+        int new_commonAlarms=0, current_commonAlarms=0;
 
-        //Ex. CMD=  CHAL_14_00000_00000_00000_00000_00002_00000
-        //RBS TODO make this armnumber-independent
-        int current_commonAlarms = Integer.parseInt(CMD.substring(8,12));
-        current_manipulatoralarms[1] = Integer.parseInt(CMD.substring(14,19));
-        current_manipulatoralarms[2] = Integer.parseInt(CMD.substring(20,25));
-        current_manipulatoralarms[3] = Integer.parseInt(CMD.substring(26,31));
-        current_manipulatoralarms[4] = Integer.parseInt(CMD.substring(32,37));
-        current_manipulatoralarms[5] = Integer.parseInt(CMD.substring(38));
+        try {
+            JSONObject JSONparser = new JSONObject(CMD);
+            JSONArray manipulatorAlarmArray = JSONparser.getJSONArray("manipulatorAlarms");
+            for(int i=0; i<manipulatorAlarmArray.length(); i++) {
+                current_manipulatoralarms[i] = manipulatorAlarmArray.getJSONObject(i).getInt("alarmArray");
+            }
+            current_commonAlarms = JSONparser.getInt("equipmentAlarms");
+        } catch (Exception jsonExc) {
+            Log.e("JSON Exception", jsonExc.getMessage());
+        }
 
         if(current_commonAlarms != lastChecked_CommonAlarms) {
             /*Alarms have changed. check which bits are different (bitwise XOR)
@@ -51,7 +58,7 @@ public class AlarmManager {
             new_commonAlarms = (lastChecked_CommonAlarms^current_commonAlarms)&current_commonAlarms;
         }
 
-        for(int i=1; i<=5; i++) { //todo MAGIC NUMBER_5
+        for(int i=1; i<=MANIPULATORS; i++) {
             if(current_manipulatoralarms[i] != lastChecked_Manipulatoralarms[i]){
                 new_manipulatoralarms[i] = (lastChecked_Manipulatoralarms[i]^current_manipulatoralarms[i])&current_manipulatoralarms[i];
             }
@@ -76,7 +83,7 @@ public class AlarmManager {
             }
         }
         //Arm Alarms
-        for(int j=1; j<=5; j++) { //todo MAGIC NUMBER_5
+        for(int j=1; j<=MANIPULATORS; j++) {
             //check bit at i
             for(int i=0; i<16; i++) {
                 //check bit at i
@@ -96,14 +103,14 @@ public class AlarmManager {
      *  False: no alarms
      */
     public Boolean[] getCurrentArmState(){
-        Boolean armState[] = new Boolean[6];
+        Boolean armState[] = new Boolean[MANIPULATORS+1];
 
         if(lastChecked_CommonAlarms != 0) {
             armState[0] = true;
         }else{
             armState[0] = false;
         }
-        for(int i=1; i<6; i++) {
+        for(int i=1; i<(MANIPULATORS+1); i++) {
             if(lastChecked_Manipulatoralarms[i] != 0) {
                 armState[i] = true;
             }else{
@@ -111,13 +118,5 @@ public class AlarmManager {
             }
         }
         return armState;
-    }
-
-    Boolean charToBoolean(char c)
-    {
-        if(c=='0')
-            return true;
-        else
-            return false;
     }
 }
