@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,10 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
@@ -33,17 +38,8 @@ public class Manual extends Fragment {
     private ImageView manual_imageView_forward;
     private ImageView manual_imageView_backward;
     private ImageView manual_imageView_stop;
-    private ImageView manual_imageView_question_top;
 
     public Manual() {
-    }
-
-
-    public static Manual newInstance( String param1, String param2 ) {
-        Manual fragment = new Manual();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -52,9 +48,7 @@ public class Manual extends Fragment {
     }
 
     @Override
-    public View onCreateView( LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState ) {
-        // Inflate the layout for this fragment
+    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         View view = inflater.inflate(R.layout.fragment_manual, container, false);
 
         Button manual_reset = (Button) view.findViewById(R.id.manual_reset);
@@ -210,7 +204,6 @@ public class Manual extends Fragment {
             public void onClick( View view ) {
                 if(manual_GifimageView_line_wheel_Drawable.isPlaying()){
                     manual_GifimageView_line_wheel_Drawable.stop();
-                    //manual_GifimageView_line_wheel_Drawable.seekToFrame(0);
                     manual_textView_line.setText("Line stoped");
                     setLineMotor(false);
 
@@ -293,139 +286,98 @@ public class Manual extends Fragment {
         mFragmentInteraction = null;
     }
 
-    public void writePLCData(int MUD, int MLR, int MFB, int mArm) {
-        String writeCommand = "PWDA_14_";
-
-        writeCommand += String.format("%02d", mArm);
-        writeCommand += "_";
-        writeCommand += "X";  //SBD
-        writeCommand += "X"; //MR
-        writeCommand += "X"; //SBFA
-        writeCommand += "X"; //SBFB
-        writeCommand += "X"; //BCRSA
-        writeCommand += "X"; //BCRSB
-        writeCommand += boolToString(!manualMode[mArm]);
-        writeCommand += boolToString(VV[mArm]);
-        writeCommand += "_";
-        writeCommand += String.format("%03d", MFB);
-        writeCommand += "_";
-        writeCommand += String.format("%03d", MLR);
-        writeCommand += "_";
-        writeCommand +=  String.format("%03d", MUD);
-        writeCommand += "_";
-        writeCommand += "XXX"; //COD
-        writeCommand += "_";
-        writeCommand += "XXX"; //WTDWT
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //PZA
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //VOCD
-        writeCommand += "_";
-        writeCommand += "X"; //CE
-        writeCommand += "X"; //TP
-        writeCommand += "X"; //ITT
-        writeCommand += "X"; //TMD
-        writeCommand += "_";
-        writeCommand += "XXX"; //PCS
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //ADD
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //ZASV
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //TPOX_AGB
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //TPOX_AAD
-        writeCommand += "\r\n";
-
-        mFragmentInteraction.onSendCommand(writeCommand);
+    private void getManualStatus() {
+        try {
+            JSONObject JSONOutput = new JSONObject();
+            JSONOutput.put("command_ID", "GEMS"); //GE Manual Status
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
     }
 
-    void serverResponse(String mResponse, Context activityContext){
+    public void onGetManualStatusResult(String CMD) {
+        try {
+            JSONObject JSONparser = new JSONObject(CMD);
+            boolean lineRunning = JSONparser.getBoolean("lineRunning");
+            JSONArray controlModes = JSONparser.getJSONArray("controlmodes");
+
+        } catch (Exception jsonExc) {
+            Log.e("JSON Exception", jsonExc.getMessage());
+        }
+    }
+
+    private void writePLCData(int MUD, int MLR, int MFB, int mArm) {
+        try {
+            JSONObject JSONOutput = new JSONObject();
+            JSONOutput.put("command_ID", "PWDA");
+            JSONOutput.put("selectedArm", mArm);
+            JSONOutput.put("MM", !manualMode[mArm]);
+            JSONOutput.put("VV", VV[mArm]);
+            JSONOutput.put("MFB", MFB);
+            JSONOutput.put("MLR", MLR);
+            JSONOutput.put("MUD", MUD);
+
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
+    }
+
+    void serverResponse(String mResponse){
         //Tint icons as feedback
-        if(mResponse.charAt(22) == '1') {
-            resetColorFilters();
-            manual_imageView_forward.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
+        try {
+            JSONObject JSONparser = new JSONObject(mResponse);
+            int MFBFeedback = JSONparser.getInt("MFBFeedback");
+            int MLRFeedback = JSONparser.getInt("MLRFeedback");
+            int MUDFeedback = JSONparser.getInt("MUDFeedback");
 
-        } else if (mResponse.charAt(22) == '2'){
-            resetColorFilters();
-            manual_imageView_backward.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
+            if(MFBFeedback == 1) {
+                resetColorFilters();
+                manual_imageView_forward.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
 
-        } else if (mResponse.charAt(26) == '1'){
-            resetColorFilters();
-            manual_imageView_left.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
+            } else if (MFBFeedback == 2){
+                resetColorFilters();
+                manual_imageView_backward.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
 
-        } else if (mResponse.charAt(26) == '2'){
-            resetColorFilters();
-            manual_imageView_right.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
+            } else if (MLRFeedback == 1){
+                resetColorFilters();
+                manual_imageView_left.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
 
-        } else if (mResponse.charAt(30) == '1'){
-            resetColorFilters();
-            manual_imageView_up.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
+            } else if (MLRFeedback == 2){
+                resetColorFilters();
+                manual_imageView_right.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
 
-        } else if (mResponse.charAt(30) == '2'){
-            resetColorFilters();
-            manual_imageView_down.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
+            } else if (MUDFeedback == 1){
+                resetColorFilters();
+                manual_imageView_up.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
+
+            } else if (MUDFeedback == 2){
+                resetColorFilters();
+                manual_imageView_down.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(255, 0,0)));
+            }
+        } catch (Exception jsonExc) {
+            Log.e("JSON Exception", jsonExc.getMessage());
         }
     }
 
-    //RBS quick&dirty I need it working now. Merge with the other function in the future.
-    //sorry :(
     public void setLineMotor(Boolean state) {
-        String writeCommand = "PWDA_14_";
-
-        writeCommand += "01"; //arm number could be whatevs
-        writeCommand += "_";
-        writeCommand += "X";  //SBD
-        writeCommand += "X"; //MR
-        writeCommand += "X"; //SBFA
-        writeCommand += "X"; //SBFB
-        writeCommand += "X"; //BCRSA
-        writeCommand += "X"; //BCRSB
-        writeCommand += "X";
-        writeCommand += "X";
-        writeCommand += "_";
-        writeCommand += "XXX"; //COD
-        writeCommand += "_";
-        writeCommand += "XXX"; //COD
-        writeCommand += "_";
-        writeCommand +=  "XXX"; //COD
-        writeCommand += "_";
-        writeCommand += "XXX"; //COD
-        writeCommand += "_";
-        writeCommand += "XXX"; //WTDWT
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //PZA
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //VOCD
-        writeCommand += "_";
-        writeCommand += "X"; //CE
-        writeCommand += "X"; //TP
-        writeCommand += "X"; //ITT
-
-        if(state == true) {
-            /*Start the line*/
-            writeCommand += "1"; //TMD       //SET THIS TO TRUE
-            writeCommand += "_";
-            writeCommand += "003"; //PCS  //AND PC STATE TO 3
-
-        } else {
-            /*Stop the line*/
-            writeCommand += "0"; //TMD       //SET THIS TO FALSE
-            writeCommand += "_";
-            writeCommand += "001"; //PCS  //AND PC STATE TO 1
+        try {
+            JSONObject JSONOutput = new JSONObject();
+            JSONOutput.put("command_ID", "PWDA");
+            if(state == true) {
+                /*Start the line*/
+                JSONOutput.put("TMD", true);
+                JSONOutput.put("PCS", 3);
+            } else {
+                /*Stop the line*/
+                JSONOutput.put("TMD", false);
+                JSONOutput.put("PCS", 1);
+            }
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
         }
-
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //ADD
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //ZASV
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //TPOX_AGB
-        writeCommand += "_";
-        writeCommand += "XXXXXX"; //TPOX_AAD
-        writeCommand += "\r\n";
-
-        mFragmentInteraction.onSendCommand(writeCommand);
     }
 
     private void resetColorFilters() {
@@ -437,14 +389,15 @@ public class Manual extends Fragment {
         manual_imageView_right.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorSecondaryPale)));
     }
 
-    private String boolToString(Boolean mBol) {
-        if (mBol)
-            return "1";
-        else
-            return "0";
-    }
-
     public interface OnFragmentInteractionListener {
         void onSendCommand( String command );
+    }
+
+    public void whenEnteringFragment() {
+
+    }
+
+    public void whenLeavingFragment() {
+
     }
 }

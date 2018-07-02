@@ -134,7 +134,7 @@ public class DebugAdvancedOptions extends Fragment {
             }
         });
 
-        //debug
+
         //String testString = "{\"command_ID\":\"GDIS\",\"Available_DNI_List\":[2,3,4,5,6,7,8,9,10],\"Manipulator_Order_List\":[{},{},{},{\"What\":false,\"When\":1058,\"Where\":false},{}],\"Bricks_Before_The_Line\":[],\"Bricks_On_The_Line\":[{\"DNI\":1,\"AssignedPallet\":8,\"Position\":7842,\"Type\":17},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":5642,\"Type\":0}],\"Bricks_Ready_For_Output\":[0,0,0,0,0,0,0,0,0,0],\"Manipulator_Fixed_Position\":[2900,5000,7000,8900,10800],\"Manipulator_Modes\":[1,1,1,1,1],\"Pallet_LowSpeedPulse_Height_List\":[5000,5000,5000,5000,5000,5000,5000,5000,5000,5000],\"Manipulator_TakenBrick\":[{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1},{\"DNI\":0,\"AssignedPallet\":0,\"Position\":0,\"Type\":1}],\"Manipulator_State\":[{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0},{\"WhatToDoWithTheBrick\":0,\"CatchOrDrop\":0,\"ValueOfCatchDrop\":0}]}";
         //this.parseInternalStateDebugData(testString);
 
@@ -194,6 +194,7 @@ public class DebugAdvancedOptions extends Fragment {
             miscInformation.setText("");
 
             //Fill taken bricks
+            //TODO RBS check if i-m missing orders here, maybe a for is required
             takenBricks.append("Taken Bricks:\n");
             for(int i=0; i<manipulatorTakenBricks.length(); i++) {
                 takenBricks.append("\nManipulator " + i + ":\n");
@@ -277,62 +278,54 @@ public class DebugAdvancedOptions extends Fragment {
 
 
     private void generateFOTP() {
-        String command = "FOTP_";
+        try {
+            JSONObject JSONOutput = new JSONObject();
 
-        command += inputToString(editText_forcetopallet, "%02d");
-        command += "\r\n";
+            JSONOutput.put("command_ID", "FOTP");
+            JSONOutput.put("pallet", Util.inputToInt(editText_forcetopallet));
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
-        mFragmentInteraction.onSendCommand(command);
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
     }
 
     private void generateWADI() {
-        String command = "WADI_";
+        try {
+            JSONObject JSONOutput = new JSONObject();
 
-        command += boolToString(switch_enable16.isChecked());
-        command += boolToString(switch_forceOutput.isChecked());
-        command += boolToString(switch_forceInput.isChecked());
-        command += "\r\n";
+            JSONOutput.put("command_ID", "WADI");
+            JSONOutput.put("enable16", switch_enable16.isChecked());
+            JSONOutput.put("forceOutput", switch_forceOutput.isChecked());
+            JSONOutput.put("forceInput", switch_forceInput.isChecked());
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
-        mFragmentInteraction.onSendCommand(command);
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
     }
 
     //PLace oRDer
     private void generatePLRD(){
-        String command = "PLRD_";
+        try {
+            JSONObject JSONOutput = new JSONObject();
 
-        command += inputToString(presets_editText_what, "%06d");
-        command += "_";
-        command += inputToString(presets_editText_when, "%06d");
-        command += "_";
-        command += inputToString(presets_editText_where, "%06d");
-        command += "\r\n";
+            JSONOutput.put("command_ID", "PLRD");
+            JSONOutput.put("type", Util.inputToInt(presets_editText_what));
+            JSONOutput.put("position", Util.inputToInt(presets_editText_when));
+            JSONOutput.put("pallet", Util.inputToInt(presets_editText_where));
+            mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
-        mFragmentInteraction.onSendCommand(command);
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
     }
 
-    String inputToString(EditText mUserInput, String format) {
-        //Get int from input
-        String inputText = mUserInput.getText().toString();
-        //default is zero
-        if(TextUtils.isEmpty(inputText))
-            inputText = "0";
-        int inputNumber = Integer.parseInt(inputText);
-        //Format int into string
-        return String.format(format, inputNumber);
-    }
-
-    private String boolToString(Boolean mBol) {
-        if (mBol)
-            return "1";
-        else
-            return "0";
-    }
-
-    public void startAutoUpdate() {
+    public void whenEnteringFragment() {
         autoUpdate = true;
     }
 
-    public void stopAutoUpdate() {
+    public void whenLeavingFragment() {
         autoUpdate = false;
     }
 

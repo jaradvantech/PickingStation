@@ -5,5 +5,6 @@
     <!-- RBS: I need an identifier for this item.
     SDK will give unique values during compile time.-->
     <item name="opt_debug_advanced" type="id"/>
+    <item name="opt_calibration" type="id"/>
 
 </resources>

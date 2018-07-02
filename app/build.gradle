@@ -32,4 +32,6 @@ dependencies {
     compile 'com.bartoszlipinski.flippablestackview:library:1.2.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.10'
     compile 'com.android.support:support-dynamic-animation:26.1.0'
+    //RBS for the Gson library
+    compile 'com.google.code.gson:gson:2.8.0'
 }

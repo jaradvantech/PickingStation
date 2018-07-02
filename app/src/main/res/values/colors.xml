@@ -8,6 +8,8 @@
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#ffffff</color>
 
+    <color name="colorRed">#ff0d00</color>
+
     <color name="brick_color_1">#ff0d00</color>
     <color name="brick_color_2">#ffb700</color>
     <color name="brick_color_3">#ffe600</color>

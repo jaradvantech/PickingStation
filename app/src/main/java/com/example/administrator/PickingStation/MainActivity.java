@@ -3,15 +3,11 @@ package com.example.administrator.PickingStation;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -28,13 +24,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.Locale;
 
-import static com.example.administrator.PickingStation.Commands.RPRV;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -45,6 +38,8 @@ public class MainActivity extends AppCompatActivity
         Debug.OnFragmentInteractionListener,
         DebugAdvancedOptions.OnFragmentInteractionListener,
         Alarms.OnFragmentInteractionListener,
+        Settings.OnFragmentInteractionListener,
+        MachineCalibration.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     private TcpClient mTcpClient;
@@ -59,19 +54,18 @@ public class MainActivity extends AppCompatActivity
     private Settings settings;
     private Loading loading;
     private Alarms alarms;
+    private MachineCalibration machineCalibration;
     private int previous_id = R.id.holder_loading;
+    private AsyncTask<String, String, TcpClient> networkConnection;
     private final int TRANSITION_TIME = 400;
-    private final int ALARM_CHECK_PERIOD = 2000;
-    private final int RPRV_PERIOD = 300;
-    private final Handler alarmLoopHandler = new Handler(Looper.getMainLooper());
-    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final String DEFAULT_IP = "127.0.0.1";
+    private final String DEFAULT_PORT = "0";
     private final AlarmManager mAlarmManager = new AlarmManager(this);
     private Button appbarTransparentButton;
     private TextView title;
     private ImageView appbar_connection;
     private ImageView manipulatorAlarmIcon[] = new ImageView[5];
     private ImageView equipmentAlarmIcon;
-    private volatile boolean DoLoops = false;
     private String CurrentLanguage = "en"; //default
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -86,8 +80,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
+
+        //Start-up configurations
         correctDisplayMetrics();
         setContentView(R.layout.activity_main);
+        SettingManager.initSettingManager(this);
+        BrickManager.initBrickManager(this);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         setGUILanguage();
@@ -113,6 +111,7 @@ public class MainActivity extends AppCompatActivity
         settings = new Settings();
         loading = new Loading();
         alarms = new Alarms();
+        machineCalibration = new MachineCalibration();
 
         //Replace built-in title with custom title
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -142,6 +141,7 @@ public class MainActivity extends AppCompatActivity
         manager.beginTransaction().replace(R.id.holder_settings, settings, settings.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_loading, loading, loading.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_alarms, alarms, alarms.getTag()).commit();
+        manager.beginTransaction().replace(R.id.holder_machine_calibration, machineCalibration, machineCalibration.getTag()).commit();
 
         //On any icon pressed in the Appbar, switch to alarm view.
         appbarTransparentButton.setOnClickListener(new View.OnClickListener()
@@ -153,24 +153,15 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        //Start TCP connection
-        new ConnectTask().execute("");
-
-        startCheckingForAlarms();
+        startNetworking();
     }
 
-    /*
-     * Release all resources before leaving app
-     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         mTcpClient.stopClient();
     }
 
-    /*
-     * When back button is pressed:
-     */
     @Override
     public void onBackPressed() {
 
@@ -184,7 +175,6 @@ public class MainActivity extends AppCompatActivity
             if(previous_id == R.id.opt_debug_advanced) switchToLayout(R.id.nav_debug);
 
             else {
-                startRPRV();
                 switchToLayout(R.id.nav_lines);
             }
         }
@@ -204,7 +194,15 @@ public class MainActivity extends AppCompatActivity
 
     //this is used when selecting a pallet in the line view.
     public void ChangeToEditor(int index){
-        onSendCommand("RGMV_"+ String.format("%02d",index-1));
+        try {
+            JSONObject RGMVCommand = new JSONObject();
+            RGMVCommand.put("command_ID", "RGMV");
+            RGMVCommand.put("palletNumber", index);
+            onSendCommand(RGMVCommand.toString());
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
+
         switchToLayout(R.id.nav_editor);
     }
 
@@ -221,23 +219,20 @@ public class MainActivity extends AppCompatActivity
         navigationView.setCheckedItem(new_id);
 
         /*
-         * Automatically enable/disable RPRV commands, so they stop
-         * when the user leaves the "Line status" screen, and they start
-         * again just before switching back to Line Status
+         * Notify the fragments
          */
-        if(previous_id == R.id.nav_lines) stopRPRV();
-        if(new_id == R.id.nav_lines) startRPRV();
-
-        /*
-         * Enable/disable autoupdate of debug fragment
-         */
-        if(previous_id == R.id.opt_debug_advanced) debug_advanced.stopAutoUpdate();
-        if(new_id == R.id.opt_debug_advanced) debug_advanced.startAutoUpdate();
-
-        /*
-         * Save&Load settings when leaving the Settings screen
-         */
-        if(previous_id == R.id.nav_settings) settings.saveSettings();
+        if(previous_id == R.id.nav_lines) line.whenLeavingFragment();
+        if(new_id == R.id.nav_lines) line.whenEnteringFragment();
+        if(previous_id == R.id.nav_debug) debug.whenLeavingFragment();
+        if(new_id == R.id.nav_debug) debug.whenEnteringFragment();
+        if(previous_id == R.id.opt_debug_advanced) debug_advanced.whenLeavingFragment();
+        if(new_id == R.id.opt_debug_advanced) debug_advanced.whenEnteringFragment();
+        if(previous_id == R.id.nav_settings) settings.whenLeavingFragment();
+        if(new_id == R.id.nav_settings) settings.whenEnteringFragment();
+        if(previous_id == R.id.opt_debug_advanced) debug_advanced.whenLeavingFragment();
+        if(new_id == R.id.opt_debug_advanced) debug_advanced.whenEnteringFragment();
+        if(previous_id == R.id.nav_manual) manual.whenLeavingFragment();
+        if(new_id == R.id.nav_manual) manual.whenEnteringFragment();
 
         //Select layouts to change
         ConstraintLayout new_layout = getLayoutByID(new_id);
@@ -283,6 +278,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_settings:
                 retLayout = (ConstraintLayout) this.findViewById(R.id.holder_settings);
+                break;
+            case R.id.opt_calibration:
+                retLayout = (ConstraintLayout) this.findViewById(R.id.holder_machine_calibration);
                 break;
         }
         return retLayout;
@@ -336,6 +334,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_settings:
                 title.setText(getResources().getString(R.string.Settings));
                 break;
+            case R.id.opt_calibration:
+                title.setText("Machine Calibration");
+                break;
         }
     }
 
@@ -348,7 +349,7 @@ public class MainActivity extends AppCompatActivity
     public class ConnectTask extends AsyncTask<String, String, TcpClient> {
 
         @Override
-        protected TcpClient doInBackground( String... message ) {
+        protected TcpClient doInBackground(String... params) {
 
             //we create a TCPClient object
             mTcpClient = new TcpClient(new TcpClient.OnMessageReceived() {
@@ -356,100 +357,73 @@ public class MainActivity extends AppCompatActivity
                 //here the messageReceived method is implemented
                 public void messageReceived(String message) {
                     //this method calls the onProgressUpdate
+                    Log.d("messageReceived", message);
                     publishProgress("cmdreceived", message);
                 }
 
-                public void connectionEstablished(){
+                public void connectionEstablished() {
                     publishProgress("connectionstatechange", "connectionestablished");
                 }
 
-                public void connectionLost(){
+                public void connectionLost() {
                     publishProgress("connectionstatechange", "connectionlost");
                 }
             });
-            mTcpClient.run(getApplicationContext());
+            mTcpClient.run(params[0], params[1]);
 
             return null;
         }
+
 
         /*
          * RBS: Parse information received from publishProgress()
          */
         @Override
-        protected void onProgressUpdate( String... values ) {
+        protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-
-            if(values[1].contains("Error") && values[0].contains("cmdreceived") ) {
-                Log.d("Bad CMD received", values[1]);
-
-            }else if(values[1].contains("RGMV") && values[0].contains("cmdreceived")) {
-                editor.onTcpReply(values[1]);
-
-            }else if(values[1].contains("RPRV") && values[0].contains("cmdreceived")){
-                line.updateLineBrickInfo(values[1]);
-                if(FirstTimeRPRV) {
-                    //first RPRV is the trigger to move from the loading screen to the line
-                    FirstTimeRPRV=false;
-                    onLoadingFinished();
-                }
-            }else if(values[1].contains("PGSI") && values[0].contains("cmdreceived")){
-                debug.updateDebugData(values[1]);
-
-            }else if(values[1].contains("PWDA") && values[0].contains("cmdreceived")){
-                manual.serverResponse(values[1], getApplicationContext());
-
-            }else if(values[1].contains("CHAL") && values[0].contains("cmdreceived")){
-                //Check for new alarms
-                alarms.updateAlarms(mAlarmManager.parseAlarmCMD(values[1]));
-                updateAppbarAlarms(mAlarmManager.getCurrentArmState());
-
-            }else if(values[1].contains("GDIS") && values[0].contains("cmdreceived")){
-                debug_advanced.parseInternalStateDebugData(values[1]);
-
-            }else if(values[1].contains("PING") && values[0].contains("cmdreceived")){
-                TcpClient.timeOuts=0;
-
-            }else if(values[1].contains("connectionestablished") && values[0].contains("connectionstatechange")){
-                appbar_connection.setImageResource(R.mipmap.linkup);
-                appbar_connection.clearColorFilter();
-                onSendCommand("RPRV_10\r\n");
-
-            }else if(values[1].contains("connectionlost") && values[0].contains("connectionstatechange")){
-                appbar_connection.setImageResource(R.mipmap.linkdown);
-                appbar_connection.setColorFilter(Color.rgb(115, 0, 0));
-            }
-        }
-    }
-
-    public void onSendCommand( String command ) {
-        if(mTcpClient!=null) {
-            mTcpClient.sendMessage(command);
-        }
-    }
-
-    /*
-     * RBS: Parse information received from publishProgress()
-
-    @Override
-    protected void onProgressUpdate( String... values ) {
-        super.onProgressUpdate(values);
             /*
              * We have two types of information here:
              *  values[0]: type of message received
              *  values[1]: the message, either a JSON command or information
              *                  about the state of the TCP connexion
-             *
-        if(values[0].equals("cmdreceived")) {
-            processCommands(values[1]);
-        }
-        else if(values[0].equals("connectionstatechange")) {
-            updateConnectionStatus(values[1]);
+             */
+            if (values[0].equals("cmdreceived")) {
+                processCommands(values[1]);
+            } else if (values[0].equals("connectionstatechange")) {
+                updateConnectionStatus(values[1]);
+            }
         }
     }
-    */
+
+    public void startNetworking() {
+        String ip = DEFAULT_IP;
+        String port = DEFAULT_PORT;
+        //Read IP and address from settings.
+        try {
+            JSONObject JSONparser = new JSONObject( SettingManager.getSetting("Machine controller"));
+            ip = JSONparser.getString("ip");
+            port = JSONparser.getString("port");
+        } catch (Exception jsonExc) {
+            Log.e("JSON Exception", jsonExc.getMessage());
+        }
+        networkConnection =  new ConnectTask();
+        networkConnection.execute(ip, port);
+    }
+
+    public void updateServerAddress() {
+        String ip = DEFAULT_IP;
+        String port = DEFAULT_PORT;
+        try {
+            JSONObject JSONparser = new JSONObject( SettingManager.getSetting("Machine controller"));
+            ip = JSONparser.getString("ip");
+            port = JSONparser.getString("port");
+        } catch (Exception jsonExc) {
+            Log.e("JSON Exception", jsonExc.getMessage());
+        }
+        mTcpClient.setAddress(ip, port);
+    }
 
     public void processCommands(String receivedString) {
-
         String cmdID = "Error";
         try {
             JSONObject JSONparser = new JSONObject(receivedString);
@@ -458,7 +432,6 @@ public class MainActivity extends AppCompatActivity
         } catch (JSONException exc) {
             Log.d("MainActivity", exc.getMessage());
         }
-
 
         if (cmdID.equals("Error")) {
             Log.d("Bad CMD received", receivedString);
@@ -478,7 +451,7 @@ public class MainActivity extends AppCompatActivity
             debug.updateDebugData(receivedString);
 
         } else if (cmdID.equals("PWDA")) {
-            manual.serverResponse(receivedString, getApplicationContext());
+            manual.serverResponse(receivedString);
 
         } else if (cmdID.equals("CHAL")) {
             //Check for new alarms
@@ -488,11 +461,20 @@ public class MainActivity extends AppCompatActivity
         } else if (cmdID.equals("GDIS")) {
             debug_advanced.parseInternalStateDebugData(receivedString);
 
+        } else if (cmdID.equals("GCFG")) {
+            settings.onSettingsRetrieved(receivedString);
+
         } else if (cmdID.equals("PING")) {
+            Log.d("PING", "ack");
             TcpClient.ack();
         }
     }
 
+    public void onSendCommand( String command ) {
+        if(mTcpClient!=null) {
+            mTcpClient.sendMessage(command);
+        }
+    }
 
 
     /*****************************************************
@@ -519,7 +501,16 @@ public class MainActivity extends AppCompatActivity
         if (command.equals("connectionestablished")) {
             appbar_connection.setImageResource(R.mipmap.linkup);
             appbar_connection.clearColorFilter();
-            onSendCommand(RPRV);
+            //RBS TODO I admit this is very dirty and should be fixed ASAP
+            //but there is so much to fix and I only have two hands D:
+            try {
+                JSONObject RPRVCommand = new JSONObject();
+                RPRVCommand.put("command_ID", "RPRV");
+                RPRVCommand.put("numberOfPallets", 10); //TODO Magic number
+                onSendCommand(RPRVCommand.toString());
+            } catch(JSONException exc) {
+                Log.d("JSON exception", exc.getMessage());
+            }
 
         } else if (command.equals("connectionlost")) {
             appbar_connection.setImageResource(R.mipmap.linkdown);
@@ -527,49 +518,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /*****************************************************
-     *                            --PERIODIC TASKS--
-     *****************************************************/
-    //checks for alarm information to PLC every two secs.
-    private void startCheckingForAlarms(){
-        Runnable autoUpdater = new Runnable() {
-            @Override
-            public void run() {
-                onSendCommand("CHAL_14\r\n");
-                alarmLoopHandler.postDelayed(this, ALARM_CHECK_PERIOD);
-            }
-        };
-        autoUpdater.run();
-    }
-
-    final Runnable timer_lines = new Runnable() {
-        @Override
-        public void run() {
-            onSendCommand("RPRV_10\r\n"); //Ask for the UIDs
-            if(DoLoops == false) handler.removeCallbacksAndMessages(null);
-            else handler.postDelayed(this,RPRV_PERIOD);
-        }
-    };
-
-    public void startRPRV() {
-        handler.postDelayed(timer_lines, RPRV_PERIOD);
-        DoLoops=true;
-    }
-
-    public void stopRPRV() {
-        DoLoops = false;
-    }
-
-
-
-
 
     /*****************************************************
      *                              --USER EXPERIENCE--
      *****************************************************/
     private void setGUILanguage() {
-        SharedPreferences sharedPref = this.getSharedPreferences(this.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        switch(sharedPref.getInt("LANGUAGE", 0)) {
+        switch(SettingManager.getLanguage()) {
             case 0:
                 CurrentLanguage = "en";
                 break;
@@ -601,6 +555,7 @@ public class MainActivity extends AppCompatActivity
         mainMenu.findItem(R.id.nav_editor).setTitle(getString(R.string.PalletEditor));
         mainMenu.findItem(R.id.nav_logs).setTitle(getString(R.string.ProductionLogs));
         mainMenu.findItem(R.id.nav_manual).setTitle(getString(R.string.ManualControl));
+        //RBS TODO Add calibration and advanced
     }
 
     /* RBS April 19th, 2018
@@ -613,7 +568,6 @@ public class MainActivity extends AppCompatActivity
      * AndroidStudio editor, this has to be reverted.
      */
     public void correctDisplayMetrics() {
-
         DisplayMetrics displayMetrics =  this.getResources().getDisplayMetrics();
         Configuration config = this.getResources().getConfiguration();
 
