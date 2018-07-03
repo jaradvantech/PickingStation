@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView.OnNavigationItemSelectedListener {
 
     private TcpClient mTcpClient;
-    private Boolean FirstTimeRPRV = true;
     private Line line;
     private Algorithm algorithm;
     private Editor editor;
@@ -55,12 +55,9 @@ public class MainActivity extends AppCompatActivity
     private Loading loading;
     private Alarms alarms;
     private MachineCalibration machineCalibration;
-    private int previous_id = R.id.holder_loading;
+    private int previous_id = R.id.opt_loading;
     private AsyncTask<String, String, TcpClient> networkConnection;
     private final int TRANSITION_TIME = 400;
-    private final String DEFAULT_IP = "127.0.0.1";
-    private final String DEFAULT_PORT = "0";
-    private final AlarmManager mAlarmManager = new AlarmManager(this);
     private Button appbarTransparentButton;
     private TextView title;
     private ImageView appbar_connection;
@@ -164,7 +161,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-
         //If drawer was open, just close drawer
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -192,21 +188,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    //this is used when selecting a pallet in the line view.
-    public void ChangeToEditor(int index){
-        try {
-            JSONObject RGMVCommand = new JSONObject();
-            RGMVCommand.put("command_ID", "RGMV");
-            RGMVCommand.put("palletNumber", index);
-            onSendCommand(RGMVCommand.toString());
-        } catch(JSONException exc) {
-            Log.d("JSON exception", exc.getMessage());
-        }
-
-        switchToLayout(R.id.nav_editor);
-    }
-
-
     /*
      *  This will be called when the connection with the machine has been
      *  stablished. Desired behavior is switching to Line status screen.
@@ -219,20 +200,32 @@ public class MainActivity extends AppCompatActivity
         navigationView.setCheckedItem(new_id);
 
         /*
-         * Notify the fragments
+         * Notify fragments
          */
-        if(previous_id == R.id.nav_lines) line.whenLeavingFragment();
-        if(new_id == R.id.nav_lines) line.whenEnteringFragment();
-        if(previous_id == R.id.nav_debug) debug.whenLeavingFragment();
-        if(new_id == R.id.nav_debug) debug.whenEnteringFragment();
-        if(previous_id == R.id.opt_debug_advanced) debug_advanced.whenLeavingFragment();
-        if(new_id == R.id.opt_debug_advanced) debug_advanced.whenEnteringFragment();
-        if(previous_id == R.id.nav_settings) settings.whenLeavingFragment();
-        if(new_id == R.id.nav_settings) settings.whenEnteringFragment();
-        if(previous_id == R.id.opt_debug_advanced) debug_advanced.whenLeavingFragment();
-        if(new_id == R.id.opt_debug_advanced) debug_advanced.whenEnteringFragment();
-        if(previous_id == R.id.nav_manual) manual.whenLeavingFragment();
-        if(new_id == R.id.nav_manual) manual.whenEnteringFragment();
+        switch (previous_id) {
+            case R.id.nav_lines: line.whenLeavingFragment(); break;
+            case R.id.nav_algorithm: algorithm.whenLeavingFragment(); break;
+            case R.id.nav_editor: editor.whenLeavingFragment();  break;
+            case R.id.nav_logs:  logs.whenLeavingFragment(); break;
+            case R.id.nav_alarms: alarms.whenLeavingFragment(); break;
+            case R.id.nav_manual: manual.whenLeavingFragment(); break;
+            case R.id.nav_debug: debug.whenLeavingFragment(); break;
+            case R.id.opt_debug_advanced: debug_advanced.whenLeavingFragment(); break;
+            case R.id.nav_settings: settings.whenLeavingFragment(); break;
+            case R.id.opt_calibration: machineCalibration.whenLeavingFragment(); break;
+        }
+        switch (new_id) {
+            case R.id.nav_lines:  line.whenEnteringFragment(); break;
+            case R.id.nav_algorithm: algorithm.whenEnteringFragment(); break;
+            case R.id.nav_editor: editor.whenEnteringFragment(); break;
+            case R.id.nav_logs: logs.whenEnteringFragment(); break;
+            case R.id.nav_alarms: alarms.whenEnteringFragment(); break;
+            case R.id.nav_manual: manual.whenEnteringFragment(); break;
+            case R.id.nav_debug: debug.whenEnteringFragment(); break;
+            case R.id.opt_debug_advanced: debug_advanced.whenEnteringFragment(); break;
+            case R.id.nav_settings: settings.whenEnteringFragment(); break;
+            case R.id.opt_calibration: machineCalibration.whenEnteringFragment(); break;
+        }
 
         //Select layouts to change
         ConstraintLayout new_layout = getLayoutByID(new_id);
@@ -357,7 +350,7 @@ public class MainActivity extends AppCompatActivity
                 //here the messageReceived method is implemented
                 public void messageReceived(String message) {
                     //this method calls the onProgressUpdate
-                    Log.d("messageReceived", message);
+                    //Log.d("messageReceived", message);
                     publishProgress("cmdreceived", message);
                 }
 
@@ -390,40 +383,26 @@ public class MainActivity extends AppCompatActivity
             if (values[0].equals("cmdreceived")) {
                 processCommands(values[1]);
             } else if (values[0].equals("connectionstatechange")) {
-                updateConnectionStatus(values[1]);
+                onUpdateConnectionStatus(values[1]);
             }
         }
     }
 
     public void startNetworking() {
-        String ip = DEFAULT_IP;
-        String port = DEFAULT_PORT;
-        //Read IP and address from settings.
-        try {
-            JSONObject JSONparser = new JSONObject( SettingManager.getSetting("Machine controller"));
-            ip = JSONparser.getString("ip");
-            port = JSONparser.getString("port");
-        } catch (Exception jsonExc) {
-            Log.e("JSON Exception", jsonExc.getMessage());
-        }
+        String ip = SettingManager.getMachineControllerAddress().address;
+        String port = SettingManager.getMachineControllerAddress().port;
         networkConnection =  new ConnectTask();
         networkConnection.execute(ip, port);
     }
 
     public void updateServerAddress() {
-        String ip = DEFAULT_IP;
-        String port = DEFAULT_PORT;
-        try {
-            JSONObject JSONparser = new JSONObject( SettingManager.getSetting("Machine controller"));
-            ip = JSONparser.getString("ip");
-            port = JSONparser.getString("port");
-        } catch (Exception jsonExc) {
-            Log.e("JSON Exception", jsonExc.getMessage());
-        }
+        String ip = SettingManager.getMachineControllerAddress().address;
+        String port = SettingManager.getMachineControllerAddress().port;
         mTcpClient.setAddress(ip, port);
     }
 
     public void processCommands(String receivedString) {
+
         String cmdID = "Error";
         try {
             JSONObject JSONparser = new JSONObject(receivedString);
@@ -441,22 +420,18 @@ public class MainActivity extends AppCompatActivity
 
         } else if (cmdID.equals("RPRV")) {
             line.updateLineBrickInfo(receivedString);
-            if(FirstTimeRPRV) {
-                //first RPRV is the trigger to move from the loading screen to the line
-                FirstTimeRPRV=false;
-                onLoadingFinished();
-            }
 
         } else if (cmdID.equals("PGSI")) {
             debug.updateDebugData(receivedString);
 
         } else if (cmdID.equals("PWDA")) {
             manual.serverResponse(receivedString);
+            machineCalibration.onServerResponse(receivedString);
 
         } else if (cmdID.equals("CHAL")) {
             //Check for new alarms
-            alarms.updateAlarms(mAlarmManager.parseAlarmCMD(receivedString));
-            updateAppbarAlarms(mAlarmManager.getCurrentArmState());
+            alarms.updateAlarms(alarms.parseAlarmCMD(receivedString));
+            updateAppbarAlarms(alarms.getCurrentArmState());
 
         } else if (cmdID.equals("GDIS")) {
             debug_advanced.parseInternalStateDebugData(receivedString);
@@ -464,8 +439,11 @@ public class MainActivity extends AppCompatActivity
         } else if (cmdID.equals("GCFG")) {
             settings.onSettingsRetrieved(receivedString);
 
+        } else if (cmdID.equals("ALGC")) {
+            algorithm.onAlgorithmConfigurationRetrieved(receivedString);
+
         } else if (cmdID.equals("PING")) {
-            Log.d("PING", "ack");
+            //Log.d("PING", "ack");
             TcpClient.ack();
         }
     }
@@ -497,24 +475,21 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void updateConnectionStatus(String command) {
+    public void onUpdateConnectionStatus(String command) {
         if (command.equals("connectionestablished")) {
             appbar_connection.setImageResource(R.mipmap.linkup);
             appbar_connection.clearColorFilter();
-            //RBS TODO I admit this is very dirty and should be fixed ASAP
-            //but there is so much to fix and I only have two hands D:
-            try {
-                JSONObject RPRVCommand = new JSONObject();
-                RPRVCommand.put("command_ID", "RPRV");
-                RPRVCommand.put("numberOfPallets", 10); //TODO Magic number
-                onSendCommand(RPRVCommand.toString());
-            } catch(JSONException exc) {
-                Log.d("JSON exception", exc.getMessage());
+            if(previous_id == R.id.opt_loading) {
+                onLoadingFinished();
             }
+            settings.onEstablishedConnection();
+            algorithm.onEstablishedConnection();
 
         } else if (command.equals("connectionlost")) {
             appbar_connection.setImageResource(R.mipmap.linkdown);
             appbar_connection.setColorFilter(Color.rgb(115, 0, 0));
+            settings.onLostConnection();
+            algorithm.onLostConnection();
         }
     }
 

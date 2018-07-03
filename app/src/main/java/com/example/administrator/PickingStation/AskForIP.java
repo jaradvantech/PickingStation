@@ -30,6 +30,16 @@ public class AskForIP extends AppCompatActivity {
         port = (EditText) this.findViewById(R.id.askforip_editText_port);
         goButton = (ImageView) this.findViewById(R.id.askforip_imageView_go);
 
+        //set defaults
+        Intent intent = getIntent();
+        String Server_IP_split[] = intent.getStringExtra("defaultIP").split("[.]+");
+        if (Server_IP_split.length == 4 ) {
+            field1.setText(Server_IP_split[0]);
+            field2.setText(Server_IP_split[1]);
+            field3.setText(Server_IP_split[2]);
+            //field4.setText(Server_IP_split[3]); //Do not prefill this field, as this is what most people will change.
+            port.setText(intent.getStringExtra("defaultPort"));
+        }
         goButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 save();
@@ -77,7 +87,7 @@ public class AskForIP extends AppCompatActivity {
             retBool = false;
             field4.setTextColor(Color.parseColor("#ff0d00"));
         }
-        if(inputToInt(port) <= 1024 || inputToInt(port) >= 65535) {
+        if(inputToInt(port) <= 100 || inputToInt(port) >= 65535) {
             retBool = false;
             port.setTextColor(Color.parseColor("#ff0d00"));
         }

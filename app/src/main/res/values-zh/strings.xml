@@ -43,7 +43,7 @@
     <string name="Alarmoftype">类型报警</string>
     <string name="Source">资源</string>
     <string name="Raisedat">提高:</string>
-    <string name="Reason">原因：未知\n\n</string>
+    <string name="Reason">原因:</string>
     <string name="Longpresstodismiss">[长按解散] \n</string>
     <string name="Equipment">设备</string>
     <string name="Type_">类型</string>
@@ -111,6 +111,29 @@
 
     <string name="logs_received">收到:</string>
     <string name="logs_sent">发送:</string>
+
+    <!--Alarm description-->
+    <string name="alarm_1">X轴撞击限位报警</string>
+    <string name="alarm_2">Z轴撞击限位报警</string>
+    <string name="alarm_3">W轴撞击限位报警</string>
+    <string name="alarm_4">吸盘限位开关报警</string>
+    <string name="alarm_5">1#吸盘压力开关报警</string>
+    <string name="alarm_6">2#吸盘压力开关报警</string>
+    <string name="alarm_7">3#吸盘压力开关报警</string>
+    <string name="alarm_8">4#吸盘压力开关报警</string>
+    <string name="alarm_9">1#库位安全光电报警</string>
+    <string name="alarm_10">2#库位安全光电报警</string>
+    <string name="alarm_11">X轴变频器报警</string>
+    <string name="alarm_12">Z轴变频器报警</string>
+
+    <string name="alarm_13">主控柜急停</string>
+    <string name="alarm_14">输送线入口左急停</string>
+    <string name="alarm_15">输送线出口急停</string>
+    <string name="alarm_16">输送线变频器报警</string>
+    <string name="alarm_17">主气源压力不足</string>
+    <string name="alarm_18">输送线入口右急停</string>
+    <string name="alarm_19">与06PLC断开连接</string>
+    <string name="alarm_20">与18PLC断开连接</string>
 
 
     <string-array name="Colours">

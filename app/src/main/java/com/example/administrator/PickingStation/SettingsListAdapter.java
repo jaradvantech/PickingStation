@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -17,9 +16,9 @@ import java.util.ArrayList;
 public class SettingsListAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mInflater;
-    private ArrayList<SettingObject> mDataSource;
+    private ArrayList<IPsetting> mDataSource;
 
-    public SettingsListAdapter(Context context, ArrayList<SettingObject> items) {
+    public SettingsListAdapter(Context context, ArrayList<IPsetting> items) {
         mContext = context;
         mDataSource = items;
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -45,22 +44,15 @@ public class SettingsListAdapter extends BaseAdapter {
 
         View rowView = mInflater.inflate(R.layout.listitem_settings, parent, false);
         TextView setting = (TextView) rowView.findViewById(R.id.settingsList_textView_setting);
-        setting.setText(mDataSource.get(position).setting);
+        setting.setText(mDataSource.get(position).name);
 
         TextView value = (TextView) rowView.findViewById(R.id.settingsList_textView_value);
-        if(mDataSource.get(position).value.equals("")) {
+        if(mDataSource.get(position).address.equals("000.000.000.000")) {
             value.setTextColor(Color.parseColor("#ff0d00"));
             value.setText("Not set");
         } else {
             value.setTextColor(Color.parseColor("#000000"));
-            try {
-                JSONObject JSONparser = new JSONObject(mDataSource.get(position).value);
-                String ip = JSONparser.getString("ip");
-                String port = JSONparser.getString("port");
-                value.setText(ip + " : " + port);
-            } catch (Exception jsonExc) {
-                Log.e("JSON Exception", jsonExc.getMessage());
-            }
+            value.setText(mDataSource.get(position).toString());
         }
 
         return rowView;

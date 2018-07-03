@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bartoszlipinski.flippablestackview.FlippableStackView;
 import com.bartoszlipinski.flippablestackview.StackPageTransformer;
@@ -27,14 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.example.administrator.PickingStation.SettingManager.getFromPreferences;
-import static com.example.administrator.PickingStation.SettingManager.getLanguage;
-import static com.example.administrator.PickingStation.SettingManager.getSetting;
-import static com.example.administrator.PickingStation.SettingManager.loadDefaults;
-import static com.example.administrator.PickingStation.SettingManager.previousConfigurationExists;
-import static com.example.administrator.PickingStation.SettingManager.saveToPreferences;
-import static com.example.administrator.PickingStation.SettingManager.setLanguage;
 
+import static com.example.administrator.PickingStation.SettingManager.getLanguage;
+
+
+import static com.example.administrator.PickingStation.SettingManager.getMachineControllerAddress;
+import static com.example.administrator.PickingStation.SettingManager.setLanguage;
+import static com.example.administrator.PickingStation.SettingManager.setMachineControllerAddress;
 
 
 public class Settings extends Fragment {
@@ -44,7 +45,7 @@ public class Settings extends Fragment {
     private FlippableStackView mFlippableStack;
     private ColorFragmentAdapter fragmentAdapter;
     private List<Fragment> fragmentList;
-    private ArrayList<SettingObject> settingArrayList;
+    private ArrayList<IPsetting> currentSettings;
     private ListView settingsListView;
     private SettingsListAdapter listAdapter;
     private View finalView;
@@ -52,8 +53,10 @@ public class Settings extends Fragment {
     private ImageView calibration;
     private ImageView factoryReset;
     private AlertDialog.Builder resetDialogBuilder;
-    private static final int GET_IP_REQUEST = 42;
-    private static final int LOGIN_REQUEST = 27;
+    private final int GET_IP_REQUEST = 42;
+    private final int LOGIN_REQUEST = 27;
+    private final String DEFAULT_RFID_ADDRESS = "127.000.000.001";
+    private final String DEFAULT_RFID_PORT = "34000";
     private final int languageFlags[][]={
             /*
              *RBS Another trick to ensure proper UX. The flag stack will show all three countries no matter
@@ -82,11 +85,6 @@ public class Settings extends Fragment {
         calibration = (ImageView) finalView.findViewById(R.id.settings_ImageView_calibration);
         factoryReset = (ImageView) finalView.findViewById(R.id.settings_ImageView_factoryReset);
 
-        if(!previousConfigurationExists()) {
-            loadDefaults();
-        }
-        fillSettings();
-
         drawLanguageFlags();
 
         save.setOnClickListener(new View.OnClickListener() {
@@ -100,10 +98,25 @@ public class Settings extends Fragment {
                 startActivityForResult(intent, LOGIN_REQUEST);
             }
         });
-
         factoryReset.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 showResetDialog();
+            }
+        });
+
+        currentSettings = new ArrayList<>();
+        currentSettings.add(getMachineControllerAddress());
+        listAdapter = new SettingsListAdapter(getContext(), currentSettings);
+        settingsListView.setAdapter(listAdapter);
+
+        settingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                lastSelectedItem = position;
+                Intent intent = new Intent(getContext(), AskForIP.class);
+                intent.putExtra("defaultIP", currentSettings.get(lastSelectedItem).address);
+                intent.putExtra("defaultPort", currentSettings.get(lastSelectedItem).port);
+                startActivityForResult(intent, GET_IP_REQUEST);
             }
         });
 
@@ -112,7 +125,7 @@ public class Settings extends Fragment {
 
     public void saveSettings() {
         //Save config, and update current values.
-        saveToPreferences(settingArrayList);
+        setMachineControllerAddress(currentSettings.get(0));
         ((MainActivity)getActivity()).updateServerAddress();
 
         //CHANGE LANGUAGE
@@ -132,13 +145,41 @@ public class Settings extends Fragment {
             setLanguage(selectedLanguage);
             showLanguageDialog();
         }
+
+        if(currentSettings.size() > 1) {
+            //Save to server configuration
+            try {
+                JSONObject JSONOutput = new JSONObject();
+                JSONArray RFIDPorts = new JSONArray();
+                JSONArray RFIDAddresses = new JSONArray();
+                JSONOutput.put("command_ID", "SCFG");
+                //Set PLC configuration
+                JSONOutput.put("PLC_address", currentSettings.get(1).address);
+                //Set RFID configuration
+                for (int i = 2; i < currentSettings.size(); i++) {
+                    if(!currentSettings.get(i).port.equals(""))
+                        RFIDPorts.put(Integer.parseInt(currentSettings.get(i).port));
+                    else
+                        RFIDPorts.put(0);
+                    RFIDAddresses.put(currentSettings.get(i).address);
+                }
+                JSONOutput.put("RFID_ports", RFIDPorts);
+                JSONOutput.put("RFID_addresses", RFIDAddresses);
+                mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
+
+            } catch (JSONException exc) {
+                Log.d("JSON exception", exc.getMessage());
+            }
+        }
+
+        Toast.makeText(getActivity().getBaseContext(), "Configuration saved", Toast.LENGTH_SHORT).show(); //RBS TODO STRINGS
     }
 
     /*
- * To ensure that the local settings are synchronized with the settings
- * stored in the machine, these will be enquired before allowing the user
- * to make any changes.
- */
+     * To ensure that the local settings are synchronized with the settings
+     * stored in the machine, these will be enquired before allowing the user
+     * to make any changes.
+     */
     public void retrieveSettings() {
         try {
             JSONObject JSONOutput = new JSONObject();
@@ -152,57 +193,34 @@ public class Settings extends Fragment {
     public void onSettingsRetrieved(String CMD) {
         try {
             JSONObject JSONparser = new JSONObject(CMD);
-            int totalManipulators = JSONparser.getInt("totalManipulators");
-            String PLCAddress = JSONparser.getString("PLCAddress");
-            JSONArray RFIDServers = JSONparser.getJSONArray("RFIDServers"); //This string is another JSON containing both, ip and port.
-            int totalRFIDServers = RFIDServers.length();
-
+            int totalRFIDServers = JSONparser.getInt("RFID_servers");
+            String PLCAddress = JSONparser.getString("PLC_address");
+            JSONArray RFIDServers = JSONparser.getJSONArray("RFID_addresses"); //This string is another JSON containing both, ip and port.
+            JSONArray RFIDPorts = JSONparser.getJSONArray("RFID_ports"); //This string is another JSON containing both, ip and port.
             //Load these settings into an array
-            ArrayList<SettingObject> receivedSettings = new ArrayList<>();
-            receivedSettings.add(new SettingObject("Machine controller", getSetting("Machine controller"), "ip")); //inherited from current configuration.
-            receivedSettings.add(new SettingObject("PLC Address", Util.inetToJSON(PLCAddress, ""), "ip"));
-            for(int i=0; i<totalRFIDServers; i++)
-                receivedSettings.add(new SettingObject("RFID server " + (i+1), RFIDServers.getString(i), "ip"));
-
-            //Now, overwrite local settings with remote settings.
-            SettingManager.saveToPreferences(receivedSettings);
-            fillSettings();
+            currentSettings.clear();
+            currentSettings.add(getMachineControllerAddress());
+            currentSettings.add(new IPsetting("PLC Address", PLCAddress, "00102"));
+            for(int i=0; i<totalRFIDServers; i++) {
+                if(i<RFIDPorts.length())
+                    currentSettings.add(new IPsetting("RFID server " + (i + 1), RFIDServers.getString(i), RFIDPorts.getString(i)));
+                else
+                    currentSettings.add(new IPsetting("RFID server " + (i + 1), "", ""));
+            }
+            listAdapter.notifyDataSetChanged();
 
         } catch (Exception jsonExc) {
-            Log.e("JSON Exception", jsonExc.getMessage());
+            Log.e("JSON Exception", "onSettingsRetrieved():" + jsonExc.getMessage());
         }
-    }
-
-    private void fillSettings() {
-        settingArrayList = getFromPreferences();
-        listAdapter = new SettingsListAdapter(getContext(), settingArrayList);
-        settingsListView.setAdapter(listAdapter);
-
-        settingsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                lastSelectedItem = position;
-                if(settingArrayList.get(lastSelectedItem).type.equals("ip")) {
-                    Intent intent = new Intent(getContext(), AskForIP.class);
-                    startActivityForResult(intent, GET_IP_REQUEST);
-                }
-            }
-        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GET_IP_REQUEST) {
             if(resultCode == RESULT_OK) {
-                try {
-                    JSONObject JSONOutput = new JSONObject();
-                    JSONOutput.put("ip",  data.getStringExtra("ip"));
-                    JSONOutput.put("port", data.getStringExtra("port"));
-                    settingArrayList.get(lastSelectedItem).value = JSONOutput.toString();
-                    listAdapter.notifyDataSetChanged();
-                } catch(JSONException exc) {
-                    Log.e("JSON exception", exc.getMessage());
-                }
+                currentSettings.get(lastSelectedItem).port = data.getStringExtra("port");
+                currentSettings.get(lastSelectedItem).address = data.getStringExtra("ip");
+                listAdapter.notifyDataSetChanged();
             }
         } else if (requestCode == LOGIN_REQUEST) {
             if(resultCode == RESULT_OK) {
@@ -268,10 +286,13 @@ public class Settings extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 switch(which){
                     case DialogInterface.BUTTON_POSITIVE:
-                            //perform factory reset
-                            loadDefaults();
-                            fillSettings();
-                            saveSettings();
+                        //i=1: do not delete server address.
+                        int listSize = currentSettings.size();
+                        for(int i=1; i<listSize; i++) {
+                            currentSettings.get(i).address = "000.000.000.000";
+                            currentSettings.get(i).port = "";
+                        }
+                        listAdapter.notifyDataSetChanged();
                         break;
 
                     case DialogInterface.BUTTON_NEUTRAL:
@@ -311,6 +332,32 @@ public class Settings extends Fragment {
     }
 
     public void whenLeavingFragment() {
-        saveSettings();
+
+        //show menu
+        // saveSettings();
     }
+
+    /*
+     * Delete list of settings when disconnecting from the server.
+     * This will avoid conflicts. Remove everything except server IP
+     */
+    public void onLostConnection() {
+        while(currentSettings.size() > 1) {
+            currentSettings.remove(currentSettings.size()-1);
+        }
+        listAdapter.notifyDataSetChanged();
+    }
+
+    public void onEstablishedConnection() {
+        Handler mHandler = new Handler();
+        mHandler.postDelayed(new Runnable() {
+            public void run() {
+                //Run 500ms after in case the server is just started
+                //and not ready yet for answering commands (it happens.)
+                //RBS TODO yes, not the most elegant solution...
+                retrieveSettings();
+            }
+        }, 500);
+    }
+
 }

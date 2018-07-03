@@ -29,7 +29,7 @@
     <!-- App-specific config-->
     <dimen name="space_between_pallets_horizontal">45dp</dimen>
     <dimen name="space_between_pallets_middle">24dp</dimen>
-    <dimen name="pallet_size">133dp</dimen>
+    <dimen name="pallet_size">139dp</dimen>
     <dimen name="brick_size">94dp</dimen>
 
 </resources>

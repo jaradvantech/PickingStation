@@ -266,7 +266,7 @@
         android:layout_height="63dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="68dp"
-        android:text="CUE"
+        android:text="NEXT POINT"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/calibration_button_microAdvance"
         app:layout_constraintTop_toTopOf="@+id/calibration_button_microAdvance" />
@@ -276,7 +276,7 @@
         android:layout_width="160dp"
         android:layout_height="63dp"
         android:layout_marginStart="16dp"
-        android:text="CLEAR"
+        android:text="START POINT"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/calibration_button_microAdvance"
         app:layout_constraintTop_toTopOf="@+id/calibration_button_microAdvance" />

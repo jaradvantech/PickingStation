@@ -27,6 +27,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.administrator.PickingStation.BrickManager.getRaw;
+
 
 public class Editor extends Fragment {
 
@@ -42,8 +44,8 @@ public class Editor extends Fragment {
     private Button editor_button_add;
     private Button editor_button_delete;
     private Button editor_button_format;
+    private Button editor_button_edit;
     private TextView editor_textView_Indicator;
-    private TextView editor_textView_Indicator2;
 
     public Editor() {
     }
@@ -61,8 +63,8 @@ public class Editor extends Fragment {
         editor_button_add = (Button) view.findViewById(R.id.editor_button_add);
         editor_button_delete = (Button) view.findViewById(R.id.editor_button_delete);
         editor_button_format = (Button) view.findViewById(R.id.editor_button_format);
+        editor_button_edit = (Button) view.findViewById(R.id.editor_button_edit);
         editor_textView_Indicator=(TextView) view.findViewById(R.id.editor_textView_Indicator);
-        editor_textView_Indicator2 = (TextView) view.findViewById(R.id.editor_textView_Indicator2);
 
         mViewPagerFragments = new ArrayList<>();
 
@@ -147,7 +149,7 @@ public class Editor extends Fragment {
         editor_button_add.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
-                int type = ((editor_listView_grades.getCheckedItemPosition()+1)<<4)+editor_listView_colours.getCheckedItemPosition()+1 ;
+                int type = getRaw(editor_listView_grades.getCheckedItemPosition(), editor_listView_colours.getCheckedItemPosition());
                 addBrick(getSelectedPallet(), type);
                 askForPalletContents(getSelectedPallet());
             }
@@ -169,6 +171,14 @@ public class Editor extends Fragment {
             }
 
         });
+
+        editor_button_edit.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                editBrick(getSelectedPallet(), mFlippableStack.getCurrentItem(), editor_listView_grades.getCheckedItemPosition(), editor_listView_colours.getCheckedItemPosition());
+                askForPalletContents(getSelectedPallet());
+            }
+        });
+
 
         return view;
     }
@@ -251,6 +261,20 @@ public class Editor extends Fragment {
         }
     }
 
+    private void editBrick(int palletNumber, int positionToEdit, int newGrade, int newColor) {
+        try {
+            JSONObject REMVCommand = new JSONObject();
+            REMVCommand.put("command_ID", "REMV");
+            REMVCommand.put("palletNumber", palletNumber);
+            REMVCommand.put("positionToEdit", positionToEdit);
+            REMVCommand.put("newGrade", newGrade);
+            REMVCommand.put("newColor", newColor);
+            mListener.onSendCommand(REMVCommand.toString());
+        } catch(JSONException exc) {
+            Log.d("JSON exception", exc.getMessage());
+        }
+    }
+
     public void onTcpReply(String mMessage) {
         //This might be void under certain circumstances RBS: should be fixed, then
         if((mMessage.length() != 0) && (view != null) && (PalletButton != null)) {
@@ -267,7 +291,6 @@ public class Editor extends Fragment {
                 //uncheck buttons
                 PalletButton[j].setChecked(false);
             }
-            editor_textView_Indicator2.setText("Pallet " + Integer.toString(index));
             PalletButton[index].setChecked(true);
         }
     }
@@ -284,7 +307,7 @@ public class Editor extends Fragment {
             int totalBricks = JSONparser.getInt("totalBricks");
 
             for (int i = 0; i < totalBricks; i++) {
-                int currentBrickRawType = values.getJSONObject(i).getInt("memoryValue");
+                int currentBrickRawType = values.getInt(i);
                 mViewPagerFragments.add(ColorFragment.newInstanceOnlyBackground(BrickManager.getColorFromRaw(currentBrickRawType), BrickManager.getGradeFromRaw(currentBrickRawType)));
             }
 

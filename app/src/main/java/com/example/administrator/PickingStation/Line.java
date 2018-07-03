@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import static android.support.animation.SpringForce.DAMPING_RATIO_NO_BOUNCY;
 import static android.support.animation.SpringForce.STIFFNESS_VERY_LOW;
+import static com.example.administrator.PickingStation.Commands.RPRV;
 
 //Pese a mis esfuerzos de adecentarla, esta clase es una chapuza, de principio a fin. firmado RBS
 
@@ -112,15 +113,21 @@ public class Line extends Fragment {
                             index = j;
                         }
                     }
-                    mListener.ChangeToEditor(index);
-                    //CODE MESSAGE HERE
-                    //String mSend;
-                    //mListener.onSendCommand(mSend);
+
+                    //Ask to server, so when switching layouts is done, information is already there.
+                    try {
+                        JSONObject RGMVCommand = new JSONObject();
+                        RGMVCommand.put("command_ID", "RGMV");
+                        RGMVCommand.put("palletNumber", index);
+                        mListener.onSendCommand(RGMVCommand.toString());
+                    } catch(JSONException exc) {
+                        Log.d("JSON exception", exc.getMessage());
+                    }
+                    ((MainActivity)getActivity()).switchToLayout(R.id.nav_editor);
                 }
             });
         }
-        handler.postDelayed(timer_lines, RPRV_PERIOD);
-        autoUpdate=true; //start updating.  //TODO RBS change the way this trigger works
+
         return view;
     }
 
@@ -142,7 +149,6 @@ public class Line extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
-        void ChangeToEditor(int index);
         void onSendCommand(String command);
     }
 
@@ -350,16 +356,7 @@ public class Line extends Fragment {
     final Runnable timer_lines = new Runnable() {
         @Override
         public void run() {
-            try {
-                JSONObject RPRVCommand = new JSONObject();
-                RPRVCommand.put("command_ID", "RPRV");
-                RPRVCommand.put("numberOfPallets", PALLETS);
-                mListener.onSendCommand(RPRVCommand.toString());
-            } catch(JSONException exc) {
-                Log.d("JSON exception", exc.getMessage());
-            }
-
-
+            mListener.onSendCommand(RPRV);
             if(autoUpdate == false) handler.removeCallbacksAndMessages(null);
             else handler.postDelayed(this, RPRV_PERIOD);
         }

@@ -35,4 +35,13 @@ public class Logs extends Fragment {
         super.onDetach();
     }
 
+
+    public void whenEnteringFragment() {
+
+    }
+
+    public void whenLeavingFragment() {
+
+    }
+
 }

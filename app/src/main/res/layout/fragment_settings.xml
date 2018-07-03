@@ -77,16 +77,6 @@
                 app:layout_constraintVertical_bias="0.28" />
         </android.support.constraint.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/settings_textView_ip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="IP Address configuration:"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/settings_constrainLayout_ipsettings"
-            app:layout_constraintStart_toStartOf="@+id/settings_constrainLayout_ipsettings" />
-
         <android.support.constraint.ConstraintLayout
             android:id="@+id/settings_constrainLayout_advanced"
             android:layout_width="wrap_content"
@@ -99,7 +89,7 @@
             app:layout_constraintVertical_chainStyle="packed">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/settings_textView_calibrationText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -117,7 +107,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/settings_textView_resetText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

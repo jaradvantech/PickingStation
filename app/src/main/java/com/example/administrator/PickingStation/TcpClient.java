@@ -1,11 +1,6 @@
 package com.example.administrator.PickingStation;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Log;
-
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -15,9 +10,8 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-
 import static com.example.administrator.PickingStation.Commands.PING;
-import static java.security.AccessController.getContext;
+
 
 public class TcpClient {
 
@@ -76,6 +70,7 @@ public class TcpClient {
 
 
             } catch(SocketTimeoutException timeOutEx){
+                //If nothing has been read in a long time:
                 sendMessage(PING); //Are you still there? ._.
                 timeOuts++;
                 if(timeOuts > 3) {
@@ -109,6 +104,7 @@ public class TcpClient {
                 mMessageListener.connectionEstablished();
 
             } catch (Exception e) {
+                //RBS TODO make exceptions a little bit more specific...
                 Errors = true;
                 Log.e("TCP connection failed", "S: Error", e);
                 closeSocket();

@@ -48,7 +48,7 @@
     <string name="Alarmoftype">Alarma de tipo: </string>
     <string name="Source">Fuente: </string>
     <string name="Raisedat">Disparada: </string>
-    <string name="Reason">Razón: Desconocida\n\n</string>
+    <string name="Reason">Razón: </string>
     <string name="Longpresstodismiss">[Mantener pulsado para eliminar] \n</string>
     <string name="Equipment">Equipamiento</string>
     <string name="Type_">Tipo </string>
@@ -117,6 +117,28 @@
     <string name="logs_received">Recibido: </string>
     <string name="logs_sent">Enviado: </string>
 
+    <!--Alarm description-->
+    <string name="alarm_1">Impacto con el limite mecanico del eje X</string>
+    <string name="alarm_2">Impacto con el limite mecanico del eje Z</string>
+    <string name="alarm_3">Impacto con el limite mecanico del eje W</string>
+    <string name="alarm_4">Impacto con el limite mecanico de las ventosas</string>
+    <string name="alarm_5">Error de presion en la ventosa numero 1</string>
+    <string name="alarm_6">Error de presion en la ventosa numero 2</string>
+    <string name="alarm_7">Error de presion en la ventosa numero 3</string>
+    <string name="alarm_8">Error de presion en la ventosa numero 4</string>
+    <string name="alarm_9">Deteccion de intrusion en el fotosensor del almacenamiento numero 1</string>
+    <string name="alarm_10">Deteccion de intrusion en el fotosensor del almacenamiento numero 2</string>
+    <string name="alarm_11">Fallo de funcionamiento en el convertidor de frecuencia del eje X</string>
+    <string name="alarm_12">Fallo de funcionamiento en el convertidor de frecuencia del eje Z</string>
+
+    <string name="alarm_13">Parada de emergencia del armario principal</string>
+    <string name="alarm_14">Parada de emergencia de la entrada de la cinta transportadora (lado izquierdo)</string>
+    <string name="alarm_15">Parada de emergencia de la salida de la cinta transportadora</string>
+    <string name="alarm_16">Fallo de funcionamiento en el convertidor de frecuencia de la cinta transportadora</string>
+    <string name="alarm_17">Presion insuficiente en la entrada principal de aire comprimido</string>
+    <string name="alarm_18">Parada de emergencia de la entrada de la cinta transportadora (lado derecho)</string>
+    <string name="alarm_19">Conexion perdida con la unidad 06</string>
+    <string name="alarm_20">Conexion perdida con la unidad 18</string>
 
     <string-array name="Colours">
         <item>Rojo</item>

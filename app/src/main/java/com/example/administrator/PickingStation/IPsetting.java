@@ -1,19 +1,19 @@
 package com.example.administrator.PickingStation;
 
 
-public class SettingObject {
+public class IPsetting {
 
-    public String setting;
-    public String value;
-    public String type;
+    public String name;
+    public String address;
+    public String port;
 
-    SettingObject(){
+    public IPsetting(String name, String address, String port) {
+        this.name = name;
+        this.address = address;
+        this.port = port;
     }
 
-    SettingObject(String setting, String value, String type){
-        this.setting  = setting;
-        this.value  = value;
-        this.type = type;
+    public String toString() {
+        return this.address + " : " + this.port;
     }
-
 }

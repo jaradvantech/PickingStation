@@ -64,9 +64,7 @@ public class Debug extends Fragment {
         //UI elements
         ImageView debug_next = (ImageView) view.findViewById(R.id.debug_imageView_next);
         ImageView debug_previous = (ImageView) view.findViewById(R.id.debug_imageView_previous);
-        buttonRead = (Button) view.findViewById(R.id.debug_read);
-        buttonWrite = (Button) view.findViewById(R.id.debug_write);
-        buttonClear = (Button) view.findViewById(R.id.debug_clear);
+        buttonWrite = (Button) view.findViewById(R.id.debug_button_write);
         debug_encoder3000 = (Button) view.findViewById(R.id.debug_encoder3000);
         advanced = (Button) view.findViewById(R.id.debug_button_advanced);
         commonDataOutput = (TextView) view.findViewById(R.id.debug_commonDataOutput);
@@ -101,22 +99,9 @@ public class Debug extends Fragment {
         commonDataOutput.setMovementMethod(new ScrollingMovementMethod());
         armDataOutput.setMovementMethod(new ScrollingMovementMethod());
 
-        buttonRead.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                requestDebugData();
-            }
-        });
-
         buttonWrite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 sendDebugData();
-            }
-        });
-
-        buttonClear.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                commonDataOutput.setText("");
-                armDataOutput.setText("");
             }
         });
 
@@ -246,14 +231,14 @@ public class Debug extends Fragment {
             JSONOutput.put("command_ID", "PWDA");
 
             JSONOutput.put("selectedArm", currentArm);
-            JSONOutput.put("SBD", boolToString(checkBox_SBD.isChecked()));
-            JSONOutput.put("MR", boolToString(checkBox_MR.isChecked()));
-            JSONOutput.put("SBFA", boolToString(checkBox_SBFA.isChecked()));
-            JSONOutput.put("SBFB", boolToString(checkBox_SBFB.isChecked()));
-            JSONOutput.put("BCRSA", boolToString(checkBox_BCRSA.isChecked()));
-            JSONOutput.put("BCRSB", boolToString(checkBox_BCRSB.isChecked()));
-            JSONOutput.put("MM", boolToString(checkBox_MM.isChecked()));
-            JSONOutput.put("VV", boolToString(checkBox_VV.isChecked()));
+            JSONOutput.put("SBD", checkBox_SBD.isChecked());
+            JSONOutput.put("MR", checkBox_MR.isChecked());
+            JSONOutput.put("SBFA", checkBox_SBFA.isChecked());
+            JSONOutput.put("SBFB", checkBox_SBFB.isChecked());
+            JSONOutput.put("BCRSA", checkBox_BCRSA.isChecked());
+            JSONOutput.put("BCRSB", checkBox_BCRSB.isChecked());
+            JSONOutput.put("MM", checkBox_MM.isChecked());
+            JSONOutput.put("VV", checkBox_VV.isChecked());
             JSONOutput.put("MFB", inputToInt(editText_MFB));
             JSONOutput.put("MLR", inputToInt(editText_MLR));
             JSONOutput.put("MUD", inputToInt(editText_MUD));
@@ -261,10 +246,10 @@ public class Debug extends Fragment {
             JSONOutput.put("WTDWT", inputToInt(editText_WTDWT));
             JSONOutput.put("PZA", inputToInt(editText_PZA));
             JSONOutput.put("VOCD", inputToInt(editText_VOCD));
-            JSONOutput.put("CE", boolToString(checkBox_CE.isChecked()));
-            JSONOutput.put("TP", boolToString(checkBox_TP.isChecked()));
-            JSONOutput.put("ITT", boolToString(checkBox_ITT.isChecked()));
-            JSONOutput.put("TMD", boolToString(checkBox_TMD.isChecked()));
+            JSONOutput.put("CE", checkBox_CE.isChecked());
+            JSONOutput.put("TP", checkBox_TP.isChecked());
+            JSONOutput.put("ITT", checkBox_ITT.isChecked());
+            JSONOutput.put("TMD", checkBox_TMD.isChecked());
             JSONOutput.put("PCS", inputToInt(editText_PCS));
             JSONOutput.put("ADD", inputToInt(editText_ADD));
             JSONOutput.put("ZASV", inputToInt(editText_ZASV));

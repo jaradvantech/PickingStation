@@ -14,54 +14,23 @@
         <TextView
             android:id="@+id/debug_commonDataOutput"
             android:layout_width="300dp"
-            android:layout_height="518dp"
+            android:layout_height="570dp"
             android:layout_marginStart="20dp"
             android:text="Common Data:"
             android:textSize="@dimen/text_default"
             app:layout_constraintStart_toEndOf="@+id/debug_armDataOutput"
             app:layout_constraintTop_toTopOf="@+id/debug_armDataOutput" />
 
-        <Button
-            android:id="@+id/debug_read"
-            android:layout_width="110dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:text="Read"
-            android:textSize="@dimen/text_default"
-            app:layout_constraintStart_toEndOf="@+id/debug_clear"
-            app:layout_constraintTop_toTopOf="@+id/debug_clear" />
-
-        <Button
-            android:id="@+id/debug_clear"
-            android:layout_width="110dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="@dimen/activity_bottom_margin"
-            android:layout_marginStart="24dp"
-            android:text="CLEAR"
-            android:textSize="@dimen/text_default"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/debug_checkBox_autoupdate" />
-
         <TextView
             android:id="@+id/debug_armDataOutput"
             android:layout_width="300dp"
-            android:layout_height="518dp"
+            android:layout_height="570dp"
             android:layout_marginStart="@dimen/activity_left_margin"
             android:layout_marginTop="@dimen/activity_top_margin"
             android:text="Arm Data:"
             android:textSize="@dimen/text_default"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/debug_write"
-            android:layout_width="110dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="16dp"
-            android:text="Write"
-            android:textSize="@dimen/text_default"
-            app:layout_constraintStart_toEndOf="@+id/debug_read"
-            app:layout_constraintTop_toTopOf="@+id/debug_read" />
 
         <EditText
             android:id="@+id/debug_editText_ZASV"
@@ -363,36 +332,23 @@
             android:id="@+id/debug_currentArm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:text="1"
             android:textColor="@color/colorPrimary"
             android:textSize="63sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/debug_write"
-            app:layout_constraintStart_toEndOf="@+id/debug_write"
-            app:layout_constraintTop_toTopOf="@+id/debug_write"
-            app:layout_constraintVertical_bias="0.731" />
-
-        <CheckBox
-            android:id="@+id/debug_checkBox_autoupdate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="@dimen/activity_left_margin"
-            android:layout_marginTop="8dp"
-            android:text="Auto-upd8"
-            android:textSize="@dimen/text_default"
-            app:layout_constraintBottom_toBottomOf="@+id/debug_clear"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/debug_clear" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/debug_editText_VOCD"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/debug_button_armPosition"
+            android:id="@+id/debug_button_write"
             android:layout_width="290dp"
             android:layout_height="65dp"
             android:layout_marginTop="8dp"
-            android:text="ARM POSITION"
+            android:text="WRITE"
             android:textSize="@dimen/text_default"
             app:layout_constraintBottom_toTopOf="@+id/debug_encoder3000"
             app:layout_constraintStart_toStartOf="@+id/debug_button_advanced"
@@ -405,7 +361,7 @@
             android:layout_marginTop="10dp"
             android:text="ADVANCED OPTIONS"
             android:textSize="@dimen/text_default"
-            app:layout_constraintBottom_toTopOf="@+id/debug_button_armPosition"
+            app:layout_constraintBottom_toTopOf="@+id/debug_button_write"
             app:layout_constraintStart_toStartOf="@+id/debug_editText_TPOX_AAD"
             app:layout_constraintTop_toBottomOf="@+id/debug_editText_TPOX_AAD" />
 
@@ -418,8 +374,8 @@
             android:text="Encoder + 3000"
             android:textSize="@dimen/text_default"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/debug_button_armPosition"
-            app:layout_constraintTop_toBottomOf="@+id/debug_button_armPosition" />
+            app:layout_constraintStart_toStartOf="@+id/debug_button_write"
+            app:layout_constraintTop_toBottomOf="@+id/debug_button_write" />
 
     </android.support.constraint.ConstraintLayout>
 

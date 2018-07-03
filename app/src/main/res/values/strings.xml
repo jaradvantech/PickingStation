@@ -3,9 +3,6 @@
     <string name="app_name">PickingStation</string>
     <string name="preference_file_key" translatable="false">Preference</string>
 
-    <string name="Stored_PC_IP_Address" translatable="false">Stored_PC_IP_Address</string>
-    <string name="Stored_PC_IP_Port" translatable="false">Stored_PC_IP_Port</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -48,7 +45,7 @@
     <string name="Alarmoftype">Alarm of type: </string>
     <string name="Source">Source: </string>
     <string name="Raisedat">Raised at: </string>
-    <string name="Reason">Reason: Unknown\n\n</string>
+    <string name="Reason">Reason: </string>
     <string name="Longpresstodismiss">[Long press to dismiss] \n</string>
     <string name="Equipment">Equipment </string>
     <string name="Type_">Type</string>
@@ -108,15 +105,34 @@
     <string name="OUTPUT">:\nOUTPUT</string>
     <string name="DISABLED">:\nDISABLED</string>
 
-    <!-- Here we go! -->
 
     <string name="button_sendCommand_text">Send</string>
-
     <string name="editText_sendCommand_text">Command to send</string>
-
     <string name="logs_received">Received: </string>
     <string name="logs_sent">Sent: </string>
 
+    <!--Alarm description-->
+    <string name="alarm_1">X-Axis mechanical limit impact</string>
+    <string name="alarm_2">Z-Axis mechanical limit impact</string>
+    <string name="alarm_3">W-Axis mechanical limit impact</string>
+    <string name="alarm_4">Suction cup mechanical limit impact</string>
+    <string name="alarm_5">Air pressure error in suction cup #1</string>
+    <string name="alarm_6">Air pressure error in suction cup #2</string>
+    <string name="alarm_7">Air pressure error in suction cup #3</string>
+    <string name="alarm_8">Air pressure error in suction cup #4</string>
+    <string name="alarm_9">Presence detected in security photosensor (Storage #1)</string>
+    <string name="alarm_10">Presence detected in security photosensor (Storage #2)</string>
+    <string name="alarm_11">X-Axis frequency converter error</string>
+    <string name="alarm_12">Z-Axis frequency converter error</string>
+
+    <string name="alarm_13">Main control cabinet emergency stop</string>
+    <string name="alarm_14">Emergency stop of conveyor belt input (Left side)</string>
+    <string name="alarm_15">Emergency stop of conveyor belt output</string>
+    <string name="alarm_16">Conveyor line frequency converter error</string>
+    <string name="alarm_17">Insufficient pressure at main air input</string>
+    <string name="alarm_18">Emergency stop of conveyor belt input (Right side)</string>
+    <string name="alarm_19">Connection lost with unit 06</string>
+    <string name="alarm_20">Connection lost with unit 18</string>
 
     <string-array name="Colours">
         <item>Red</item>

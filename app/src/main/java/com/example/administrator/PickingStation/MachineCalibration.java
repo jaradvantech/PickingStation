@@ -27,10 +27,11 @@ public class MachineCalibration extends Fragment {
     private OnFragmentInteractionListener mFragmentInteraction;
     private ArrayList<EditText> textFields;
     private ArrayList<TextView> textViews;
-    private Button setManipulators, send, startStop, advance, microAdvance;
+    private Button setManipulators, send, startStop, advance, microAdvance, cue, clear;
     private EditText manipulatorNum, standByValue, waitingPosition;
     private Boolean motorRuning = false;
-    private int encoderIncrement = 0,  currentStep = 0;
+    private int incrementFromLastStep = 0, encoderIncrement =0, previousEncoderValue = 0,  currentStep = 0;
+    private final int MAX_ENCODER_VALUE = 100000;
     private final int ADVANCE_PERIOD = 300;
     private final int MICROADVANCE_PERIOD = 70;
 
@@ -71,6 +72,8 @@ public class MachineCalibration extends Fragment {
         manipulatorNum = view.findViewById(R.id.calibration_editText_totalManipulators);
         standByValue =  view.findViewById(R.id.calibration_editText_tSBV);
         waitingPosition = view.findViewById(R.id.calibration_editText_AGBTTWPIA);
+        cue = view.findViewById(R.id.calibration_button_cue);
+        clear = view.findViewById(R.id.calibration_button_clear);
 
         setManipulators.setOnClickListener(new View.OnClickListener() {
             public void onClick( View v ) {
@@ -117,6 +120,26 @@ public class MachineCalibration extends Fragment {
             }
         });
 
+        cue.setOnClickListener(new View.OnClickListener() {
+            public void onClick( View v ) {
+                if(currentStep < MANIPULATORS) {
+                    incrementFromLastStep = 0;
+                    currentStep++;
+                }
+            }
+        });
+
+        clear.setOnClickListener(new View.OnClickListener() {
+            public void onClick( View v ) {
+                incrementFromLastStep = 0;
+                    currentStep = 0;
+                    for(int i=0; i<10; i++) {
+                        textFields.get(i).setText("");
+                    }
+            }
+        });
+
+
         return view;
     }
 
@@ -142,7 +165,7 @@ public class MachineCalibration extends Fragment {
     }
 
     private void setManipulators(int mMANIPULATORS) {
-        if(mMANIPULATORS <= 10) {
+        if(mMANIPULATORS < 10) {
             this.MANIPULATORS = mMANIPULATORS;
 
             //Set visible only as many as required
@@ -184,7 +207,7 @@ public class MachineCalibration extends Fragment {
         }
     }
 
-    public void setLineMotor(Boolean state) {
+    private void setLineMotor(Boolean state) {
         try {
             JSONObject JSONOutput = new JSONObject();
             JSONOutput.put("command_ID", "PWDA");
@@ -205,5 +228,37 @@ public class MachineCalibration extends Fragment {
         } catch(JSONException exc) {
             Log.d("JSON exception", exc.getMessage());
         }
+    }
+
+    public void onServerResponse(String responseCMD) {
+        try {
+            JSONObject JSONparser = new JSONObject(responseCMD);
+            int currentEncoderValue = JSONparser.getInt("encoderFeedback");
+
+            if(currentEncoderValue - previousEncoderValue >= 0) {
+                encoderIncrement = currentEncoderValue - previousEncoderValue;
+                previousEncoderValue += encoderIncrement;
+            } else {
+                encoderIncrement = (currentEncoderValue+MAX_ENCODER_VALUE) - previousEncoderValue;
+                previousEncoderValue += (encoderIncrement-MAX_ENCODER_VALUE);
+            }
+
+            int lastStepValue = 0;
+            if(currentStep != 0) {
+                lastStepValue = Integer.parseInt(textFields.get(currentStep - 1).getText().toString());
+            }
+            incrementFromLastStep += encoderIncrement;
+            textFields.get(currentStep).setText(Integer.toString(lastStepValue + incrementFromLastStep));
+        } catch (Exception jsonExc) {
+            Log.e("JSON Exception", "onServerResponse(): " + jsonExc.getMessage());
+        }
+    }
+
+    public void whenEnteringFragment() {
+
+    }
+
+    public void whenLeavingFragment() {
+
     }
 }
