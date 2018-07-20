@@ -20,6 +20,20 @@
         <item name="android:listPreferredItemHeightSmall">65dp</item><!-- item size in menu-->
     </style>
 
+    <!-- RBS Custom progress bar (for Line status)-->
+    <style name="CustomProgressBarHorizontal" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/pallet_progress_bar</item>
+        <item name="android:minHeight">10dip</item>
+        <item name="android:maxHeight">20dip</item>
+    </style>
+
+    <!-- RBS Custom SeekBar sliders for box position in pallet creator-->
+    <style name="CustomSliderBar" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/position_slider</item>
+        <item name="android:minHeight">10dp</item>
+        <item name="android:maxHeight">10dp</item>
+    </style>
+
     <style name="list_item_appearance">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>

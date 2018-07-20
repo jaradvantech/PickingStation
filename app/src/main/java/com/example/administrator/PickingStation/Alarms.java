@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,15 +40,13 @@ public class Alarms extends Fragment {
     private ListView mListView;
     private final int ALARM_CHECK_PERIOD = 2000;
     private final Handler alarmLoopHandler = new Handler(Looper.getMainLooper());
-
-    private int MANIPULATORS = 5; //RBS, yes TODO
+    private int totalManipulators;
     private ArrayList<AlarmObject> newAlarms;
     private int lastChecked_CommonAlarms;
-    private int lastChecked_Manipulatoralarms[] = new int[MANIPULATORS+1];
+    private int lastChecked_Manipulatoralarms[];
 
     public Alarms() {
     }
-
 
     public static Alarms newInstance(String param1, String param2) {
         Alarms fragment = new Alarms();
@@ -76,10 +76,12 @@ public class Alarms extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_alarms, container, false);
 
+        setManipulatorNumber(SettingManager.getArms());
+
         TextView textView_recent = (TextView) view.findViewById(R.id.alarms_textView_recent);
         infoOutput = (TextView) view.findViewById(R.id.alarms_textView_output);
+        infoOutput.setMovementMethod(new ScrollingMovementMethod());
 
-        /*LIST VIEW*****************************************/
         mListView = (ListView) view.findViewById(R.id.alarms_ListView);
         theAlarms = new ArrayList<>();
 
@@ -109,8 +111,6 @@ public class Alarms extends Fragment {
         builder.setPositiveButton(getString(R.string.Delete), dialogClickListener);
         builder.setNegativeButton(getString(R.string.Cancel), dialogClickListener);
 
-
-
         //User interaction: Delete Alarm
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -124,28 +124,8 @@ public class Alarms extends Fragment {
         });
 
 
-        //User interaction: Select Alarm
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    AlarmObject selectedAlarm = theAlarms.get(position);
-                    infoOutput.setText("\n");
-                    infoOutput.append(getString(R.string.Alarmoftype) + " " + selectedAlarm.getType() + "\n");
-                    infoOutput.append(getString(R.string.Source) + " " + selectedAlarm.getSource() + "\n");
-                    infoOutput.append(getString(R.string.Raisedat) + " " + selectedAlarm.getTime() + "\n");
-                    String reason = getContext().getResources().getString(
-                            getContext().getResources().getIdentifier("alarm_" + selectedAlarm.getType(), "string", getContext().getPackageName()));
-                    infoOutput.append(getString(R.string.Reason) + " " + reason + "\n\n");
-                    infoOutput.append(getString(R.string.Longpresstodismiss));
-                } catch(Resources.NotFoundException exc) {
-                    Log.e("Alarms", exc.toString());
-                }
-            }
-        });
-
-        //Easter egg: delete all alarms by clicking on "recent alarms"
-        textView_recent.setOnClickListener(new View.OnClickListener() {
+        ImageView clearButton = view.findViewById(R.id.alarms_imageView_clearButton);
+        clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 theAlarms.clear();
@@ -170,7 +150,12 @@ public class Alarms extends Fragment {
         super.onDetach();
     }
 
-    public void updateAlarms(ArrayList<AlarmObject> newAlarms){
+    public void setManipulatorNumber(int number) {
+        lastChecked_Manipulatoralarms = new int[number];
+        totalManipulators = number;
+    }
+
+    public void updateAlarmLog(ArrayList<AlarmObject> newAlarms){
         //Append new alarms to alarm list
         theAlarms.addAll(newAlarms);
 
@@ -180,6 +165,7 @@ public class Alarms extends Fragment {
         //Update listview
         adapter.notifyDataSetChanged();
     }
+
     /* RBS
      *Parse alarm command:
      * Will check new alarm codes against previosly received alarm commands
@@ -188,13 +174,21 @@ public class Alarms extends Fragment {
      */
     public ArrayList<AlarmObject> parseAlarmCMD(String CMD) {
         newAlarms = new ArrayList<>();
-        int current_manipulatoralarms[] = new int[MANIPULATORS+1]; //TODO RBS this other index salad has to be fixed as well
-        int new_manipulatoralarms[] = new int[MANIPULATORS+1];
+        int current_manipulatoralarms[] = new int[totalManipulators+1]; //TODO RBS this other index salad has to be fixed as well
+        int new_manipulatoralarms[] = new int[totalManipulators+1];
         int new_commonAlarms=0, current_commonAlarms=0;
 
         try {
             JSONObject JSONparser = new JSONObject(CMD);
             JSONArray manipulatorAlarmArray = JSONparser.getJSONArray("manipulatorAlarms");
+
+            int receivedManipulatorNumber = manipulatorAlarmArray.length();
+            if(receivedManipulatorNumber != totalManipulators) {
+                Log.e("Alarms", "Number of manipualtors has changed from " + totalManipulators + " to " + receivedManipulatorNumber + "!!!!" );
+                SettingManager.setArms(receivedManipulatorNumber);
+                setManipulatorNumber(receivedManipulatorNumber);
+            }
+
             for(int i=0; i<manipulatorAlarmArray.length(); i++) {
                 current_manipulatoralarms[i+1] = manipulatorAlarmArray.getInt(i);
             }
@@ -211,7 +205,7 @@ public class Alarms extends Fragment {
             new_commonAlarms = (lastChecked_CommonAlarms^current_commonAlarms)&current_commonAlarms;
         }
 
-        for(int i=1; i<=MANIPULATORS; i++) {
+        for(int i=0; i<totalManipulators; i++) {
             if(current_manipulatoralarms[i] != lastChecked_Manipulatoralarms[i]){
                 new_manipulatoralarms[i] = (lastChecked_Manipulatoralarms[i]^current_manipulatoralarms[i])&current_manipulatoralarms[i];
             }
@@ -232,45 +226,75 @@ public class Alarms extends Fragment {
             if(BigInteger.valueOf(new_commonAlarms).testBit(i)){
                 //If bit is set: we detected a new alarm.
                 //Type=i+13 because (1-12) are manipulator alarms and (13-20) are equipment alarms
-                newAlarms.add(new AlarmObject(Integer.toString(i+13), strDate, getContext().getResources().getString(R.string.Equipment)));
+                String alarmDescription = getContext().getResources().getString(
+                        getContext().getResources().getIdentifier("alarm_" + (i+13), "string", getContext().getPackageName()));
+                newAlarms.add(new AlarmObject(Integer.toString(i+13), strDate, getContext().getResources().getString(R.string.Equipment), alarmDescription));
             }
         }
         //Arm Alarms
-        for(int j=1; j<=MANIPULATORS; j++) {
+        for(int j=0; j<totalManipulators; j++) {
             //check bit at i
             for(int i=0; i<16; i++) {
                 //check bit at i
                 if(BigInteger.valueOf(new_manipulatoralarms[j]).testBit(i)){
-                    newAlarms.add(new AlarmObject(Integer.toString(i+1), strDate.toString(), getContext().getResources().getString(R.string.Manipulator) + " "  + j));
+                    String alarmDescription = getContext().getResources().getString(
+                            getContext().getResources().getIdentifier("alarm_" + (i+1), "string", getContext().getPackageName()));
+                    newAlarms.add(new AlarmObject(Integer.toString(i+1), strDate.toString(), getContext().getResources().getString(R.string.Manipulator) + " "  + (j+1), alarmDescription));
                 }
             }
         }
 
+        updateCurrentAlarms();
         return newAlarms;
     }
 
-    /*
-     * Returns array of bools denoting which arms have alarms r n
-     * Array starts @index 0
-     *  True: alarms
-     *  False: no alarms
-     */
-    public Boolean[] getCurrentArmState(){
-        Boolean armState[] = new Boolean[MANIPULATORS+1];
+    private void updateCurrentAlarms() {
 
-        if(lastChecked_CommonAlarms != 0) {
-            armState[0] = true;
-        }else{
-            armState[0] = false;
-        }
-        for(int i=1; i<(MANIPULATORS+1); i++) {
+        //Update appbar
+        boolean[] alarms = new boolean[totalManipulators];
+        for(int i=0; i<totalManipulators; i++) {
             if(lastChecked_Manipulatoralarms[i] != 0) {
-                armState[i] = true;
+                alarms[i] = true;
             }else{
-                armState[i] = false;
+                alarms[i] = false;
             }
         }
-        return armState;
+
+        AppBarManager.updateEquipmentAlarm(lastChecked_CommonAlarms != 0);
+        AppBarManager.updateManipulatorAlarms(alarms);
+
+        //update text field
+        infoOutput.setText("");
+        infoOutput.append("Equipment:\n");
+        if(lastChecked_CommonAlarms != 0) {
+            for(int i=0; i<16; i++) {
+                if(BigInteger.valueOf(lastChecked_CommonAlarms).testBit(i)){
+                    String alarmDescription = getContext().getResources().getString(
+                            getContext().getResources().getIdentifier("alarm_" + (i+13), "string", getContext().getPackageName()));
+                    infoOutput.append("    Bit "+i+": "+alarmDescription+"\n");
+                }
+            }
+        } else {
+            infoOutput.append("    No alarms ✔\n");
+        }
+        infoOutput.append("\n");
+
+        for(int j=0; j<totalManipulators; j++) {
+            infoOutput.append("Manipulator "+(j+1)+":\n");
+            if(lastChecked_Manipulatoralarms[j] != 0) {
+                for (int i = 0; i < 16; i++) {
+                    if (BigInteger.valueOf(lastChecked_Manipulatoralarms[j]).testBit(i)) {
+                        String alarmDescription = getContext().getResources().getString(
+                                getContext().getResources().getIdentifier("alarm_" + (i + 1), "string", getContext().getPackageName()));
+                        infoOutput.append("    Bit " + i + ": " + alarmDescription + "\n");
+                    }
+                }
+            } else {
+                infoOutput.append("    No alarms ✔\n");
+            }
+            infoOutput.append("\n");
+        }
+
     }
 
 

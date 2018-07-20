@@ -5,10 +5,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -21,13 +19,15 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
 import java.util.Locale;
+
+import static com.example.administrator.PickingStation.AppBarManager.CONNECTED;
+import static com.example.administrator.PickingStation.AppBarManager.DISCONNECTED;
 
 
 public class MainActivity extends AppCompatActivity
@@ -58,11 +58,7 @@ public class MainActivity extends AppCompatActivity
     private int previous_id = R.id.opt_loading;
     private AsyncTask<String, String, TcpClient> networkConnection;
     private final int TRANSITION_TIME = 400;
-    private Button appbarTransparentButton;
     private TextView title;
-    private ImageView appbar_connection;
-    private ImageView manipulatorAlarmIcon[] = new ImageView[5];
-    private ImageView equipmentAlarmIcon;
     private String CurrentLanguage = "en"; //default
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -83,21 +79,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         SettingManager.initSettingManager(this);
         BrickManager.initBrickManager(this);
+        AppBarManager.initAppBarManager(this);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         setGUILanguage();
 
-        //Make transparent so when user press any icon view switches to alarms
-        appbarTransparentButton = (Button) findViewById(R.id.appbar_button_transparentButton);
-        appbarTransparentButton.setVisibility(View.VISIBLE);
-        appbarTransparentButton.setBackgroundColor(Color.TRANSPARENT);
-        appbar_connection = (ImageView) findViewById(R.id.appbar_imageView_connection);
-        manipulatorAlarmIcon[0] = (ImageView) findViewById(R.id.appbar_imageView_arm1);
-        manipulatorAlarmIcon[1] = (ImageView) findViewById(R.id.appbar_imageView_arm2);
-        manipulatorAlarmIcon[2] = (ImageView) findViewById(R.id.appbar_imageView_arm3);
-        manipulatorAlarmIcon[3] = (ImageView) findViewById(R.id.appbar_imageView_arm4);
-        manipulatorAlarmIcon[4] = (ImageView) findViewById(R.id.appbar_imageView_arm5);
-        equipmentAlarmIcon = (ImageView) findViewById(R.id.appbar_imageview_equipment);
         line = new Line();
         algorithm = new Algorithm();
         editor = new Editor();
@@ -139,16 +125,6 @@ public class MainActivity extends AppCompatActivity
         manager.beginTransaction().replace(R.id.holder_loading, loading, loading.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_alarms, alarms, alarms.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_machine_calibration, machineCalibration, machineCalibration.getTag()).commit();
-
-        //On any icon pressed in the Appbar, switch to alarm view.
-        appbarTransparentButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                switchToLayout(R.id.nav_alarms);
-            }
-        });
 
         startNetworking();
     }
@@ -420,6 +396,7 @@ public class MainActivity extends AppCompatActivity
 
         } else if (cmdID.equals("RPRV")) {
             line.updateLineBrickInfo(receivedString);
+            editor.updateBrickInfo(receivedString);
 
         } else if (cmdID.equals("PGSI")) {
             debug.updateDebugData(receivedString);
@@ -429,9 +406,7 @@ public class MainActivity extends AppCompatActivity
             machineCalibration.onServerResponse(receivedString);
 
         } else if (cmdID.equals("CHAL")) {
-            //Check for new alarms
-            alarms.updateAlarms(alarms.parseAlarmCMD(receivedString));
-            updateAppbarAlarms(alarms.getCurrentArmState());
+            alarms.updateAlarmLog(alarms.parseAlarmCMD(receivedString));
 
         } else if (cmdID.equals("GDIS")) {
             debug_advanced.parseInternalStateDebugData(receivedString);
@@ -455,39 +430,19 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    /*****************************************************
-     *                            --APP BAR ICONS--
-     *****************************************************/
-    public void updateAppbarAlarms(Boolean[] armState) {
-        if(armState[0] == true) {
-            equipmentAlarmIcon.setColorFilter(Color.rgb(255, 0, 0), android.graphics.PorterDuff.Mode.MULTIPLY);
-        } else {
-            equipmentAlarmIcon.clearColorFilter();
-        }
-
-        //Armstate indexes 1 to 5, manipulatorAlarmIcon 0 to 4
-        for(int i=1; i<6; i++) {
-            if(armState[i] == true) {
-                manipulatorAlarmIcon[i-1].setColorFilter(Color.rgb(255, 0, 0), android.graphics.PorterDuff.Mode.MULTIPLY);
-            } else {
-                manipulatorAlarmIcon[i-1].clearColorFilter();
-            }
-        }
-    }
 
     public void onUpdateConnectionStatus(String command) {
         if (command.equals("connectionestablished")) {
-            appbar_connection.setImageResource(R.mipmap.linkup);
-            appbar_connection.clearColorFilter();
+            AppBarManager.updateConnectionIcon(CONNECTED);
             if(previous_id == R.id.opt_loading) {
+
                 onLoadingFinished();
             }
             settings.onEstablishedConnection();
             algorithm.onEstablishedConnection();
 
         } else if (command.equals("connectionlost")) {
-            appbar_connection.setImageResource(R.mipmap.linkdown);
-            appbar_connection.setColorFilter(Color.rgb(115, 0, 0));
+            AppBarManager.updateConnectionIcon(DISCONNECTED);
             settings.onLostConnection();
             algorithm.onLostConnection();
         }

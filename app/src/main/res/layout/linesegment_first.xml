@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:id="@+id/lineSegment_button_palletUp"
+        android:layout_width="@dimen/brick_size"
+        android:layout_height="98dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:textAlignment="center"
+        android:textSize="11sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/lineSegment_imageView_palletDown"
+        app:layout_constraintEnd_toEndOf="@+id/lineSegment_imageView_palletDown"
+        app:layout_constraintStart_toStartOf="@+id/lineSegment_imageView_palletDown"
+        app:layout_constraintTop_toTopOf="@+id/lineSegment_imageView_palletDown"
+        app:layout_constraintVertical_bias="0.77" />
+
+    <Button
+        android:id="@+id/lineSegment_button_palletDown"
+        android:layout_width="@dimen/brick_size"
+        android:layout_height="98dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="28dp"
+        android:background="@android:color/transparent"
+        android:textAlignment="center"
+        android:textSize="11sp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@+id/lineSegment_imageView_palletUp"
+        app:layout_constraintHorizontal_bias="0.517"
+        app:layout_constraintStart_toStartOf="@+id/lineSegment_imageView_palletUp"
+        app:layout_constraintTop_toTopOf="@+id/lineSegment_imageView_palletUp" />
+
+    <ImageView
+        android:id="@+id/segment_background"
+        android:layout_width="200dp"
+        android:layout_height="559dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@mipmap/lines_first_big" />
+
+    <ImageView
+        android:id="@+id/lineSegment_imageView_palletUp"
+        android:layout_width="@dimen/pallet_size"
+        android:layout_height="@dimen/pallet_size"
+        android:layout_marginBottom="44dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="378dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/pallet"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/line_image_middle_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/lineSegment_imageView_palletDown"
+        android:layout_width="@dimen/pallet_size"
+        android:layout_height="@dimen/pallet_size"
+        android:layout_marginBottom="44dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="44dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/pallet"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/line_image_middle_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lineSegment_textView_UIDup"
+        android:layout_width="139dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:background="@color/colorBlack"
+        android:text="0000000000000000"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/lineSegment_imageView_palletDown"
+        tools:text="0000000000000000" />
+
+    <TextView
+        android:id="@+id/lineSegment_textView_UIDDown"
+        android:layout_width="139dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="164dp"
+        android:layout_marginStart="14dp"
+        android:background="@android:color/black"
+        android:text="0000000000000000"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

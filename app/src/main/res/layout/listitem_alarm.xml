@@ -23,14 +23,13 @@
       android:layout_height="wrap_content"
       android:layout_alignParentEnd="true"
       android:layout_centerVertical="true"
-      android:layout_marginStart="4dp"
       android:layout_marginEnd="2dp"
+      android:layout_marginStart="4dp"
       android:maxLines="1"
       android:paddingEnd="4dp"
       android:textColor="#000000"
       android:textSize="@dimen/text_small"
-      tools:text="Detail"
-      />
+      tools:text="Timestamp" />
 
   <RelativeLayout
       android:id="@+id/recipe_list_text_layout"
@@ -47,8 +46,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:textSize="@dimen/text_big"
-        tools:text="Title"
-        />
+        tools:text="Source" />
 
     <TextView
         android:id="@+id/recipe_list_subtitle"
@@ -61,8 +59,7 @@
         android:ellipsize="end"
         android:maxLines="3"
         android:textSize="@dimen/text_default"
-        tools:text="Subtitle"
-        />
+        tools:text="description" />
 
   </RelativeLayout>
 </RelativeLayout>

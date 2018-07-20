@@ -39,12 +39,12 @@ public class SettingManager {
         sharedPref_editor.commit();
     }
 
-    static int getTotalManipulators() {
+    static int getArms() {
         SharedPreferences sharedPref = appContext.getSharedPreferences(appContext.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         return sharedPref.getInt("MANIPULATORS", 5); //Default Number is 5
     }
 
-    static void setTotalManipulators(int numberOfManipulators) {
+    static void setArms(int numberOfManipulators) {
         SharedPreferences sharedPref = appContext.getSharedPreferences(appContext.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor sharedPref_editor = sharedPref.edit();
         sharedPref_editor.putInt("MANIPULATORS", numberOfManipulators);

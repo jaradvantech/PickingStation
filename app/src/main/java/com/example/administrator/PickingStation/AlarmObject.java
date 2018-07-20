@@ -10,16 +10,19 @@ import java.util.Date;
 public class AlarmObject {
 
     private String type;
+    private String description;
     private String time;
     private String source;
+
 
     AlarmObject(){
     }
 
-    AlarmObject(String mType, String mTime, String mSource){
+    AlarmObject(String mType, String mTime, String mSource, String mDescription){
         this.type = mType;
         this.time = mTime;
         this.source = mSource;
+        this.description = mDescription;
     }
 
     public String toString(){
@@ -48,6 +51,10 @@ public class AlarmObject {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     /* RBS

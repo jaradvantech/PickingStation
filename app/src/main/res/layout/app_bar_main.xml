@@ -41,17 +41,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.45999998" />
 
-            <Button
-                android:id="@+id/appbar_button_transparentButton"
-                android:layout_width="286dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="112dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/appbar_imageView_connection"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/appbar_imageView_connection"
-                app:layout_constraintVertical_bias="0.416" />
-
             <ImageView
                 android:id="@+id/appbar_imageView_connection"
                 android:layout_width="@dimen/action_bar_icon_size"
@@ -66,87 +55,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@mipmap/linkdown" />
 
-            <ImageView
-                android:id="@+id/appbar_imageView_arm5"
-                android:layout_width="@dimen/action_bar_icon_size"
-                android:layout_height="@dimen/action_bar_icon_size"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="8dp"
-                android:scaleType="fitXY"
+            <LinearLayout
+                android:id="@+id/appBar_linearLayout_alarms"
+                android:layout_width="645dp"
+                android:layout_height="53dp"
+                android:layout_marginEnd="360dp"
+                android:layout_marginStart="8dp"
+                android:layoutDirection="rtl"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/appbar_imageView_connection"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.4"
-                app:srcCompat="@mipmap/robotarm" />
-
-            <ImageView
-                android:id="@+id/appbar_imageView_arm4"
-                android:layout_width="@dimen/action_bar_icon_size"
-                android:layout_height="@dimen/action_bar_icon_size"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/appbar_imageView_arm5"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.4"
-                app:srcCompat="@mipmap/robotarm" />
-
-            <ImageView
-                android:id="@+id/appbar_imageView_arm2"
-                android:layout_width="@dimen/action_bar_icon_size"
-                android:layout_height="@dimen/action_bar_icon_size"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/appbar_imageView_arm3"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.4"
-                app:srcCompat="@mipmap/robotarm" />
-
-            <ImageView
-                android:id="@+id/appbar_imageView_arm3"
-                android:layout_width="@dimen/action_bar_icon_size"
-                android:layout_height="@dimen/action_bar_icon_size"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/appbar_imageView_arm4"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.4"
-                app:srcCompat="@mipmap/robotarm" />
-
-            <ImageView
-                android:id="@+id/appbar_imageView_arm1"
-                android:layout_width="@dimen/action_bar_icon_size"
-                android:layout_height="@dimen/action_bar_icon_size"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="8dp"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/appbar_imageView_arm2"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.4"
-                app:srcCompat="@mipmap/robotarm" />
-
-            <ImageView
-                android:id="@+id/appbar_imageview_equipment"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/appbar_imageView_arm1"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/equipment" />
+                app:layout_constraintHorizontal_bias="0.52"
+                app:layout_constraintStart_toEndOf="@+id/appBar_TextView_Title"
+                app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
         </android.support.constraint.ConstraintLayout>
 

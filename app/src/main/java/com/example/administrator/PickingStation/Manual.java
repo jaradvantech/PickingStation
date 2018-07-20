@@ -27,9 +27,10 @@ import pl.droidsonroids.gif.GifImageView;
 public class Manual extends Fragment {
 
     private OnFragmentInteractionListener mFragmentInteraction;
-    private int currentArm = 1;
-    private boolean[] manualMode = new boolean[5+1]; //Default = false. Will be inverted when sending the command so the default becomes "auto"
-    private boolean[] VV = new  boolean[5+1]; //Length +1 so I can start at 1
+    private int currentArm = 0;
+    private int totalArms;
+    private boolean[] manualMode; //Default = false. Will be inverted when sending the command so the default becomes "auto"
+    private boolean[] VV;
 
     private ImageView manual_imageView_up;
     private ImageView manual_imageView_down;
@@ -50,6 +51,8 @@ public class Manual extends Fragment {
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         View view = inflater.inflate(R.layout.fragment_manual, container, false);
+
+        this.setManipulatorNumber(SettingManager.getArms());
 
         Button manual_reset = (Button) view.findViewById(R.id.manual_reset);
         final Switch mode = view.findViewById(R.id.manual_switch_mode);
@@ -95,6 +98,7 @@ public class Manual extends Fragment {
                     manualMode[currentArm] = false;
                     writePLCData(0, 0, 0, currentArm);
                 }
+                AppBarManager.updateAppbarModes(manualMode);
             }
         });
 
@@ -104,7 +108,7 @@ public class Manual extends Fragment {
             @Override
             public void onClick( View view ) {
                 //all to manual, all valves off
-                for(int i=1; i<6; i++){
+                for(int i=0; i<totalArms; i++){
                     VV[i] = false;
                     manualMode[i] = true;
                     writePLCData(0, 0, 0, i);
@@ -129,9 +133,9 @@ public class Manual extends Fragment {
         manual_imageView_previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick( View view ) {
-                if (currentArm > 1) {
+                if (currentArm > 0) {
                     currentArm--;
-                    currentArmText.setText(Integer.toString(currentArm));
+                    currentArmText.setText(Integer.toString(currentArm+1));
 
                     //Set mode switch to the appropiate value for this arm
                     mode.setChecked(manualMode[currentArm]);
@@ -152,9 +156,9 @@ public class Manual extends Fragment {
         manual_imageView_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick( View view ) {
-                if (currentArm < 5) {
+                if (currentArm < totalArms-1) {
                     currentArm++;
-                    currentArmText.setText(Integer.toString(currentArm));
+                    currentArmText.setText(Integer.toString(currentArm+1));
 
                     mode.setChecked(manualMode[currentArm]);
 
@@ -269,6 +273,12 @@ public class Manual extends Fragment {
         return view;
     }
 
+    public void setManipulatorNumber(int number) {
+        manualMode = new boolean[number];
+        VV = new  boolean[number];
+        totalArms = number;
+    }
+
     @Override
     public void onAttach( Context context ) {
         super.onAttach(context);
@@ -311,7 +321,7 @@ public class Manual extends Fragment {
         try {
             JSONObject JSONOutput = new JSONObject();
             JSONOutput.put("command_ID", "PWDA");
-            JSONOutput.put("selectedArm", mArm);
+            JSONOutput.put("selectedArm", mArm+1);
             JSONOutput.put("MM", !manualMode[mArm]);
             JSONOutput.put("VV", VV[mArm]);
             JSONOutput.put("MFB", MFB);

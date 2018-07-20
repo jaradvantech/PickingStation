@@ -33,7 +33,8 @@
             android:id="@+id/editor_listView_colours"
             android:layout_width="220dp"
             android:layout_height="275dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="32dp"
             android:alwaysDrawnWithCache="false"
             android:choiceMode="singleChoice"
             android:clickable="false"
@@ -42,25 +43,20 @@
             android:maxHeight="10dp"
             android:minHeight="10dp"
             android:scrollingCache="false"
-            app:layout_constraintEnd_toStartOf="@+id/editor_listView_grades"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/editor_ScrollView_pallets"
-            app:layout_constraintTop_toTopOf="@+id/editor_listView_grades" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
         <ListView
             android:id="@+id/editor_listView_grades"
             style="@style/Widget.AppCompat.ListView.Menu"
             android:layout_width="220dp"
             android:layout_height="275dp"
-            android:layout_marginStart="60dp"
+            android:layout_marginStart="56dp"
             android:choiceMode="singleChoice"
             android:entries="@array/Grades"
             android:listSelector="@color/colorPrimaryPale"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/editor_button_add"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/editor_listView_colours"
-            app:layout_constraintTop_toBottomOf="@+id/editor_ScrollView_pallets" />
+            app:layout_constraintTop_toTopOf="@+id/editor_listView_colours" />
 
         <TextView
             android:id="@+id/editor_textView_Indicator"
@@ -111,171 +107,50 @@
             android:id="@+id/editor_button_add"
             android:layout_width="150dp"
             android:layout_height="55dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="8dp"
             android:text="@string/Add"
             android:textSize="@dimen/text_default"
-            app:layout_constraintEnd_toEndOf="@+id/editor_ScrollView_pallets"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/editor_listView_grades"
             app:layout_constraintTop_toTopOf="@+id/editor_listView_grades" />
 
-        <HorizontalScrollView
-            android:id="@+id/editor_ScrollView_pallets"
-            android:layout_width="800dp"
-            android:layout_height="291dp"
-            app:layout_constraintBottom_toTopOf="@+id/editor_listView_grades"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="717dp"
+            android:layout_height="300dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="36dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/editor_flipview_bricks_stack"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.195"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.078">
 
-            <android.support.constraint.ConstraintLayout
+            <HorizontalScrollView
+                android:id="@+id/editor_ScrollView_pallets"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/editor_listView_grades"
+                app:layout_constraintEnd_toStartOf="@+id/editor_flipview_bricks_stack"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <ToggleButton
-                    android:id="@+id/editor_button_pallet_8"
-                    style="@android:style/Widget.Material.Button.Toggle"
-                    android:layout_width="104dp"
-                    android:layout_height="104dp"
-                    android:layout_marginStart="@dimen/space_between_pallets_horizontal"
-                    android:textOff="8"
-                    android:textOn="8"
-                    android:textSize="@dimen/text_default"
-                    app:layout_constraintBottom_toTopOf="@+id/editor_button_pallet_7"
-                    app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_6"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ToggleButton
-                    android:id="@+id/editor_button_pallet_2"
-                    style="@android:style/Widget.Material.Button.Toggle"
-                    android:layout_width="104dp"
-                    android:layout_height="104dp"
-                    android:layout_marginStart="76dp"
-                    android:textOff="2"
-                    android:textOn="2"
-                    android:textSize="@dimen/text_default"
-                    app:layout_constraintBottom_toTopOf="@+id/editor_button_pallet_1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ToggleButton
-                    android:id="@+id/editor_button_pallet_9"
-                    style="@android:style/Widget.Material.Button.Toggle"
-                    android:layout_width="104dp"
-                    android:layout_height="104dp"
-                    android:layout_marginStart="45dp"
-                    android:layout_marginTop="24dp"
-                    android:textOff="9"
-                    android:textOn="9"
-                    android:textSize="@dimen/text_default"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_7"
-                    app:layout_constraintTop_toBottomOf="@+id/editor_button_pallet_10" />
-
-                <ToggleButton
-                    android:id="@+id/editor_button_pallet_1"
-                    style="@android:style/Widget.Material.Button.Toggle"
-                    android:layout_width="104dp"
-                    android:layout_height="104dp"
-                    android:layout_marginTop="@dimen/space_between_pallets_middle"
-                    android:textOff="1"
-                    android:textOn="1"
-                    android:textSize="@dimen/text_default"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/editor_button_pallet_2"
-                    app:layout_constraintTop_toBottomOf="@+id/editor_button_pallet_2" />
-
-                <ToggleButton
-                    android:id="@+id/editor_button_pallet_3"
-                    style="@android:style/Widget.Material.Button.Toggle"
-                    android:layout_width="104dp"
-                    android:layout_height="104dp"
-                    android:layout_marginStart="@dimen/space_between_pallets_horizontal"
-                    android:layout_marginTop="@dimen/space_between_pallets_middle"
-                    android:textOff="3"
-                    android:textOn="3"
-                    android:textSize="@dimen/text_default"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_1"
-                    app:layout_constraintTop_toBottomOf="@+id/editor_button_pallet_4" />
-
-                <ToggleButton
-                    android:id="@+id/editor_button_pallet_5"
-                    style="@android:style/Widget.Material.Button.Toggle"
-                    android:layout_width="104dp"
-                    android:layout_height="104dp"
-                    android:layout_marginStart="@dimen/space_between_pallets_horizontal"
-                    android:layout_marginTop="@dimen/space_between_pallets_middle"
-                    android:textOff="5"
-                    android:textOn="5"
-                    android:textSize="@dimen/text_default"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_3"
-                    app:layout_constraintTop_toBottomOf="@+id/editor_button_pallet_6" />
-
-                <ToggleButton
-                    android:id="@+id/editor_button_pallet_7"
-                    style="@android:style/Widget.Material.Button.Toggle"
-                    android:layout_width="104dp"
-                    android:layout_height="104dp"
-                    android:layout_marginStart="@dimen/space_between_pallets_horizontal"
-                    android:layout_marginTop="@dimen/space_between_pallets_middle"
-                    android:textOff="7"
-                    android:textOn="7"
-                    android:textSize="@dimen/text_default"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_5"
-                    app:layout_constraintTop_toBottomOf="@+id/editor_button_pallet_8" />
-
-                <ToggleButton
-                    android:id="@+id/editor_button_pallet_4"
-                    style="@android:style/Widget.Material.Button.Toggle"
-                    android:layout_width="104dp"
-                    android:layout_height="104dp"
-                    android:layout_marginStart="@dimen/space_between_pallets_horizontal"
-                    android:textOff="4"
-                    android:textOn="4"
-                    android:textSize="@dimen/text_default"
-                    app:layout_constraintBottom_toTopOf="@+id/editor_button_pallet_3"
-                    app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_2"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ToggleButton
-                    android:id="@+id/editor_button_pallet_6"
-                    style="@android:style/Widget.Material.Button.Toggle"
-                    android:layout_width="104dp"
-                    android:layout_height="104dp"
-                    android:layout_marginStart="@dimen/space_between_pallets_horizontal"
-                    android:textOff="6"
-                    android:textOn="6"
-                    android:textSize="@dimen/text_default"
-                    app:layout_constraintBottom_toTopOf="@+id/editor_button_pallet_5"
-                    app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_4"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ToggleButton
-                    android:id="@+id/editor_button_pallet_10"
-                    style="@android:style/Widget.Material.Button.Toggle"
-                    android:layout_width="104dp"
-                    android:layout_height="104dp"
-                    android:layout_marginStart="@dimen/space_between_pallets_horizontal"
-                    android:textOff="10"
-                    android:textOn="10"
-                    android:textSize="@dimen/text_default"
-                    app:layout_constraintBottom_toTopOf="@+id/editor_button_pallet_9"
-                    app:layout_constraintStart_toEndOf="@+id/editor_button_pallet_8"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </android.support.constraint.ConstraintLayout>
-
-        </HorizontalScrollView>
+                <LinearLayout
+                    android:id="@+id/editor_linearLayout_holder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"></LinearLayout>
+            </HorizontalScrollView>
+        </android.support.constraint.ConstraintLayout>
 
         <com.bartoszlipinski.flippablestackview.FlippableStackView
             android:id="@+id/editor_flipview_bricks_stack"
             android:layout_width="376dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="44dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

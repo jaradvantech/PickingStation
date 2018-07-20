@@ -15,6 +15,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,17 +28,22 @@ import static com.example.administrator.PickingStation.Commands.ALGC;
 
 public class Algorithm extends Fragment {
     private AlertDialog.Builder dialogBuilder;
-    private final int MANIPULATORS = 5;
     private boolean unsavedChanges = false;
     private OnFragmentInteractionListener mFragmentInteraction;
-    private int manipulatorModes[]  = new int[MANIPULATORS];
-    private ImageView imageViews[] = new ImageView[MANIPULATORS];
-    private TextView textViews[] = new TextView[MANIPULATORS];
+    private int manipulatorModes[];
+    private ImageView imageViews[];
+    private TextView textViews[];
     private TextView demoBrick;
     private ListView algorithm_listView_colours;
     private ListView algorithm_listView_grades;
     private int currentColor = 1;
     private int currentGrade = 1;
+
+    private LayoutInflater inflater;
+    private ViewGroup container;
+    private LinearLayout holder;
+    private View view;
+    private int armNumber;
 
     private final int INPUT = 0;
     private final int INOUT = 1;
@@ -53,25 +59,17 @@ public class Algorithm extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        //TODO manipulator number independent
-        View view = inflater.inflate(R.layout.fragment_algorithm, container, false);
-        imageViews[0] = (ImageView) view.findViewById(R.id.algorithm_imageView_arm1mode);
-        imageViews[1] = (ImageView) view.findViewById(R.id.algorithm_imageView_arm2mode);
-        imageViews[2] = (ImageView) view.findViewById(R.id.algorithm_imageView_arm3mode);
-        imageViews[3] = (ImageView) view.findViewById(R.id.algorithm_imageView_arm4mode);
-        imageViews[4] = (ImageView) view.findViewById(R.id.algorithm_imageView_arm5mode);
-        textViews[0] = (TextView) view.findViewById(R.id.algorithm_textView_manipulator1);
-        textViews[1] = (TextView) view.findViewById(R.id.algorithm_textView_manipulator2);
-        textViews[2] = (TextView) view.findViewById(R.id.algorithm_textView_manipulator3);
-        textViews[3] = (TextView) view.findViewById(R.id.algorithm_textView_manipulator4);
-        textViews[4] = (TextView) view.findViewById(R.id.algorithm_textView_manipulator5);
-        demoBrick = (TextView) view.findViewById(R.id.algorithm_demobrick);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.view = inflater.inflate(R.layout.fragment_algorithm, container, false);
+        this.holder = view.findViewById(R.id.algorithm_linearLayout_modes);
+        this.demoBrick = (TextView) view.findViewById(R.id.algorithm_demobrick);
         Button saveButton = (Button) view.findViewById(R.id.algorithm_button_save);
+        this.inflater = inflater;
+        this.container = container;
 
-        updateDisplay();
+        //setManipulatorNumber(SettingManager.getArms());
+        setManipulatorNumber(7);
+
 
         //SAVE DIALOG
         dialogBuilder = new AlertDialog.Builder(getActivity());
@@ -131,42 +129,6 @@ public class Algorithm extends Fragment {
             }
         });
 
-        imageViews[0].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Algorithm.this.updateModes(0);
-                unsavedChanges = true;
-            }
-        });
-        imageViews[1].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Algorithm.this.updateModes(1);
-                unsavedChanges = true;
-            }
-        });
-        imageViews[2].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Algorithm.this.updateModes(2);
-                unsavedChanges = true;
-            }
-        });
-        imageViews[3].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Algorithm.this.updateModes(3);
-                unsavedChanges = true;
-            }
-        });
-        imageViews[4].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Algorithm.this.updateModes(4);
-                unsavedChanges = true;
-            }
-        });
-
         return view;
     }
 
@@ -187,6 +149,36 @@ public class Algorithm extends Fragment {
         mFragmentInteraction = null;
     }
 
+    public void setManipulatorNumber(int number) {
+        this.armNumber = number;
+        manipulatorModes = new int[armNumber];
+        View currentViews[] = new View[armNumber]; //RBS maybe this is not needed.
+        imageViews = new ImageView[armNumber];
+        textViews = new TextView[armNumber];
+        holder.removeAllViews();
+
+        for(int i=0; i<armNumber; i++) {
+            currentViews[i] = inflater.inflate(R.layout.algorithm_segment, container, false);
+            imageViews[i] = currentViews[i].findViewById(R.id.algorithmSegment_imageView_mode);
+            textViews[i] = currentViews[i].findViewById(R.id.algorithmSegment_textView_text);
+            holder.addView(currentViews[i]);
+        }
+
+        //Create listeners
+        for(int i=0; i<armNumber; i++) {
+            final int fi = i;
+            imageViews[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Algorithm.this.updateModes(fi);
+                    unsavedChanges = true;
+                }
+            });
+        }
+        updateDisplay();
+    }
+
     private void updateModes(int mManipulator) {
         manipulatorModes[mManipulator] += 1;
         if (manipulatorModes[mManipulator] > 3)
@@ -195,22 +187,22 @@ public class Algorithm extends Fragment {
     }
 
     private void updateDisplay() {
-        for (int i = 0; i<MANIPULATORS; i++) {
+        for (int i = 0; i<armNumber; i++) {
             if (manipulatorModes[i] == INPUT) {
                 imageViews[i].setImageResource(R.mipmap.in);
-                textViews[i].setText(getString(R.string.Arm) + " " + i +getString(R.string.INPUT));
+                textViews[i].setText(getString(R.string.Arm) + " " + (i+1) +getString(R.string.INPUT));
 
             } else if (manipulatorModes[i] == INOUT) {
                 imageViews[i].setImageResource(R.mipmap.inout);
-                textViews[i].setText(getString(R.string.Arm) + " " + i +getString(R.string.INOUT));
+                textViews[i].setText(getString(R.string.Arm) + " " + (i+1) +getString(R.string.INOUT));
 
             } else if (manipulatorModes[i] == OUTPUT) {
                 imageViews[i].setImageResource(R.mipmap.out);
-                textViews[i].setText(getString(R.string.Arm) + " " + i +getString(R.string.OUTPUT));
+                textViews[i].setText(getString(R.string.Arm) + " " + (i+1) +getString(R.string.OUTPUT));
 
             } else if(manipulatorModes[i] == DISABLED){
                 imageViews[i].setImageResource(R.mipmap.disabled);
-                textViews[i].setText(getString(R.string.Arm) + " " + i +getString(R.string.DISABLED));
+                textViews[i].setText(getString(R.string.Arm) + " " + (i+1) +getString(R.string.DISABLED));
             }
         }
         setDemoBrickColor(currentColor);
@@ -229,6 +221,14 @@ public class Algorithm extends Fragment {
             demoBrick.setVisibility(View.VISIBLE);
 
             JSONArray arrayMode = JSONparser.getJSONArray("manipulatorModes");
+
+            int receivedArmNumber = arrayMode.length();
+            if(receivedArmNumber != armNumber) {
+                Log.e("Algorithm", "Number of arms has changed from " + armNumber + " to " + receivedArmNumber + "!!!!" );
+                SettingManager.setArms(receivedArmNumber);
+                this.setManipulatorNumber(receivedArmNumber);
+            }
+
             for(int i=0; i<arrayMode.length(); i++) {
                 manipulatorModes[i] = arrayMode.getInt(i);
             }
@@ -250,7 +250,7 @@ public class Algorithm extends Fragment {
             JSONOutput.put("grade", algorithm_listView_grades.getCheckedItemPosition());
 
             JSONArray modes = new JSONArray();
-            for(int i=0; i<MANIPULATORS; i++)
+            for(int i=0; i<armNumber; i++)
                 modes.put(manipulatorModes[i]);
             JSONOutput.put("modes", modes);
 
@@ -265,8 +265,8 @@ public class Algorithm extends Fragment {
         demoBrick.setText(BrickManager.getGrade(mGrade));
     }
 
-    public void setDemoBrickColor(int mColor ) {
-        demoBrick.setBackgroundColor(BrickManager.getColor(mColor));
+    public void setDemoBrickColor(int mColor) {
+        demoBrick.setBackgroundColor(mColor);
     }
 
     public void whenEnteringFragment() {

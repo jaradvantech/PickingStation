@@ -120,7 +120,7 @@ public class Debug extends Fragment {
 
         debug_next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (currentArm < 5) {
+                if (currentArm < SettingManager.getArms()) {
                     currentArm++;
                     currentArmText.setText(Integer.toString(currentArm));
                 }

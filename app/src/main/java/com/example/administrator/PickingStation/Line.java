@@ -11,13 +11,17 @@ import android.os.Looper;
 import android.support.animation.DynamicAnimation;
 import android.support.animation.SpringAnimation;
 import android.support.animation.SpringForce;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +35,6 @@ import static android.support.animation.SpringForce.DAMPING_RATIO_NO_BOUNCY;
 import static android.support.animation.SpringForce.STIFFNESS_VERY_LOW;
 import static com.example.administrator.PickingStation.Commands.RPRV;
 
-//Pese a mis esfuerzos de adecentarla, esta clase es una chapuza, de principio a fin. firmado RBS
 
 public class Line extends Fragment {
     private OnFragmentInteractionListener mListener;
@@ -39,35 +42,34 @@ public class Line extends Fragment {
     //JAGM: Arbitrary constants to control the position of the bricks on the line
     private float OriginPosition = -116.35f; //smaller=later
     private float EncoderToPixelDivider = 10.1f; //mas grande, lo suelta antes
-    private final ImageView PhysicalPallet[] = new ImageView[10 + 1];
-    private final TextView PhysicalPallet_UID_Viewer[] = new TextView[10 + 1]; //RBS TODO make this start at 0
-    private final TextView PhysicalBricksOnTheLine_Brick_Viewer[] = new TextView[12 + 1];
-    private final Button PhysicalPallet_TopBrick[] = new Button[10 + 1];
+    private ImageView PhysicalPallet[];
+    private TextView PhysicalPallet_UID[];
+    private TextView bricksOnTheLine[] = new TextView[12];
+    private Button PhysicalPallet_TopBrick[];
     private boolean autoUpdate;
     private int armNumber;
-    private View view;
-    private int MANIPULATORS = 5; //Will be variable in the future. default 5
-    private int PALLETS = 2*MANIPULATORS;
-    private int NumberOfPallets;
+    private int palletNumber;
     private int NumberOfBricksOnLine;
-    private ArrayList DNIinUse = new ArrayList<>();
-    private int current_ManipulatorDNIs[] = new int[MANIPULATORS+1];
-    private int last_ManipulatorDNIs[] = new int[MANIPULATORS+1];
-    private int destinationPallets[] = new int[(2*MANIPULATORS)+1];
+    private ArrayList DNIinUse;
+    private int current_ManipulatorDNIs[];
+    private int last_ManipulatorDNIs[];
+    private int destinationPallets[];
+    private int palletCoords[][];
     private final int RPRV_PERIOD = 300;
-    private final  String NULL_UID = "0000000000000000";
+    private final int X = 0;
+    private final int Y = 1;
+    private final String NULL_UID = "0000000000000000";
     private final Handler handler = new Handler(Looper.getMainLooper());
     private JSONArray palletInformation = null;
     private JSONArray bricksOnLine = null;
     private JSONArray takenBricks = null;
 
-   /* Convert from pallet number (1-10) to px. (index 0 means origin)
-    * (pixel) palletCoords[(x=0, y=1)][(pallet num)]
-    */
-    private final int palletCoords[][]={
-        {-100, 143, 143, 343, 343, 543, 543, 743, 743, 943, 943},
-        {  230, 408,  68, 408,   68, 408,   68, 408,  68,  408,  68}
-    };
+    private LayoutInflater inflater;
+    private ViewGroup container;
+    private LinearLayout holder;
+    private ConstraintLayout main;
+    private View view;
+
 
     public Line() {
     }
@@ -79,57 +81,18 @@ public class Line extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //Set layout
         view = inflater.inflate(R.layout.fragment_line, container, false);
+        holder = view.findViewById(R.id.line_linearLayout_holder);
+        main = view.findViewById(R.id.line_constraintLayout_mainContainer);
+        this.inflater = inflater;
+        this.container = container;
 
-        //Init bricks on the line
-        for (int i = 1; i < PhysicalBricksOnTheLine_Brick_Viewer.length; i++) {
-            String PhysicalBricksOnTheLine_Brick_ViewerID = "line_textView_brickOnTheLine_" + (i);
-
-            int PhysicalBricksOnTheLine_Brick_ViewerIDresID = getResources().getIdentifier(PhysicalBricksOnTheLine_Brick_ViewerID, "id", getActivity().getPackageName());
-
-            PhysicalBricksOnTheLine_Brick_Viewer[i] = ((TextView) view.findViewById(PhysicalBricksOnTheLine_Brick_ViewerIDresID));
-        }
-
-
-        for (int i = 1; i < PhysicalPallet.length; i++) {
-            String PhysicalPalletID = "line_image_pallet_" + (i);
-            String PhysicalPallet_UID_ViewerID = "line_textView_UID_" + (i);
-            String PhysicalPallet_TopBrickID = "line_button_pallet_" + (i);
-
-            int PhysicalPalletresID = getResources().getIdentifier(PhysicalPalletID, "id", getActivity().getPackageName());
-            int PhysicalPallet_UID_ViewerIDresID = getResources().getIdentifier(PhysicalPallet_UID_ViewerID, "id", getActivity().getPackageName());
-            int PhysicalPallet_TopBrickresID = getResources().getIdentifier(PhysicalPallet_TopBrickID, "id", getActivity().getPackageName());
-
-            PhysicalPallet[i] = ((ImageView) view.findViewById(PhysicalPalletresID));
-            PhysicalPallet_UID_Viewer[i] = ((TextView) view.findViewById(PhysicalPallet_UID_ViewerIDresID));
-            PhysicalPallet_TopBrick[i] = ((Button) view.findViewById(PhysicalPallet_TopBrickresID));
-
-            PhysicalPallet_TopBrick[i].setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    int index = 1;
-                    for (int j = 1; j < PhysicalPallet_TopBrick.length; j++) {
-                        if (PhysicalPallet_TopBrick[j].getId() == v.getId()) {
-                            index = j;
-                        }
-                    }
-
-                    //Ask to server, so when switching layouts is done, information is already there.
-                    try {
-                        JSONObject RGMVCommand = new JSONObject();
-                        RGMVCommand.put("command_ID", "RGMV");
-                        RGMVCommand.put("palletNumber", index);
-                        mListener.onSendCommand(RGMVCommand.toString());
-                    } catch(JSONException exc) {
-                        Log.d("JSON exception", exc.getMessage());
-                    }
-                    ((MainActivity)getActivity()).switchToLayout(R.id.nav_editor);
-                }
-            });
-        }
+        //setNumberOfManipulators(SettingManager.getArms());
+        setNumberOfManipulators(8);
 
         return view;
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -162,7 +125,12 @@ public class Line extends Fragment {
             bricksOnLine = JSONparser.getJSONArray("bricksOnTheLine");
             takenBricks = JSONparser.getJSONArray("bricksTakenByManipulators");
 
-            NumberOfPallets = palletInformation.length(); //this won't be necessary in the future.
+            int receivedPalletNumber = palletInformation.length(); //this won't be necessary in the future.
+            if(receivedPalletNumber != palletNumber) {
+                Log.e("Line", "Number of pallets has changed from " + palletNumber + " to " + receivedPalletNumber + "!!!!" );
+                SettingManager.setArms(receivedPalletNumber/2);
+                this.setNumberOfManipulators(receivedPalletNumber/2);
+            }
             NumberOfBricksOnLine = bricksOnLine.length();
 
         } catch (Exception jsonExc) {
@@ -170,35 +138,28 @@ public class Line extends Fragment {
         }
 
         DNIinUse = new ArrayList<>();
-        try {
-            updateBricksInPallets();
 
-            updateBricksOnLine();
+        updateBricksInPallets();
 
-            checkForPickedBricks();
+        updateBricksOnLine();
 
-            hideUnusedBricks();
-        } catch(Exception e) {
-            //Today this cannot fail //TODO remove tomorrow
-            Log.e("RPRV fail", e.toString());
-        }
+        checkForPickedBricks();
+
+        hideUnusedBricks();
     }
 
     /*
-     *  Update UID and content of every pallet. Argument is the response
-     *  of an RPRV command.
+     *  Update UID and content of every pallet.
      */
     private void updateBricksInPallets() {
         //For every pallet in the line
-        for (int i = 1; i <= NumberOfPallets; i++) {
+        for (int i=0; i<palletNumber; i++) {
             String palletUID = NULL_UID;
             int numberOfBricks=0, topBrick=0;
-            //RBS TODO by the time we finally rewrite all of this, hopefully during the summer,
-            //TODO we MUST finally put an end to this index0-index1 salad
             try {
-                palletUID = palletInformation.getJSONObject(i-1).getString("palletUID");
-                numberOfBricks = palletInformation.getJSONObject(i-1).getInt("numberOfBricks");
-                topBrick = palletInformation.getJSONObject(i-1).getInt("topBrick");
+                palletUID = palletInformation.getJSONObject(i).getString("palletUID");
+                numberOfBricks = palletInformation.getJSONObject(i).getInt("numberOfBricks");
+                topBrick = palletInformation.getJSONObject(i).getInt("topBrick");
             } catch (Exception jsonExc) {
                 Log.e("JSON Exception", "updateBricksInPallets(): " + jsonExc.getMessage());
             }
@@ -206,14 +167,14 @@ public class Line extends Fragment {
             //Update pallets
             if (palletUID.contentEquals(NULL_UID)) {
                 PhysicalPallet[i].setVisibility(View.INVISIBLE);
-                PhysicalPallet_UID_Viewer[i].setVisibility(View.INVISIBLE);
-                PhysicalPallet_UID_Viewer[i].setText(palletUID);
+                PhysicalPallet_UID[i].setVisibility(View.INVISIBLE);
+                PhysicalPallet_UID[i].setText(palletUID);
                 PhysicalPallet_TopBrick[i].setBackgroundColor(Color.TRANSPARENT);
                 PhysicalPallet_TopBrick[i].setText("");
             } else {
                 PhysicalPallet[i].setVisibility(View.VISIBLE);
-                PhysicalPallet_UID_Viewer[i].setVisibility(View.VISIBLE);
-                PhysicalPallet_UID_Viewer[i].setText(palletUID);
+                PhysicalPallet_UID[i].setVisibility(View.VISIBLE);
+                PhysicalPallet_UID[i].setText(palletUID);
                 if (numberOfBricks > 0) {
                     int colorID = getResources().getIdentifier("brick_color_" + (topBrick & 15), "color", getContext().getPackageName());
                     String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (topBrick >> 4), "string", getContext().getPackageName()));
@@ -237,12 +198,12 @@ public class Line extends Fragment {
      * Update graphic information of the bricks laying in the conveyor line
      */
     private void updateBricksOnLine() {
-        for (int i = 1; i <= NumberOfBricksOnLine; i++) {
+        for (int i=0; i<NumberOfBricksOnLine; i++) {
             try {
-                int brickPosition = bricksOnLine.getJSONObject(i-1).getInt("position"); //INDEX
-                int brickRaw = bricksOnLine.getJSONObject(i-1).getInt("type");
-                int assignedPallet = bricksOnLine.getJSONObject(i-1).getInt("assignedPallet"); //SALAD
-                int brickDNI = bricksOnLine.getJSONObject(i-1).getInt("DNI"); //!!@@#!#fgfdb
+                int brickPosition = bricksOnLine.getJSONObject(i).getInt("position");
+                int brickRaw = bricksOnLine.getJSONObject(i).getInt("type");
+                int assignedPallet = bricksOnLine.getJSONObject(i).getInt("assignedPallet");
+                int brickDNI = bricksOnLine.getJSONObject(i).getInt("DNI");
 
                 destinationPallets[brickDNI] = assignedPallet;
 
@@ -254,7 +215,10 @@ public class Line extends Fragment {
                 SpringForce force = new SpringForce();
                 force.setDampingRatio(DAMPING_RATIO_NO_BOUNCY).setStiffness(STIFFNESS_VERY_LOW);
                 float finalpos = OriginPosition + brickPosition / (EncoderToPixelDivider);
-                final SpringAnimation springAnim = new SpringAnimation(PhysicalBricksOnTheLine_Brick_Viewer[brickDNI], DynamicAnimation.X).setSpring(force);
+                if(finalpos > palletCoords[X][assignedPallet]) {
+                    finalpos = palletCoords[X][assignedPallet]; //Do not allow brick to go beyond its pallet.
+                }
+                final SpringAnimation springAnim = new SpringAnimation(bricksOnTheLine[brickDNI], DynamicAnimation.X).setSpring(force);
                 springAnim.animateToFinalPosition(finalpos);
 
             } catch (Exception jsonExc) {
@@ -264,14 +228,14 @@ public class Line extends Fragment {
     }
 
     private void checkForPickedBricks() {
-        for (int j = 1; j<MANIPULATORS+1; j++) {
+        for (int j=0; j<armNumber; j++) {
             try {
-                int currentXEncoderValue = takenBricks.getJSONObject(j-1).getInt("currentXEncoderValue"); //j-1 because index salad
-                int ValueOfCatchDrop = takenBricks.getJSONObject(j-1).getInt("valueOfCatchDrop");
-                int Position = takenBricks.getJSONObject(j-1).getInt("position");
-                int rawType = takenBricks.getJSONObject(j-1).getInt("type");
-                int assignedPallet = takenBricks.getJSONObject(j-1).getInt("assignedPallet");
-                int DNI = takenBricks.getJSONObject(j-1).getInt("DNI");
+                int currentXEncoderValue = takenBricks.getJSONObject(j).getInt("currentXEncoderValue"); //j-1 because index salad
+                int ValueOfCatchDrop = takenBricks.getJSONObject(j).getInt("valueOfCatchDrop");
+                int Position = takenBricks.getJSONObject(j).getInt("position");
+                int rawType = takenBricks.getJSONObject(j).getInt("type");
+                int assignedPallet = takenBricks.getJSONObject(j).getInt("assignedPallet");
+                int DNI = takenBricks.getJSONObject(j).getInt("DNI");
 
                 current_ManipulatorDNIs[j] = DNI;
 
@@ -301,8 +265,8 @@ public class Line extends Fragment {
         float finalpos_X = palletCoords[0][destinationPallet];
         float finalpos_Y = palletCoords[1][destinationPallet];
 
-        ObjectAnimator editorLayoutAnimation_x = ObjectAnimator.ofFloat(PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI], "x", finalpos_X);
-        ObjectAnimator editorLayoutAnimation_y = ObjectAnimator.ofFloat(PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI], "y", finalpos_Y);
+        ObjectAnimator editorLayoutAnimation_x = ObjectAnimator.ofFloat(bricksOnTheLine[mBrickDNI], "x", finalpos_X);
+        ObjectAnimator editorLayoutAnimation_y = ObjectAnimator.ofFloat(bricksOnTheLine[mBrickDNI], "y", finalpos_Y);
         AnimatorSet animSetline = new AnimatorSet();
         animSetline.playTogether(editorLayoutAnimation_x, editorLayoutAnimation_y);
 
@@ -324,23 +288,23 @@ public class Line extends Fragment {
             Toast.makeText(getActivity(), "Received DNI 0 from server", Toast.LENGTH_LONG).show();
         } else {
             //RBS TODO there is a better way to insert variables inside strings while supporting different languages
-            PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setVisibility(View.VISIBLE);
-            PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setText(getString(R.string.At) + " " + mBrickPosition + "\nDNI: " + mBrickDNI + "\n" + BrickManager.getGradeFromRaw(mBrickRaw) + "\n " + getString(R.string.To) + " " + mAssignedPallet);
-            PhysicalBricksOnTheLine_Brick_Viewer[mBrickDNI].setBackground(generateBrickBackground(mBrickRaw));
+            bricksOnTheLine[mBrickDNI].setVisibility(View.VISIBLE);
+            bricksOnTheLine[mBrickDNI].setText(getString(R.string.At) + " " + mBrickPosition + "\nDNI: " + mBrickDNI + "\n" + BrickManager.getGradeFromRaw(mBrickRaw) + "\n " + getString(R.string.To) + " " + mAssignedPallet);
+            bricksOnTheLine[mBrickDNI].setBackground(generateBrickBackground(mBrickRaw));
         }
     }
 
     private void hideUnusedBricks() {
-        for (int i = 1; i<PhysicalBricksOnTheLine_Brick_Viewer.length; i++) {
+        for (int i = 0; i< bricksOnTheLine.length; i++) {
 
             //If the brick is no longer in the line
             if (DNIinUse.contains(i) == false) {
                 //Make invisible
-                PhysicalBricksOnTheLine_Brick_Viewer[i].setVisibility(View.INVISIBLE);
+                bricksOnTheLine[i].setVisibility(View.INVISIBLE);
 
                 //Move to beginning of line
-                ObjectAnimator hideAnimation_x = ObjectAnimator.ofFloat(PhysicalBricksOnTheLine_Brick_Viewer[i], "x", palletCoords[0][0]);
-                ObjectAnimator hideAnimation_y = ObjectAnimator.ofFloat(PhysicalBricksOnTheLine_Brick_Viewer[i], "y", palletCoords[1][0]);
+                ObjectAnimator hideAnimation_x = ObjectAnimator.ofFloat(bricksOnTheLine[i], "x", palletCoords[X][0]);
+                ObjectAnimator hideAnimation_y = ObjectAnimator.ofFloat(bricksOnTheLine[i], "y", palletCoords[Y][0]);
                 AnimatorSet animSetline = new AnimatorSet();
                 animSetline.playTogether(hideAnimation_x, hideAnimation_y);
                 animSetline.setDuration(10);
@@ -368,7 +332,7 @@ public class Line extends Fragment {
          * To draw a brick we just use a drawable of the brick color as background
          */
         GradientDrawable gd = new GradientDrawable();
-        gd.setColor(getResources().getColor(BrickManager.getColorFromRaw(type)));
+        gd.setColor(BrickManager.getColorFromRaw(type));
         gd.setCornerRadius(1);
         gd.setStroke(2, 0xFF000000);
         return gd;
@@ -388,18 +352,93 @@ public class Line extends Fragment {
     /*****************************************************
      *               --DRAW SCREEN FOR N MANIPULATORS--
      *****************************************************/
-    private void setNumberOfManipulators(int n) {
+    public void setNumberOfManipulators(int n) {
         this.armNumber = n;
+        this.palletNumber = 2*n;
 
-        //LinearLayout mainLayout = (LinearLayout) view.findViewById(R.id.line_linearLayout_canvas);
+        //Draw screen
+        holder.removeAllViews();
+        View currentViews[] = new View[armNumber];
 
-        /*Structure is as follows*/
-        //Line Start --> always
-        //first_pallet --> always (n>1)
-        //middle_pallet --> As required (n-1) times
-        // ....
-        //Line end
+        holder.addView(inflater.inflate(R.layout.linesegment_start, container, false));
+        currentViews[0] = inflater.inflate(R.layout.linesegment_first, container, false);
+        holder.addView(currentViews[0]);
+        for(int i=1; i<armNumber; i++) {
+            currentViews[i] = inflater.inflate(R.layout.linesegment_middle, container, false);
+            holder.addView(currentViews[i]);
+        }
+        holder.addView(inflater.inflate(R.layout.linesegment_end, container, false));
 
+        current_ManipulatorDNIs = new int[armNumber];
+        last_ManipulatorDNIs = new int[armNumber];
+        destinationPallets = new int[palletNumber];
+        PhysicalPallet = new ImageView[palletNumber];
+        PhysicalPallet_UID = new TextView[palletNumber];
+        PhysicalPallet_TopBrick = new Button[palletNumber];
 
+        //Find Elements
+        int currentPallet = 0;
+        for(int i=0; i<armNumber; i++) {
+            PhysicalPallet_TopBrick[currentPallet] = currentViews[i].findViewById(R.id.lineSegment_button_palletDown);
+            PhysicalPallet_UID[currentPallet] = currentViews[i].findViewById(R.id.lineSegment_textView_UIDDown);
+            PhysicalPallet[currentPallet] = currentViews[i].findViewById(R.id.lineSegment_imageView_palletDown);
+            currentPallet++;
+
+            PhysicalPallet_TopBrick[currentPallet] = currentViews[i].findViewById(R.id.lineSegment_button_palletUp);
+            PhysicalPallet_UID[currentPallet] = currentViews[i].findViewById(R.id.lineSegment_textView_UIDup);
+            PhysicalPallet[currentPallet] = currentViews[i].findViewById(R.id.lineSegment_imageView_palletUp);
+            currentPallet++;
+        }
+
+        //Set listeners for buttons
+        for(int i=0; i<palletNumber; i++) {
+            final int fi = i;
+            PhysicalPallet_TopBrick[i].setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    //Ask to server, so when switching layouts is done, information is already there.
+                    try {
+                        JSONObject RGMVCommand = new JSONObject();
+                        RGMVCommand.put("command_ID", "RGMV");
+                        RGMVCommand.put("palletNumber", fi+1); //pallets start at 1 serverside
+                        mListener.onSendCommand(RGMVCommand.toString());
+                    } catch(JSONException exc) {
+                        Log.d("JSON exception", exc.getMessage());
+                    }
+                    ((MainActivity)getActivity()).switchToLayout(R.id.nav_editor);
+                }
+            });
+        }
+
+        //Create the bricks that will be shown on the line //TODO RBS make fully dynamic
+        for (int i=0; i<bricksOnTheLine.length; i++) {
+            bricksOnTheLine[i] = new TextView(getActivity());
+            bricksOnTheLine[i].setTextSize(TypedValue.COMPLEX_UNIT_SP,14);
+            ConstraintLayout.LayoutParams params = new ConstraintLayout.LayoutParams(94, 94);
+            bricksOnTheLine[i].setLayoutParams(params);
+            bricksOnTheLine[i].setGravity(Gravity.CENTER | Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+            bricksOnTheLine[i].setVisibility(View.VISIBLE);
+            main.addView(bricksOnTheLine[i]);
+        }
+
+        //Generate pallet coords;
+        //index 0 is start point before the line. indexes 1....n are the pallets.
+        //Y is either 408 (down pallet) or 68 (top pallet)
+        //X starts at pos 143, and then every pallet is 200dp wide
+        palletCoords = new int[2][palletNumber];
+
+        palletCoords[X][0] = -100;
+        palletCoords[Y][0] = 230;
+        int manipulatorN = -1;
+        for (int i=1; i<palletNumber; i++) {
+            //Y: even pallets are at top, odd pallets at bottom
+            if(i%2 == 0) {
+                palletCoords[Y][i] = 68;
+            } else {
+                palletCoords[Y][i] = 408;
+                manipulatorN++;
+            }
+            //X;
+            palletCoords[X][i] = 143 + 200*manipulatorN;
+        }
     }
 }

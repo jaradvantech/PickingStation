@@ -26,7 +26,8 @@
             android:id="@+id/alarms_textView_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Details"
+            android:layout_marginBottom="12dp"
+            android:text="Current Alarms:"
             android:textSize="@dimen/text_big"
             app:layout_constraintBottom_toTopOf="@+id/alarms_textView_output"
             app:layout_constraintStart_toStartOf="@+id/alarms_textView_output" />
@@ -35,8 +36,9 @@
             android:id="@+id/alarms_textView_recent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
             android:clickable="true"
-            android:text="@string/RecentAlarms"
+            android:text="Alarm Log:"
             android:textSize="@dimen/text_big"
             app:layout_constraintBottom_toTopOf="@+id/alarms_ListView"
             app:layout_constraintStart_toStartOf="@+id/alarms_ListView" />
@@ -49,7 +51,18 @@
             android:textSize="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/border"/>
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/alarms_imageView_clearButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@mipmap/clear"
+            app:layout_constraintEnd_toEndOf="@+id/alarms_ListView"
+            app:layout_constraintStart_toStartOf="@+id/alarms_ListView"
+            app:layout_constraintTop_toBottomOf="@+id/alarms_ListView" />
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

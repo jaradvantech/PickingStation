@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="220dp"
+    android:layout_height="250dp">
+
+    <TextView
+        android:id="@+id/algorithmSegment_textView_text"
+        android:layout_width="101dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:text="INPUT"
+        android:textSize="@dimen/text_default"
+        app:layout_constraintStart_toEndOf="@+id/algorithmSegment_imageView_mode"
+        app:layout_constraintTop_toBottomOf="@+id/algorithmSegment_imageView_arm"
+        tools:text="INPUT" />
+
+    <ImageView
+        android:id="@+id/algorithmSegment_imageView_mode"
+        android:layout_width="78dp"
+        android:layout_height="78dp"
+        android:clickable="true"
+        android:scaleType="fitXY"
+        android:src="@mipmap/in"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@+id/algorithmSegment_imageView_arm"
+        app:layout_constraintTop_toBottomOf="@+id/algorithmSegment_imageView_arm" />
+
+    <ImageView
+        android:id="@+id/algorithmSegment_imageView_arm"
+        android:layout_width="182dp"
+        android:layout_height="182dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/manual_manipulator"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</android.support.constraint.ConstraintLayout>

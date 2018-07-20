@@ -167,7 +167,7 @@ public class MachineCalibration extends Fragment {
     private void setManipulators(int mMANIPULATORS) {
         if(mMANIPULATORS < 10) {
             this.MANIPULATORS = mMANIPULATORS;
-
+            SettingManager.setArms(MANIPULATORS);
             //Set visible only as many as required
             setAllInvisible();
             for (int i=0; i<MANIPULATORS; i++) {
@@ -201,7 +201,7 @@ public class MachineCalibration extends Fragment {
             mFragmentInteraction.onSendCommand(JSONOutput + "\r\n");
 
             //Save to local config
-            SettingManager.setTotalManipulators(MANIPULATORS);
+            SettingManager.setArms(MANIPULATORS);
         } catch(JSONException exc) {
             Log.d("JSON exception", exc.getMessage());
         }
