@@ -7,5 +7,6 @@
     <item name="opt_debug_advanced" type="id"/>
     <item name="opt_calibration" type="id"/>
     <item name="opt_loading" type="id"/>
+    <item name="opt_tiles" type="id"/>
 
 </resources>

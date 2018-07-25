@@ -11,46 +11,91 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/logs_textView_toText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="To:"
+            app:layout_constraintBottom_toTopOf="@+id/logs_textView_toDate"
+            app:layout_constraintStart_toStartOf="@+id/logs_textView_toDate" />
+
         <ListView
-            android:layout_width="714dp"
-            android:layout_height="420dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.878"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.828" />
+            android:id="@+id/logs_arrayList_results"
+            android:layout_width="713dp"
+            android:layout_height="422dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/logs_textView_resultTitle"
+            app:layout_constraintTop_toBottomOf="@+id/logs_textView_resultTitle" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/logs_textView_resultTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tiles produced in the selected period>"
+            android:layout_marginStart="468dp"
+            android:layout_marginTop="76dp"
+            android:text="Total Bricks produced in the selected period; 1334"
             android:textSize="28sp"
-            tools:layout_editor_absoluteX="528dp"
-            tools:layout_editor_absoluteY="85dp" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="116dp"
-            android:layout_marginTop="180dp"
-            android:text="From"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/birthday"
+            android:id="@+id/logs_textView_fromDate"
+            android:layout_width="252dp"
+            android:layout_height="51dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/border"
+            android:textSize="@dimen/text_big"
+            app:layout_constraintStart_toStartOf="@+id/logs_textView_infoText"
+            app:layout_constraintTop_toBottomOf="@+id/logs_textView_infoText" />
+
+        <TextView
+            android:id="@+id/logs_textView_toDate"
+            android:layout_width="252dp"
+            android:layout_height="51dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/border"
+            android:textSize="@dimen/text_big"
+            app:layout_constraintStart_toStartOf="@+id/logs_textView_fromDate"
+            app:layout_constraintTop_toBottomOf="@+id/logs_textView_fromDate" />
+
+        <TextView
+            android:id="@+id/logs_textView_fromText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            tools:layout_editor_absoluteX="158dp"
-            tools:layout_editor_absoluteY="492dp" />
+            android:layout_marginBottom="4dp"
+            android:text="From:"
+            app:layout_constraintBottom_toTopOf="@+id/logs_textView_fromDate"
+            app:layout_constraintStart_toStartOf="@+id/logs_textView_fromDate" />
+
+        <TextView
+            android:id="@+id/logs_textView_infoText"
+            android:layout_width="252dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="116dp"
+            android:layout_marginTop="132dp"
+            android:text="Check production for period:"
+            android:textSize="@dimen/text_default"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/logs_imageButton_search"
+            android:layout_width="256dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="48dp"
+            android:src="@mipmap/searchsmall"
+            app:layout_constraintStart_toStartOf="@+id/logs_textView_toDate"
+            app:layout_constraintTop_toBottomOf="@+id/logs_textView_toDate" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="262dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:entries="@array/Logs_sortby_modes"
+            app:layout_constraintStart_toStartOf="@+id/logs_imageButton_search"
+            app:layout_constraintTop_toBottomOf="@+id/logs_imageButton_search" />
 
     </android.support.constraint.ConstraintLayout>
 

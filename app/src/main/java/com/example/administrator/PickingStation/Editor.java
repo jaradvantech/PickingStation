@@ -133,7 +133,7 @@ public class Editor extends Fragment {
 
             public void onClick(View v){
                 int type = getRaw(editor_listView_grades.getCheckedItemPosition(), editor_listView_colours.getCheckedItemPosition());
-                addBrick(selectedPallet, type);
+                addBrick(selectedPallet, mFlippableStack.getCurrentItem(), type);
                 askForPalletContents(selectedPallet);
             }
 
@@ -268,11 +268,12 @@ public class Editor extends Fragment {
         }
     }
 
-    private void addBrick(int palletNumber, int type) {
+    private void addBrick(int palletNumber, int position, int type) {
         try {
             JSONObject RAMVCommand = new JSONObject();
             RAMVCommand.put("command_ID", "RAMV");
             RAMVCommand.put("selectedPallet", palletNumber);
+            RAMVCommand.put("position", position);
             RAMVCommand.put("valueToAdd", type);
             mListener.onSendCommand(RAMVCommand.toString());
         } catch(JSONException exc) {
@@ -426,6 +427,17 @@ public class Editor extends Fragment {
             else handler.postDelayed(this, RPRV_PERIOD);
         }
     };
+
+    public void onLostConnection() {
+        holder.setVisibility(View.INVISIBLE);
+        autoUpdate = false;
+    }
+
+    public void onEstablishedConnection() {
+        holder.setVisibility(View.VISIBLE);
+        handler.postDelayed(timer_editor, RPRV_PERIOD);
+        autoUpdate=true;
+    }
 
     public void whenEnteringFragment() {
         handler.postDelayed(timer_editor, RPRV_PERIOD);

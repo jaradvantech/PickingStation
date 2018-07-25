@@ -29,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.spec.ECField;
 import java.util.ArrayList;
 
 import static android.support.animation.SpringForce.DAMPING_RATIO_NO_BOUNCY;
@@ -87,8 +88,7 @@ public class Line extends Fragment {
         this.inflater = inflater;
         this.container = container;
 
-        //setNumberOfManipulators(SettingManager.getArms());
-        setNumberOfManipulators(8);
+        setNumberOfManipulators(SettingManager.getArms());
 
         return view;
     }
@@ -176,9 +176,14 @@ public class Line extends Fragment {
                 PhysicalPallet_UID[i].setVisibility(View.VISIBLE);
                 PhysicalPallet_UID[i].setText(palletUID);
                 if (numberOfBricks > 0) {
-                    int colorID = getResources().getIdentifier("brick_color_" + (topBrick & 15), "color", getContext().getPackageName());
-                    String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (topBrick >> 4), "string", getContext().getPackageName()));
-
+                    int colorID = 0;
+                    String grade = "no";
+                    try {
+                        colorID = getResources().getIdentifier("brick_color_" + (topBrick & 15), "color", getContext().getPackageName());
+                        grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (topBrick >> 4), "string", getContext().getPackageName()));
+                    } catch (Exception e) {
+                        Log.e("exc", e.toString());
+                    }
                     GradientDrawable gd = new GradientDrawable();
                     gd.setColor(getResources().getColor(colorID)); // Changes this drawable to use a single color instead of a gradient
                     gd.setCornerRadius(1);

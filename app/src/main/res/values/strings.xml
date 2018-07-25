@@ -162,4 +162,10 @@
         <item>Grade F</item>
         <item>Grade G</item>
     </string-array>
+
+    <string-array name="Logs_sortby_modes">
+        <item>Sort By Grade</item>
+        <item>Sort By Color</item>
+    </string-array>
+
 </resources>

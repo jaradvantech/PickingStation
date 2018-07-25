@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 
-public class AlarmObject {
+public class AlarmObject implements Comparable<AlarmObject> {
 
     private String type;
     private String description;
@@ -61,21 +61,19 @@ public class AlarmObject {
      *  Implement comparator class so alarms can be sorted by timestamp
      *  Yeah, shit is getting serious with Java now 8)
      */
-    class SortByDate implements Comparator<AlarmObject> {
+    public int compareTo(AlarmObject a)
+    {
+        int result = 0;
+        Date timestampA, timestampB;
+        try {
+            timestampA = new SimpleDateFormat("HH:mm:ss dd-MM-yy ").parse(a.getTime());
+            timestampB = new SimpleDateFormat("HH:mm:ss dd-MM-yy ").parse(this.getTime());
+            result = timestampA.compareTo(timestampB);
 
-        public int compare(AlarmObject a, AlarmObject b)
-        {
-            int result = 0;
-            Date timestampA, timestampB;
-            try {
-                timestampA = new SimpleDateFormat("HH:mm:ss dd-MM-yy ").parse(a.getTime());
-                timestampB = new SimpleDateFormat("HH:mm:ss dd-MM-yy ").parse(b.getTime());
-                result = timestampA.compareTo(timestampB);
-
-            } catch (ParseException parserException) {
-                Log.e("AlarmObject", "Invalid Timestamp");
-            }
-            return result;
+        } catch (ParseException parserException) {
+            Log.e("AlarmObject", "Invalid Timestamp");
         }
+        return result;
     }
+
 }

@@ -52,6 +52,7 @@ public class Settings extends Fragment {
     private ImageView save;
     private ImageView calibration;
     private ImageView factoryReset;
+    private ImageView tileConfig;
     private AlertDialog.Builder resetDialogBuilder;
     private final int GET_IP_REQUEST = 42;
     private final int LOGIN_REQUEST = 27;
@@ -84,6 +85,7 @@ public class Settings extends Fragment {
         save = (ImageView) finalView.findViewById(R.id.settings_ImageView_save);
         calibration = (ImageView) finalView.findViewById(R.id.settings_ImageView_calibration);
         factoryReset = (ImageView) finalView.findViewById(R.id.settings_ImageView_factoryReset);
+        tileConfig = (ImageView) finalView.findViewById(R.id.settings_ImageView_tiles);
 
         drawLanguageFlags();
 
@@ -101,6 +103,11 @@ public class Settings extends Fragment {
         factoryReset.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 showResetDialog();
+            }
+        });
+        tileConfig.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).switchToLayout(R.id.opt_tiles);
             }
         });
 

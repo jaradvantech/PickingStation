@@ -25,6 +25,10 @@ public class BrickManager {
         return localContext.getResources().getStringArray(R.array.Grades)[grade];
     }
 
+    static String getColorName(int index) {
+        return localContext.getResources().getStringArray(R.array.Colours)[index];
+    }
+
     //before starting at 1, now starting at 0
     static int getColor(int color) {
         return  localContext.getResources().getColor(localContext.getResources().getIdentifier("brick_color_" + (color+1), "color", localContext.getPackageName()));
@@ -34,5 +38,13 @@ public class BrickManager {
     //Color = 0...
     static int getRaw(int grade, int color) {
         return ((grade+1)<<4) + (color+1);
+    }
+
+    static int getTotalColors() {
+        return 16;
+    }
+
+    static int getTotalGrades() {
+        return 7;
     }
 }

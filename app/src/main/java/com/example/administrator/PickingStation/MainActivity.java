@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity
         Algorithm.OnFragmentInteractionListener,
         Editor.OnFragmentInteractionListener,
         Manual.OnFragmentInteractionListener,
+        Logs.OnFragmentInteractionListener,
         Debug.OnFragmentInteractionListener,
         DebugAdvancedOptions.OnFragmentInteractionListener,
         Alarms.OnFragmentInteractionListener,
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity
     private Loading loading;
     private Alarms alarms;
     private MachineCalibration machineCalibration;
+    private Tiles tiles;
     private int previous_id = R.id.opt_loading;
     private AsyncTask<String, String, TcpClient> networkConnection;
     private final int TRANSITION_TIME = 400;
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity
         loading = new Loading();
         alarms = new Alarms();
         machineCalibration = new MachineCalibration();
+        tiles = new Tiles();
 
         //Replace built-in title with custom title
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -125,6 +128,7 @@ public class MainActivity extends AppCompatActivity
         manager.beginTransaction().replace(R.id.holder_loading, loading, loading.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_alarms, alarms, alarms.getTag()).commit();
         manager.beginTransaction().replace(R.id.holder_machine_calibration, machineCalibration, machineCalibration.getTag()).commit();
+        manager.beginTransaction().replace(R.id.holder_tiles, tiles, tiles.getTag()).commit();
 
         startNetworking();
     }
@@ -248,6 +252,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_settings:
                 retLayout = (ConstraintLayout) this.findViewById(R.id.holder_settings);
                 break;
+            case R.id.opt_tiles:
+                retLayout = (ConstraintLayout) this.findViewById(R.id.holder_tiles);
+                break;
             case R.id.opt_calibration:
                 retLayout = (ConstraintLayout) this.findViewById(R.id.holder_machine_calibration);
                 break;
@@ -302,6 +309,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_settings:
                 title.setText(getResources().getString(R.string.Settings));
+                break;
+            case R.id.opt_tiles:
+                title.setText("Tile configuration");//title.setText(getResources().getString(R.string.Settings));
                 break;
             case R.id.opt_calibration:
                 title.setText("Machine Calibration");
@@ -440,11 +450,13 @@ public class MainActivity extends AppCompatActivity
             }
             settings.onEstablishedConnection();
             algorithm.onEstablishedConnection();
+            editor.onEstablishedConnection();
 
         } else if (command.equals("connectionlost")) {
             AppBarManager.updateConnectionIcon(DISCONNECTED);
             settings.onLostConnection();
             algorithm.onLostConnection();
+            editor.onLostConnection();
         }
     }
 
@@ -485,7 +497,7 @@ public class MainActivity extends AppCompatActivity
         mainMenu.findItem(R.id.nav_editor).setTitle(getString(R.string.PalletEditor));
         mainMenu.findItem(R.id.nav_logs).setTitle(getString(R.string.ProductionLogs));
         mainMenu.findItem(R.id.nav_manual).setTitle(getString(R.string.ManualControl));
-        //RBS TODO Add calibration and advanced
+        //RBS TODO Add calibration and advanced and tiles and etc--
     }
 
     /* RBS April 19th, 2018

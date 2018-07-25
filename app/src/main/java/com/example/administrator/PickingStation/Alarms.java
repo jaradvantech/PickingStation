@@ -25,6 +25,7 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 import static com.example.administrator.PickingStation.Commands.CHAL;
 
@@ -130,7 +131,6 @@ public class Alarms extends Fragment {
             public void onClick(View v) {
                 theAlarms.clear();
                 adapter.notifyDataSetChanged();
-                infoOutput.setText("");
             }
         });
 
@@ -160,7 +160,7 @@ public class Alarms extends Fragment {
         theAlarms.addAll(newAlarms);
 
         //Sort alarms by decreasing timestamp, so new ones are on top
-        //theAlarms.sort(new AlarmObject.SortByDate);
+        Collections.sort(theAlarms);
 
         //Update listview
         adapter.notifyDataSetChanged();

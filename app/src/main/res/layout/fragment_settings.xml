@@ -26,14 +26,14 @@
 
         <ImageView
             android:id="@+id/settings_ImageView_save"
-            android:layout_width="119dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginBottom="84dp"
             android:layout_marginStart="8dp"
             android:src="@mipmap/save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/settings_constrainLayout_advanced"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/settings_constrainLayout_advanced"
             app:layout_constraintTop_toBottomOf="@+id/settings_constrainLayout_advanced" />
 
@@ -80,7 +80,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/settings_constrainLayout_advanced"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="184dp"
             android:layout_marginBottom="48dp"
             android:layout_marginEnd="120dp"
             app:layout_constraintBottom_toTopOf="@+id/settings_ImageView_save"
@@ -107,6 +107,15 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/settings_textView_tileConfig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Brick\nconfiguration"
+                app:layout_constraintBottom_toBottomOf="@+id/settings_ImageView_tiles"
+                app:layout_constraintStart_toEndOf="@+id/settings_ImageView_tiles" />
+
+            <TextView
                 android:id="@+id/settings_textView_resetText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,6 +123,15 @@
                 android:text="Reset to\ndefault"
                 app:layout_constraintBottom_toBottomOf="@+id/settings_ImageView_factoryReset"
                 app:layout_constraintStart_toEndOf="@+id/settings_ImageView_factoryReset" />
+
+            <ImageView
+                android:id="@+id/settings_ImageView_tiles"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="20dp"
+                android:src="@mipmap/tile"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/settings_ImageView_factoryReset" />
 
             <ImageView
                 android:id="@+id/settings_ImageView_factoryReset"
