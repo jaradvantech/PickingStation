@@ -11,6 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Spinner
+            android:id="@+id/logs_spinner_order"
+            android:layout_width="262dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:entries="@array/Logs_order"
+            app:layout_constraintStart_toStartOf="@+id/logs_spinner_sortBy"
+            app:layout_constraintTop_toBottomOf="@+id/logs_spinner_sortBy" />
+
         <TextView
             android:id="@+id/logs_textView_toText"
             android:layout_width="wrap_content"
@@ -45,6 +54,7 @@
             android:layout_height="51dp"
             android:layout_marginTop="36dp"
             android:background="@drawable/border"
+            android:gravity="center_vertical|center_horizontal"
             android:textSize="@dimen/text_big"
             app:layout_constraintStart_toStartOf="@+id/logs_textView_infoText"
             app:layout_constraintTop_toBottomOf="@+id/logs_textView_infoText" />
@@ -55,6 +65,7 @@
             android:layout_height="51dp"
             android:layout_marginTop="48dp"
             android:background="@drawable/border"
+            android:gravity="fill_vertical|center_horizontal"
             android:textSize="@dimen/text_big"
             app:layout_constraintStart_toStartOf="@+id/logs_textView_fromDate"
             app:layout_constraintTop_toBottomOf="@+id/logs_textView_fromDate" />
@@ -72,8 +83,8 @@
             android:id="@+id/logs_textView_infoText"
             android:layout_width="252dp"
             android:layout_height="30dp"
-            android:layout_marginStart="116dp"
-            android:layout_marginTop="132dp"
+            android:layout_marginStart="84dp"
+            android:layout_marginTop="124dp"
             android:text="Check production for period:"
             android:textSize="@dimen/text_default"
             app:layout_constraintStart_toStartOf="parent"
@@ -83,19 +94,43 @@
             android:id="@+id/logs_imageButton_search"
             android:layout_width="256dp"
             android:layout_height="66dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="16dp"
             android:src="@mipmap/searchsmall"
+            app:layout_constraintStart_toStartOf="@+id/logs_spinner_order"
+            app:layout_constraintTop_toBottomOf="@+id/logs_spinner_order" />
+
+        <Spinner
+            android:id="@+id/logs_spinner_sortBy"
+            android:layout_width="262dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:entries="@array/Logs_sortby_modes"
             app:layout_constraintStart_toStartOf="@+id/logs_textView_toDate"
             app:layout_constraintTop_toBottomOf="@+id/logs_textView_toDate" />
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="262dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:entries="@array/Logs_sortby_modes"
-            app:layout_constraintStart_toStartOf="@+id/logs_imageButton_search"
-            app:layout_constraintTop_toBottomOf="@+id/logs_imageButton_search" />
+        <ImageView
+            android:id="@+id/logs_imageView_calendarFrom"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@mipmap/calendar"
+            app:layout_constraintBottom_toBottomOf="@+id/logs_textView_fromDate"
+            app:layout_constraintEnd_toEndOf="@+id/logs_textView_fromDate"
+            app:layout_constraintTop_toTopOf="@+id/logs_textView_fromDate" />
+
+        <ImageView
+            android:id="@+id/logs_imageView_calendarTo"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@mipmap/calendar"
+            app:layout_constraintBottom_toBottomOf="@+id/logs_textView_toDate"
+            app:layout_constraintEnd_toEndOf="@+id/logs_textView_toDate"
+            app:layout_constraintTop_toTopOf="@+id/logs_textView_toDate" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -14,12 +14,23 @@
       android:layout_toStartOf="@id/recipe_list_detail">
 
     <TextView
+        android:id="@+id/log_listItem_textFieldPercent"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="@dimen/text_default"
+        tools:text="100%" />
+
+    <TextView
         android:id="@+id/log_listItem_textField"
         android:layout_width="220dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="0dp"
+        android:gravity="center_vertical"
         android:textSize="@dimen/text_default"
         tools:text="Grade A:" />
 

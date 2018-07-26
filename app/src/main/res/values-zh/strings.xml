@@ -82,13 +82,13 @@
     <string name="LightGrey">浅灰色</string>
     <string name="DarkGrey">深灰色</string>
 
-    <string name="brick_grade_1">年级 A</string>
-    <string name="brick_grade_2">年级 B</string>
-    <string name="brick_grade_3">年级 C</string>
-    <string name="brick_grade_4">年级 D</string>
-    <string name="brick_grade_5">年级 E</string>
-    <string name="brick_grade_6">年级 F</string>
-    <string name="brick_grade_7">年级 G</string>
+    <string name="brick_grade_0">年级 A</string>
+    <string name="brick_grade_1">年级 B</string>
+    <string name="brick_grade_2">年级 C</string>
+    <string name="brick_grade_3">年级 D</string>
+    <string name="brick_grade_4">年级 E</string>
+    <string name="brick_grade_5">年级 F</string>
+    <string name="brick_grade_6">年级 G</string>
 
     <!-- Algorithm Configuration-->
     <string name="TypeToPackage">键入打包:</string>

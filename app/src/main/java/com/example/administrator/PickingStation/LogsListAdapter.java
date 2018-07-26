@@ -42,12 +42,12 @@ public class LogsListAdapter extends BaseAdapter {
         View rowView = mInflater.inflate(R.layout.listitem_log, parent, false);
 
         TextView characteristicName = rowView.findViewById(R.id.log_listItem_textField);
+        TextView percentText = rowView.findViewById(R.id.log_listItem_textFieldPercent);
         ProgressBar percentBar = rowView.findViewById(R.id.log_listItem_progressbar);
 
-
         LogListObject item = (LogListObject) getItem(position);
-
         characteristicName.setText(item.getCharacteristic() + ": " + item.getNumberWithThisCharacteristic());
+        percentText.setText(item.getPercent() + "%");
         percentBar.setMax(100);
         percentBar.setProgress(item.getPercent());
 

@@ -28,12 +28,11 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.security.spec.ECField;
 import java.util.ArrayList;
 
 import static android.support.animation.SpringForce.DAMPING_RATIO_NO_BOUNCY;
 import static android.support.animation.SpringForce.STIFFNESS_VERY_LOW;
+import static com.example.administrator.PickingStation.BrickManager.getGradeFromRaw;
 import static com.example.administrator.PickingStation.Commands.RPRV;
 
 
@@ -176,21 +175,12 @@ public class Line extends Fragment {
                 PhysicalPallet_UID[i].setVisibility(View.VISIBLE);
                 PhysicalPallet_UID[i].setText(palletUID);
                 if (numberOfBricks > 0) {
-                    int colorID = 0;
-                    String grade = "no";
                     try {
-                        colorID = getResources().getIdentifier("brick_color_" + (topBrick & 15), "color", getContext().getPackageName());
-                        grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (topBrick >> 4), "string", getContext().getPackageName()));
+                        PhysicalPallet_TopBrick[i].setBackground(BrickManager.getBackgroundFromRaw(topBrick));
+                        PhysicalPallet_TopBrick[i].setText("#: " + numberOfBricks + "\n\n" + getGradeFromRaw(topBrick));
                     } catch (Exception e) {
                         Log.e("exc", e.toString());
                     }
-                    GradientDrawable gd = new GradientDrawable();
-                    gd.setColor(getResources().getColor(colorID)); // Changes this drawable to use a single color instead of a gradient
-                    gd.setCornerRadius(1);
-                    gd.setStroke(2, 0xFF000000);
-                    PhysicalPallet_TopBrick[i].setBackground(gd);
-                    PhysicalPallet_TopBrick[i].setText("#: " + numberOfBricks + "\n\n" + grade);
-
                 } else {
                     PhysicalPallet_TopBrick[i].setBackgroundColor(Color.TRANSPARENT);
                     PhysicalPallet_TopBrick[i].setText("");
@@ -295,7 +285,7 @@ public class Line extends Fragment {
             //RBS TODO there is a better way to insert variables inside strings while supporting different languages
             bricksOnTheLine[mBrickDNI].setVisibility(View.VISIBLE);
             bricksOnTheLine[mBrickDNI].setText(getString(R.string.At) + " " + mBrickPosition + "\nDNI: " + mBrickDNI + "\n" + BrickManager.getGradeFromRaw(mBrickRaw) + "\n " + getString(R.string.To) + " " + mAssignedPallet);
-            bricksOnTheLine[mBrickDNI].setBackground(generateBrickBackground(mBrickRaw));
+            bricksOnTheLine[mBrickDNI].setBackground(BrickManager.getBackgroundFromRaw(mBrickRaw));
         }
     }
 
@@ -330,18 +320,6 @@ public class Line extends Fragment {
             else handler.postDelayed(this, RPRV_PERIOD);
         }
     };
-
-
-    private GradientDrawable generateBrickBackground(int type) {
-        /*
-         * To draw a brick we just use a drawable of the brick color as background
-         */
-        GradientDrawable gd = new GradientDrawable();
-        gd.setColor(BrickManager.getColorFromRaw(type));
-        gd.setCornerRadius(1);
-        gd.setStroke(2, 0xFF000000);
-        return gd;
-    }
 
     public void whenEnteringFragment() {
         handler.postDelayed(timer_lines, RPRV_PERIOD);

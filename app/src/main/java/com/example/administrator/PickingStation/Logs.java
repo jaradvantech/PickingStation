@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -30,15 +31,18 @@ public class Logs extends Fragment {
 
     private final int GRADES = 0;
     private final int COLORS = 1;
+    private final int DATE = 2;
+    private final int DESCENDING = 0;
+    private final int ASCENDING = 1;
     private Logs.OnFragmentInteractionListener mListener;
     private View view;
     private TextView from, to, title;
     private ListView results;
     private ImageButton searchButton;
+    private Spinner sortBy, sortOrder;
     private int fromYear, fromMonth, fromDay, toYear, toMonth, toDay;
     private ArrayList<LogListObject> resultsArray = new ArrayList<LogListObject>();
     private LogsListAdapter resultListAdapter;
-    private int sortBy = GRADES;
     private JSONArray qtyByColor;
     private JSONArray qtyByGrade;
     private int totalForPeriod;
@@ -55,6 +59,8 @@ public class Logs extends Fragment {
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
         view = inflater.inflate(R.layout.fragment_logs, container, false);
 
+        sortBy = view.findViewById(R.id.logs_spinner_sortBy);
+        sortOrder = view.findViewById(R.id.logs_spinner_order);
         from = view.findViewById(R.id.logs_textView_fromDate);
         to = view.findViewById(R.id.logs_textView_toDate);
         title = view.findViewById(R.id.logs_textView_resultTitle);
@@ -170,7 +176,7 @@ public class Logs extends Fragment {
     private void updateResultList() {
         resultsArray.clear();
         Random rand = new Random();
-        if(sortBy == GRADES) {
+        if(sortBy.getSelectedItemPosition() == GRADES) {
             for(int i=0; i<BrickManager.getTotalGrades(); i++) {
                 /*
                 try {
@@ -183,7 +189,7 @@ public class Logs extends Fragment {
                 Log.d("", resultsArray.get(i).getPercent() + "");
             }
 
-        } else if (sortBy == COLORS) {
+        } else if (sortBy.getSelectedItemPosition() == COLORS) {
             for(int i=0; i<BrickManager.getTotalColors(); i++) {
                 try {
                     resultsArray.add(new LogListObject(BrickManager.getColorName(i), totalForPeriod, qtyByColor.getInt(i)));
@@ -193,8 +199,7 @@ public class Logs extends Fragment {
             }
         }
         Collections.sort(resultsArray);
-        boolean descendingOrder = true;
-        if(descendingOrder) {
+        if(sortOrder.getSelectedItemPosition() == DESCENDING) {
             Collections.reverse(resultsArray);
         }
         resultListAdapter.notifyDataSetChanged();

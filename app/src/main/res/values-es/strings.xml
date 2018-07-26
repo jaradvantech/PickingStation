@@ -87,13 +87,13 @@
     <string name="LightGrey">Gris Claro</string>
     <string name="DarkGrey">Gris Oscuro</string>
 
-    <string name="brick_grade_1">Grado A</string>
-    <string name="brick_grade_2">Grado B</string>
-    <string name="brick_grade_3">Grado C</string>
-    <string name="brick_grade_4">Grado D</string>
-    <string name="brick_grade_5">Grado E</string>
-    <string name="brick_grade_6">Grado F</string>
-    <string name="brick_grade_7">Grado G</string>
+    <string name="brick_grade_0">Grado A</string>
+    <string name="brick_grade_1">Grado B</string>
+    <string name="brick_grade_2">Grado C</string>
+    <string name="brick_grade_3">Grado D</string>
+    <string name="brick_grade_4">Grado E</string>
+    <string name="brick_grade_5">Grado F</string>
+    <string name="brick_grade_6">Grado G</string>
 
     <!-- Algorithm Configuration-->
     <string name="TypeToPackage">Tipo a empaquetar:</string>

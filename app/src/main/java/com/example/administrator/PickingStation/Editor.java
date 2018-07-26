@@ -32,7 +32,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.administrator.PickingStation.BrickManager.getRaw;
+import static com.example.administrator.PickingStation.BrickManager.getGradeFromRaw;
 import static com.example.administrator.PickingStation.Commands.RPRV;
 
 
@@ -105,8 +105,7 @@ public class Editor extends Fragment {
             }
         });
 
-        //setManipulatorNumber(SettingManager.getArms());
-        setManipulatorNumber(7);
+        setManipulatorNumber(SettingManager.getArms());
 
         mPageAdapter = new ColorFragmentAdapter(getFragmentManager(), mViewPagerFragments);
         mFlippableStack = (FlippableStackView) view.findViewById(R.id.editor_flipview_bricks_stack);
@@ -116,9 +115,6 @@ public class Editor extends Fragment {
 
             public void onPageSelected( int position ) {
                 editor_textView_Indicator.setText("Brick "+Integer.toString(position)+" of "+Integer.toString(mPageAdapter.getCount()-1));
-                if(position==0&&mPageAdapter.getCount()>1){
-                    mFlippableStack.setCurrentItem(1);
-                }
             }
 
             public void onPageScrollStateChanged( int state ) {
@@ -132,8 +128,7 @@ public class Editor extends Fragment {
         editor_button_add.setOnClickListener(new View.OnClickListener(){
 
             public void onClick(View v){
-                int type = getRaw(editor_listView_grades.getCheckedItemPosition(), editor_listView_colours.getCheckedItemPosition());
-                addBrick(selectedPallet, mFlippableStack.getCurrentItem(), type);
+                addBrick(selectedPallet, mFlippableStack.getCurrentItem(), editor_listView_grades.getCheckedItemPosition(), editor_listView_colours.getCheckedItemPosition());
                 askForPalletContents(selectedPallet);
             }
 
@@ -268,13 +263,14 @@ public class Editor extends Fragment {
         }
     }
 
-    private void addBrick(int palletNumber, int position, int type) {
+    private void addBrick(int palletNumber, int position, int grade, int color) {
         try {
             JSONObject RAMVCommand = new JSONObject();
             RAMVCommand.put("command_ID", "RAMV");
             RAMVCommand.put("selectedPallet", palletNumber);
             RAMVCommand.put("position", position);
-            RAMVCommand.put("valueToAdd", type);
+            RAMVCommand.put("grade", grade);
+            RAMVCommand.put("color", color);
             mListener.onSendCommand(RAMVCommand.toString());
         } catch(JSONException exc) {
             Log.d("JSON exception", exc.getMessage());
@@ -387,8 +383,6 @@ public class Editor extends Fragment {
                 } catch (Exception jsonExc) {
                     Log.e("JSON Exception", "updateBricksInPallets(): " + jsonExc.getMessage());
                 }
-
-
                 if (palletUID.contentEquals(NULL_UID)) {
                     pallets[i].setVisibility(View.INVISIBLE);
                     tops[i].setBackgroundColor(Color.TRANSPARENT);
@@ -397,15 +391,12 @@ public class Editor extends Fragment {
                     pallets[i].setVisibility(View.VISIBLE);
                     tops[i].setVisibility(View.VISIBLE);
                     if (numberOfBricks > 0) {
-                        tops[i].setText(Integer.toString(numberOfBricks));
-                        int colorID = getResources().getIdentifier("brick_color_" + (topBrick & 15), "color", getContext().getPackageName());
-                        String grade = getResources().getString(getResources().getIdentifier("brick_grade_" + (topBrick >> 4), "string", getContext().getPackageName()));
-
-                        GradientDrawable gd = new GradientDrawable();
-                        gd.setColor(getResources().getColor(colorID));
-                        gd.setCornerRadius(1);
-                        gd.setStroke(2, 0xFF000000);
-                        tops[i].setBackground(gd);
+                        try {
+                            tops[i].setBackground(BrickManager.getBackgroundFromRaw(topBrick));
+                            tops[i].setText("#: " + numberOfBricks + "\n\n" + getGradeFromRaw(topBrick));
+                        } catch (Exception e) {
+                            Log.e("updateBrickInfo()", e.toString() + " Raw type: " + topBrick);
+                        }
                     } else {
                         tops[i].setBackgroundColor(Color.TRANSPARENT);
                         tops[i].setText("");

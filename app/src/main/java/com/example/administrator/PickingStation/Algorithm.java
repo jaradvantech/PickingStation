@@ -266,7 +266,7 @@ public class Algorithm extends Fragment {
     }
 
     public void setDemoBrickColor(int mColor) {
-        demoBrick.setBackgroundColor(mColor);
+        demoBrick.setBackground(BrickManager.getBackgroundFromColor(mColor));
     }
 
     public void whenEnteringFragment() {
@@ -314,6 +314,7 @@ public class Algorithm extends Fragment {
             imageViews[i].setVisibility(View.VISIBLE);
             textViews[i].setVisibility(View.VISIBLE);
         }
+
 
         Handler mHandler = new Handler();
         mHandler.postDelayed(new Runnable() {

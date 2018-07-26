@@ -84,13 +84,13 @@
     <string name="LightGrey">LightGrey</string>
     <string name="DarkGrey">DarkGrey</string>
 
-    <string name="brick_grade_1">Grade A</string>
-    <string name="brick_grade_2">Grade B</string>
-    <string name="brick_grade_3">Grade C</string>
-    <string name="brick_grade_4">Grade D</string>
-    <string name="brick_grade_5">Grade E</string>
-    <string name="brick_grade_6">Grade F</string>
-    <string name="brick_grade_7">Grade G</string>
+    <string name="brick_grade_0">Grade A</string>
+    <string name="brick_grade_1">Grade B</string>
+    <string name="brick_grade_2">Grade C</string>
+    <string name="brick_grade_3">Grade D</string>
+    <string name="brick_grade_4">Grade E</string>
+    <string name="brick_grade_5">Grade F</string>
+    <string name="brick_grade_6">Grade G</string>
 
     <!-- Algorithm Configuration-->
     <string name="TypeToPackage">Type to package:</string>
@@ -166,6 +166,12 @@
     <string-array name="Logs_sortby_modes">
         <item>Sort By Grade</item>
         <item>Sort By Color</item>
+        <item>Sort By Date</item>
+    </string-array>
+
+    <string-array name="Logs_order">
+        <item>Descending order</item>
+        <item>Ascending order</item>
     </string-array>
 
 </resources>

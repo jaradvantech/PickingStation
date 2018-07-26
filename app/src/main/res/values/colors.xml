@@ -12,20 +12,20 @@
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#ffffff</color>
 
-    <color name="brick_color_1">#ff0d00</color>
-    <color name="brick_color_2">#ffb700</color>
-    <color name="brick_color_3">#ffe600</color>
-    <color name="brick_color_4">#bbff00</color>
-    <color name="brick_color_5">#04ff00</color>
-    <color name="brick_color_6">#00ffc4</color>
-    <color name="brick_color_7">#00c4ff</color>
-    <color name="brick_color_8">#0051ff</color>
-    <color name="brick_color_9">#ae00ff</color>
-    <color name="brick_color_10">#a8feadff</color>
-    <color name="brick_color_11">#ff00bb</color>
-    <color name="brick_color_12">#895b00</color>
-    <color name="brick_color_13">#ffffff</color>
-    <color name="brick_color_14">#d4d4d4</color>
-    <color name="brick_color_15">#8b8b8b</color>
+    <color name="brick_color_0">#ff0d00</color>
+    <color name="brick_color_1">#ffb700</color>
+    <color name="brick_color_2">#ffe600</color>
+    <color name="brick_color_3">#bbff00</color>
+    <color name="brick_color_4">#04ff00</color>
+    <color name="brick_color_5">#00ffc4</color>
+    <color name="brick_color_6">#00c4ff</color>
+    <color name="brick_color_7">#0051ff</color>
+    <color name="brick_color_8">#ae00ff</color>
+    <color name="brick_color_9">#a8feadff</color>
+    <color name="brick_color_10">#ff00bb</color>
+    <color name="brick_color_11">#895b00</color>
+    <color name="brick_color_12">#ffffff</color>
+    <color name="brick_color_13">#d4d4d4</color>
+    <color name="brick_color_14">#8b8b8b</color>
 
 </resources>
